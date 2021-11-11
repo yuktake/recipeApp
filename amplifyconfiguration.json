@@ -1,0 +1,87 @@
+{
+    "UserAgent": "aws-amplify-cli/2.0",
+    "Version": "1.0",
+    "api": {
+        "plugins": {
+            "awsAPIPlugin": {
+                "swiftuitest": {
+                    "endpointType": "GraphQL",
+                    "endpoint": "https://zselmw3bqjc2ncy4vetq3lpnb4.appsync-api.ap-northeast-1.amazonaws.com/graphql",
+                    "region": "ap-northeast-1",
+                    "authorizationType": "API_KEY",
+                    "apiKey": "da2-uolav3u7nndyfk4eaqomv7tw7u"
+                }
+            }
+        }
+    },
+    "auth": {
+        "plugins": {
+            "awsCognitoAuthPlugin": {
+                "UserAgent": "aws-amplify/cli",
+                "Version": "0.1.0",
+                "IdentityManager": {
+                    "Default": {}
+                },
+                "AppSync": {
+                    "Default": {
+                        "ApiUrl": "https://zselmw3bqjc2ncy4vetq3lpnb4.appsync-api.ap-northeast-1.amazonaws.com/graphql",
+                        "Region": "ap-northeast-1",
+                        "AuthMode": "API_KEY",
+                        "ApiKey": "da2-uolav3u7nndyfk4eaqomv7tw7u",
+                        "ClientDatabasePrefix": "swiftuitest_API_KEY"
+                    }
+                },
+                "CredentialsProvider": {
+                    "CognitoIdentity": {
+                        "Default": {
+                            "PoolId": "ap-northeast-1:1ed4507e-fcb3-4461-a467-dfe0f71fe38f",
+                            "Region": "ap-northeast-1"
+                        }
+                    }
+                },
+                "CognitoUserPool": {
+                    "Default": {
+                        "PoolId": "ap-northeast-1_snZZ5ZfZ1",
+                        "AppClientId": "54qjpqfi4u4f929uepgta8t3kt",
+                        "Region": "ap-northeast-1"
+                    }
+                },
+                "Auth": {
+                    "Default": {
+                        "authenticationFlowType": "USER_SRP_AUTH",
+                        "loginMechanisms": [],
+                        "signupAttributes": [
+                            "EMAIL"
+                        ],
+                        "passwordProtectionSettings": {
+                            "passwordPolicyMinLength": 8,
+                            "passwordPolicyCharacters": []
+                        },
+                        "mfaConfiguration": "OFF",
+                        "mfaTypes": [
+                            "SMS"
+                        ],
+                        "verificationMechanisms": [
+                            "EMAIL"
+                        ]
+                    }
+                },
+                "S3TransferUtility": {
+                    "Default": {
+                        "Bucket": "swiftuitestba08fb19acc64e4ca91fb089a97a7d8d102838-dev",
+                        "Region": "ap-northeast-1"
+                    }
+                }
+            }
+        }
+    },
+    "storage": {
+        "plugins": {
+            "awsS3StoragePlugin": {
+                "bucket": "swiftuitestba08fb19acc64e4ca91fb089a97a7d8d102838-dev",
+                "region": "ap-northeast-1",
+                "defaultAccessLevel": "guest"
+            }
+        }
+    }
+}

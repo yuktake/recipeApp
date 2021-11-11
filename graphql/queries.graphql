@@ -1,0 +1,508 @@
+# this is an auto generated file. This will be overwritten
+query GetRecipe($id: ID!) {
+  getRecipe(id: $id) {
+    id
+    user
+    type
+    title
+    protein
+    fat
+    carbo
+    state
+    materials
+    contents {
+      items {
+        id
+        recipeID
+        order
+        content
+        image
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    image
+    reviews {
+      items {
+        id
+        user
+        recipeID
+        content
+        image
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    favNum
+    createdAt
+    updatedAt
+    delFlg
+  }
+}
+query ListRecipes(
+  $filter: ModelRecipeFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listRecipes(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      user
+      type
+      title
+      protein
+      fat
+      carbo
+      state
+      materials
+      contents {
+        nextToken
+      }
+      image
+      reviews {
+        nextToken
+      }
+      favNum
+      createdAt
+      updatedAt
+      delFlg
+    }
+    nextToken
+  }
+}
+query GetProcedure($id: ID!) {
+  getProcedure(id: $id) {
+    id
+    recipeID
+    order
+    content
+    image
+    recipe {
+      id
+      user
+      type
+      title
+      protein
+      fat
+      carbo
+      state
+      materials
+      contents {
+        nextToken
+      }
+      image
+      reviews {
+        nextToken
+      }
+      favNum
+      createdAt
+      updatedAt
+      delFlg
+    }
+    createdAt
+    updatedAt
+  }
+}
+query ListProcedures(
+  $filter: ModelProcedureFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listProcedures(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      recipeID
+      order
+      content
+      image
+      recipe {
+        id
+        user
+        type
+        title
+        protein
+        fat
+        carbo
+        state
+        materials
+        image
+        favNum
+        createdAt
+        updatedAt
+        delFlg
+      }
+      createdAt
+      updatedAt
+    }
+    nextToken
+  }
+}
+query GetReview($id: ID!) {
+  getReview(id: $id) {
+    id
+    user
+    recipeID
+    content
+    image
+    recipe {
+      id
+      user
+      type
+      title
+      protein
+      fat
+      carbo
+      state
+      materials
+      contents {
+        nextToken
+      }
+      image
+      reviews {
+        nextToken
+      }
+      favNum
+      createdAt
+      updatedAt
+      delFlg
+    }
+    createdAt
+    updatedAt
+  }
+}
+query ListReviews(
+  $filter: ModelReviewFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listReviews(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      user
+      recipeID
+      content
+      image
+      recipe {
+        id
+        user
+        type
+        title
+        protein
+        fat
+        carbo
+        state
+        materials
+        image
+        favNum
+        createdAt
+        updatedAt
+        delFlg
+      }
+      createdAt
+      updatedAt
+    }
+    nextToken
+  }
+}
+query GetUser($id: ID!) {
+  getUser(id: $id) {
+    id
+    name
+    displayName
+    email
+    description
+    createdAt
+    updatedAt
+  }
+}
+query ListUsers(
+  $filter: ModelUserFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      name
+      displayName
+      email
+      description
+      createdAt
+      updatedAt
+    }
+    nextToken
+  }
+}
+query GetFav($id: ID!) {
+  getFav(id: $id) {
+    id
+    userID
+    recipeID
+    createdAt
+    updatedAt
+  }
+}
+query ListFavs($filter: ModelFavFilterInput, $limit: Int, $nextToken: String) {
+  listFavs(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    items {
+      id
+      userID
+      recipeID
+      createdAt
+      updatedAt
+    }
+    nextToken
+  }
+}
+query RecipesByProtein(
+  $type: String
+  $protein: ModelFloatKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelRecipeFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  recipesByProtein(
+    type: $type
+    protein: $protein
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      user
+      type
+      title
+      protein
+      fat
+      carbo
+      state
+      materials
+      contents {
+        nextToken
+      }
+      image
+      reviews {
+        nextToken
+      }
+      favNum
+      createdAt
+      updatedAt
+      delFlg
+    }
+    nextToken
+  }
+}
+query RecipesByFat(
+  $type: String
+  $fat: ModelFloatKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelRecipeFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  recipesByFat(
+    type: $type
+    fat: $fat
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      user
+      type
+      title
+      protein
+      fat
+      carbo
+      state
+      materials
+      contents {
+        nextToken
+      }
+      image
+      reviews {
+        nextToken
+      }
+      favNum
+      createdAt
+      updatedAt
+      delFlg
+    }
+    nextToken
+  }
+}
+query RecipesByCarbo(
+  $type: String
+  $carbo: ModelFloatKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelRecipeFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  recipesByCarbo(
+    type: $type
+    carbo: $carbo
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      user
+      type
+      title
+      protein
+      fat
+      carbo
+      state
+      materials
+      contents {
+        nextToken
+      }
+      image
+      reviews {
+        nextToken
+      }
+      favNum
+      createdAt
+      updatedAt
+      delFlg
+    }
+    nextToken
+  }
+}
+query RecipesByDate(
+  $type: String
+  $createdAt: ModelStringKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelRecipeFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  recipesByDate(
+    type: $type
+    createdAt: $createdAt
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      user
+      type
+      title
+      protein
+      fat
+      carbo
+      state
+      materials
+      contents {
+        nextToken
+      }
+      image
+      reviews {
+        nextToken
+      }
+      favNum
+      createdAt
+      updatedAt
+      delFlg
+    }
+    nextToken
+  }
+}
+query ByProcedure(
+  $recipeID: ID
+  $order: ModelIntKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelProcedureFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  byProcedure(
+    recipeID: $recipeID
+    order: $order
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      recipeID
+      order
+      content
+      image
+      recipe {
+        id
+        user
+        type
+        title
+        protein
+        fat
+        carbo
+        state
+        materials
+        image
+        favNum
+        createdAt
+        updatedAt
+        delFlg
+      }
+      createdAt
+      updatedAt
+    }
+    nextToken
+  }
+}
+query ByReview(
+  $recipeID: ID
+  $sortDirection: ModelSortDirection
+  $filter: ModelReviewFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  byReview(
+    recipeID: $recipeID
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      user
+      recipeID
+      content
+      image
+      recipe {
+        id
+        user
+        type
+        title
+        protein
+        fat
+        carbo
+        state
+        materials
+        image
+        favNum
+        createdAt
+        updatedAt
+        delFlg
+      }
+      createdAt
+      updatedAt
+    }
+    nextToken
+  }
+}

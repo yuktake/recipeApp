@@ -1,0 +1,74 @@
+## [Start] Set query expression for @key **
+#set( $modelQueryExpression = {} )
+## [Start] Validate key arguments. **
+#if( !$util.isNull($ctx.args.protein) && $util.isNull($ctx.args.type) )
+  $util.error("When providing argument 'protein' you must also provide arguments type", "InvalidArgumentsError")
+#end
+## [End] Validate key arguments. **
+#if( !$util.isNull($ctx.args.type) )
+  #set( $modelQueryExpression.expression = "#type = :type" )
+  #set( $modelQueryExpression.expressionNames = {
+  "#type": "type"
+} )
+  #set( $modelQueryExpression.expressionValues = {
+  ":type": {
+      "S": "$ctx.args.type"
+  }
+} )
+#end
+## [Start] Applying Key Condition **
+#if( !$util.isNull($ctx.args.protein) && !$util.isNull($ctx.args.protein.beginsWith) )
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND begins_with(#sortKey, :sortKey)" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "protein"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey", { "N": "$ctx.args.protein.beginsWith" }))
+#end
+#if( !$util.isNull($ctx.args.protein) && !$util.isNull($ctx.args.protein.between) )
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND #sortKey BETWEEN :sortKey0 AND :sortKey1" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "protein"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey0", { "N": "$ctx.args.protein.between[0]" }))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey1", { "N": "$ctx.args.protein.between[1]" }))
+#end
+#if( !$util.isNull($ctx.args.protein) && !$util.isNull($ctx.args.protein.eq) )
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND #sortKey = :sortKey" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "protein"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey", { "N": "$ctx.args.protein.eq" }))
+#end
+#if( !$util.isNull($ctx.args.protein) && !$util.isNull($ctx.args.protein.lt) )
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND #sortKey < :sortKey" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "protein"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey", { "N": "$ctx.args.protein.lt" }))
+#end
+#if( !$util.isNull($ctx.args.protein) && !$util.isNull($ctx.args.protein.le) )
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND #sortKey <= :sortKey" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "protein"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey", { "N": "$ctx.args.protein.le" }))
+#end
+#if( !$util.isNull($ctx.args.protein) && !$util.isNull($ctx.args.protein.gt) )
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND #sortKey > :sortKey" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "protein"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey", { "N": "$ctx.args.protein.gt" }))
+#end
+#if( !$util.isNull($ctx.args.protein) && !$util.isNull($ctx.args.protein.ge) )
+  #set( $modelQueryExpression.expression = "$modelQueryExpression.expression AND #sortKey >= :sortKey" )
+  $util.qr($modelQueryExpression.expressionNames.put("#sortKey", "protein"))
+  $util.qr($modelQueryExpression.expressionValues.put(":sortKey", { "N": "$ctx.args.protein.ge" }))
+#end
+## [End] Applying Key Condition **
+## [End] Set query expression for @key **
+#set( $limit = $util.defaultIfNull($context.args.limit, 100) )
+#set( $QueryRequest = {
+  "version": "2018-05-29",
+  "operation": "Query",
+  "limit": $limit,
+  "query": $modelQueryExpression,
+  "index": "recipesByProtein"
+} )
+#if( !$util.isNull($ctx.args.sortDirection)
+                    && $ctx.args.sortDirection == "DESC" )
+  #set( $QueryRequest.scanIndexForward = false )
+#else
+  #set( $QueryRequest.scanIndexForward = true )
+#end
+#if( $context.args.nextToken ) #set( $QueryRequest.nextToken = $context.args.nextToken ) #end
+#if( $context.args.filter ) #set( $QueryRequest.filter = $util.parseJson("$util.transform.toDynamoDBFilterExpression($ctx.args.filter)") ) #end
+$util.toJson($QueryRequest)

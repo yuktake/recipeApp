@@ -1,0 +1,490 @@
+type Recipe {
+  id: ID!
+  user: String!
+  type: String!
+  title: String!
+  protein: Float!
+  fat: Float!
+  carbo: Float!
+  state: Int!
+  materials: String!
+  contents(order: ModelIntKeyConditionInput, filter: ModelProcedureFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelProcedureConnection
+  image: String!
+  reviews(filter: ModelReviewFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelReviewConnection
+  favNum: Int!
+  createdAt: String
+  updatedAt: String
+  delFlg: Int!
+}
+
+type Procedure {
+  id: ID!
+  recipeID: ID!
+  order: Int!
+  content: String!
+  image: String
+  recipe: Recipe
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type Review {
+  id: ID!
+  user: String!
+  recipeID: ID!
+  content: String!
+  image: String
+  recipe: Recipe
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type User {
+  id: ID!
+  name: String!
+  displayName: String!
+  email: String!
+  description: String
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+type Fav {
+  id: ID!
+  userID: String!
+  recipeID: String!
+  createdAt: AWSDateTime!
+  updatedAt: AWSDateTime!
+}
+
+enum ModelSortDirection {
+  ASC
+  DESC
+}
+
+type ModelRecipeConnection {
+  items: [Recipe]
+  nextToken: String
+}
+
+input ModelStringInput {
+  ne: String
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  contains: String
+  notContains: String
+  between: [String]
+  beginsWith: String
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelIDInput {
+  ne: ID
+  eq: ID
+  le: ID
+  lt: ID
+  ge: ID
+  gt: ID
+  contains: ID
+  notContains: ID
+  between: [ID]
+  beginsWith: ID
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+  size: ModelSizeInput
+}
+
+input ModelIntInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelFloatInput {
+  ne: Float
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelBooleanInput {
+  ne: Boolean
+  eq: Boolean
+  attributeExists: Boolean
+  attributeType: ModelAttributeTypes
+}
+
+input ModelSizeInput {
+  ne: Int
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+}
+
+input ModelRecipeFilterInput {
+  id: ModelIDInput
+  user: ModelStringInput
+  type: ModelStringInput
+  title: ModelStringInput
+  protein: ModelFloatInput
+  fat: ModelFloatInput
+  carbo: ModelFloatInput
+  state: ModelIntInput
+  materials: ModelStringInput
+  image: ModelStringInput
+  favNum: ModelIntInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
+  delFlg: ModelIntInput
+  and: [ModelRecipeFilterInput]
+  or: [ModelRecipeFilterInput]
+  not: ModelRecipeFilterInput
+}
+
+enum ModelAttributeTypes {
+  binary
+  binarySet
+  bool
+  list
+  map
+  number
+  numberSet
+  string
+  stringSet
+  _null
+}
+
+type Query {
+  getRecipe(id: ID!): Recipe
+  listRecipes(filter: ModelRecipeFilterInput, limit: Int, nextToken: String): ModelRecipeConnection
+  getProcedure(id: ID!): Procedure
+  listProcedures(filter: ModelProcedureFilterInput, limit: Int, nextToken: String): ModelProcedureConnection
+  getReview(id: ID!): Review
+  listReviews(filter: ModelReviewFilterInput, limit: Int, nextToken: String): ModelReviewConnection
+  getUser(id: ID!): User
+  listUsers(filter: ModelUserFilterInput, limit: Int, nextToken: String): ModelUserConnection
+  getFav(id: ID!): Fav
+  listFavs(filter: ModelFavFilterInput, limit: Int, nextToken: String): ModelFavConnection
+  recipesByProtein(type: String, protein: ModelFloatKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelRecipeFilterInput, limit: Int, nextToken: String): ModelRecipeConnection
+  recipesByFat(type: String, fat: ModelFloatKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelRecipeFilterInput, limit: Int, nextToken: String): ModelRecipeConnection
+  recipesByCarbo(type: String, carbo: ModelFloatKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelRecipeFilterInput, limit: Int, nextToken: String): ModelRecipeConnection
+  recipesByDate(type: String, createdAt: ModelStringKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelRecipeFilterInput, limit: Int, nextToken: String): ModelRecipeConnection
+  byProcedure(recipeID: ID, order: ModelIntKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelProcedureFilterInput, limit: Int, nextToken: String): ModelProcedureConnection
+  byReview(recipeID: ID, sortDirection: ModelSortDirection, filter: ModelReviewFilterInput, limit: Int, nextToken: String): ModelReviewConnection
+}
+
+input CreateRecipeInput {
+  id: ID
+  user: String!
+  type: String!
+  title: String!
+  protein: Float!
+  fat: Float!
+  carbo: Float!
+  state: Int!
+  materials: String!
+  image: String!
+  favNum: Int!
+  createdAt: String
+  updatedAt: String
+  delFlg: Int!
+}
+
+input UpdateRecipeInput {
+  id: ID!
+  user: String
+  type: String
+  title: String
+  protein: Float
+  fat: Float
+  carbo: Float
+  state: Int
+  materials: String
+  image: String
+  favNum: Int
+  createdAt: String
+  updatedAt: String
+  delFlg: Int
+}
+
+input DeleteRecipeInput {
+  id: ID!
+}
+
+type Mutation {
+  createRecipe(input: CreateRecipeInput!, condition: ModelRecipeConditionInput): Recipe
+  updateRecipe(input: UpdateRecipeInput!, condition: ModelRecipeConditionInput): Recipe
+  deleteRecipe(input: DeleteRecipeInput!, condition: ModelRecipeConditionInput): Recipe
+  createProcedure(input: CreateProcedureInput!, condition: ModelProcedureConditionInput): Procedure
+  updateProcedure(input: UpdateProcedureInput!, condition: ModelProcedureConditionInput): Procedure
+  deleteProcedure(input: DeleteProcedureInput!, condition: ModelProcedureConditionInput): Procedure
+  createReview(input: CreateReviewInput!, condition: ModelReviewConditionInput): Review
+  updateReview(input: UpdateReviewInput!, condition: ModelReviewConditionInput): Review
+  deleteReview(input: DeleteReviewInput!, condition: ModelReviewConditionInput): Review
+  createUser(input: CreateUserInput!, condition: ModelUserConditionInput): User
+  updateUser(input: UpdateUserInput!, condition: ModelUserConditionInput): User
+  deleteUser(input: DeleteUserInput!, condition: ModelUserConditionInput): User
+  createFav(input: CreateFavInput!, condition: ModelFavConditionInput): Fav
+  updateFav(input: UpdateFavInput!, condition: ModelFavConditionInput): Fav
+  deleteFav(input: DeleteFavInput!, condition: ModelFavConditionInput): Fav
+}
+
+input ModelRecipeConditionInput {
+  user: ModelStringInput
+  type: ModelStringInput
+  title: ModelStringInput
+  protein: ModelFloatInput
+  fat: ModelFloatInput
+  carbo: ModelFloatInput
+  state: ModelIntInput
+  materials: ModelStringInput
+  image: ModelStringInput
+  favNum: ModelIntInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
+  delFlg: ModelIntInput
+  and: [ModelRecipeConditionInput]
+  or: [ModelRecipeConditionInput]
+  not: ModelRecipeConditionInput
+}
+
+type Subscription {
+  onCreateRecipe: Recipe @aws_subscribe(mutations: ["createRecipe"])
+  onUpdateRecipe: Recipe @aws_subscribe(mutations: ["updateRecipe"])
+  onDeleteRecipe: Recipe @aws_subscribe(mutations: ["deleteRecipe"])
+  onCreateProcedure: Procedure @aws_subscribe(mutations: ["createProcedure"])
+  onUpdateProcedure: Procedure @aws_subscribe(mutations: ["updateProcedure"])
+  onDeleteProcedure: Procedure @aws_subscribe(mutations: ["deleteProcedure"])
+  onCreateReview: Review @aws_subscribe(mutations: ["createReview"])
+  onUpdateReview: Review @aws_subscribe(mutations: ["updateReview"])
+  onDeleteReview: Review @aws_subscribe(mutations: ["deleteReview"])
+  onCreateUser: User @aws_subscribe(mutations: ["createUser"])
+  onUpdateUser: User @aws_subscribe(mutations: ["updateUser"])
+  onDeleteUser: User @aws_subscribe(mutations: ["deleteUser"])
+  onCreateFav: Fav @aws_subscribe(mutations: ["createFav"])
+  onUpdateFav: Fav @aws_subscribe(mutations: ["updateFav"])
+  onDeleteFav: Fav @aws_subscribe(mutations: ["deleteFav"])
+}
+
+type ModelProcedureConnection {
+  items: [Procedure]
+  nextToken: String
+}
+
+input ModelProcedureFilterInput {
+  id: ModelIDInput
+  recipeID: ModelIDInput
+  order: ModelIntInput
+  content: ModelStringInput
+  image: ModelStringInput
+  and: [ModelProcedureFilterInput]
+  or: [ModelProcedureFilterInput]
+  not: ModelProcedureFilterInput
+}
+
+input CreateProcedureInput {
+  id: ID
+  recipeID: ID!
+  order: Int!
+  content: String!
+  image: String
+}
+
+input UpdateProcedureInput {
+  id: ID!
+  recipeID: ID
+  order: Int
+  content: String
+  image: String
+}
+
+input DeleteProcedureInput {
+  id: ID!
+}
+
+input ModelProcedureConditionInput {
+  recipeID: ModelIDInput
+  order: ModelIntInput
+  content: ModelStringInput
+  image: ModelStringInput
+  and: [ModelProcedureConditionInput]
+  or: [ModelProcedureConditionInput]
+  not: ModelProcedureConditionInput
+}
+
+type ModelReviewConnection {
+  items: [Review]
+  nextToken: String
+}
+
+input ModelReviewFilterInput {
+  id: ModelIDInput
+  user: ModelStringInput
+  recipeID: ModelIDInput
+  content: ModelStringInput
+  image: ModelStringInput
+  and: [ModelReviewFilterInput]
+  or: [ModelReviewFilterInput]
+  not: ModelReviewFilterInput
+}
+
+input CreateReviewInput {
+  id: ID
+  user: String!
+  recipeID: ID!
+  content: String!
+  image: String
+}
+
+input UpdateReviewInput {
+  id: ID!
+  user: String
+  recipeID: ID
+  content: String
+  image: String
+}
+
+input DeleteReviewInput {
+  id: ID!
+}
+
+input ModelReviewConditionInput {
+  user: ModelStringInput
+  recipeID: ModelIDInput
+  content: ModelStringInput
+  image: ModelStringInput
+  and: [ModelReviewConditionInput]
+  or: [ModelReviewConditionInput]
+  not: ModelReviewConditionInput
+}
+
+type ModelUserConnection {
+  items: [User]
+  nextToken: String
+}
+
+input ModelUserFilterInput {
+  id: ModelIDInput
+  name: ModelStringInput
+  displayName: ModelStringInput
+  email: ModelStringInput
+  description: ModelStringInput
+  and: [ModelUserFilterInput]
+  or: [ModelUserFilterInput]
+  not: ModelUserFilterInput
+}
+
+input CreateUserInput {
+  id: ID
+  name: String!
+  displayName: String!
+  email: String!
+  description: String
+}
+
+input UpdateUserInput {
+  id: ID!
+  name: String
+  displayName: String
+  email: String
+  description: String
+}
+
+input DeleteUserInput {
+  id: ID!
+}
+
+input ModelUserConditionInput {
+  name: ModelStringInput
+  displayName: ModelStringInput
+  email: ModelStringInput
+  description: ModelStringInput
+  and: [ModelUserConditionInput]
+  or: [ModelUserConditionInput]
+  not: ModelUserConditionInput
+}
+
+type ModelFavConnection {
+  items: [Fav]
+  nextToken: String
+}
+
+input ModelFavFilterInput {
+  id: ModelIDInput
+  userID: ModelStringInput
+  recipeID: ModelStringInput
+  and: [ModelFavFilterInput]
+  or: [ModelFavFilterInput]
+  not: ModelFavFilterInput
+}
+
+input CreateFavInput {
+  id: ID
+  userID: String!
+  recipeID: String!
+}
+
+input UpdateFavInput {
+  id: ID!
+  userID: String
+  recipeID: String
+}
+
+input DeleteFavInput {
+  id: ID!
+}
+
+input ModelFavConditionInput {
+  userID: ModelStringInput
+  recipeID: ModelStringInput
+  and: [ModelFavConditionInput]
+  or: [ModelFavConditionInput]
+  not: ModelFavConditionInput
+}
+
+input ModelFloatKeyConditionInput {
+  eq: Float
+  le: Float
+  lt: Float
+  ge: Float
+  gt: Float
+  between: [Float]
+}
+
+input ModelStringKeyConditionInput {
+  eq: String
+  le: String
+  lt: String
+  ge: String
+  gt: String
+  between: [String]
+  beginsWith: String
+}
+
+input ModelIntKeyConditionInput {
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+}

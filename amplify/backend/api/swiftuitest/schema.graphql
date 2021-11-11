@@ -1,0 +1,57 @@
+type Recipe @model 
+  @key(name: "recipesByProtein",fields: ["type", "protein"], queryField: "recipesByProtein")
+  @key(name: "recipesByFat",fields: ["type", "fat"], queryField: "recipesByFat")
+  @key(name: "recipesByCarbo",fields: ["type", "carbo"], queryField: "recipesByCarbo")
+  @key(name: "recipesByDate",fields: ["type", "createdAt"], queryField: "recipesByDate")
+{
+  id: ID!
+  user: String!
+  type: String!
+  title: String!
+  protein: Float!
+  fat: Float!
+  carbo: Float!
+  state: Int!
+  materials: String!
+  contents: [Procedure!]! @connection(name: "RecipeProcedures",keyName: "byProcedure", fields: ["id"])
+  image: String!
+  reviews: [Review] @connection(name: "RecipeReviews", keyName: "byReview", fields: ["id"])
+  favNum: Int!
+  createdAt: String
+  updatedAt: String
+  delFlg: Int!
+}
+
+type Procedure @model
+  @key(name: "byProcedure", fields: ["recipeID", "order"], queryField: "byProcedure") {
+  id: ID!
+  recipeID: ID!
+  order: Int!
+  content: String!
+  image: String
+  recipe: Recipe @connection(fields: ["recipeID"])
+}
+
+type Review @model
+  @key(name: "byReview", fields: ["recipeID"], queryField: "byReview") {
+  id: ID!
+  user: String!
+  recipeID: ID!
+  content: String!
+  image: String
+  recipe: Recipe @connection(fields: ["recipeID"])
+}
+
+type User @model{
+  id: ID!
+  name: String!
+  displayName: String!
+  email: String!
+  description: String
+}
+
+type Fav @model{
+  id: ID!
+  userID: String!
+  recipeID: String!
+}

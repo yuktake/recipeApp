@@ -1,0 +1,430 @@
+# this is an auto generated file. This will be overwritten
+mutation CreateRecipe(
+  $input: CreateRecipeInput!
+  $condition: ModelRecipeConditionInput
+) {
+  createRecipe(input: $input, condition: $condition) {
+    id
+    user
+    type
+    title
+    protein
+    fat
+    carbo
+    state
+    materials
+    contents {
+      items {
+        id
+        recipeID
+        order
+        content
+        image
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    image
+    reviews {
+      items {
+        id
+        user
+        recipeID
+        content
+        image
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    favNum
+    createdAt
+    updatedAt
+    delFlg
+  }
+}
+mutation UpdateRecipe(
+  $input: UpdateRecipeInput!
+  $condition: ModelRecipeConditionInput
+) {
+  updateRecipe(input: $input, condition: $condition) {
+    id
+    user
+    type
+    title
+    protein
+    fat
+    carbo
+    state
+    materials
+    contents {
+      items {
+        id
+        recipeID
+        order
+        content
+        image
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    image
+    reviews {
+      items {
+        id
+        user
+        recipeID
+        content
+        image
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    favNum
+    createdAt
+    updatedAt
+    delFlg
+  }
+}
+mutation DeleteRecipe(
+  $input: DeleteRecipeInput!
+  $condition: ModelRecipeConditionInput
+) {
+  deleteRecipe(input: $input, condition: $condition) {
+    id
+    user
+    type
+    title
+    protein
+    fat
+    carbo
+    state
+    materials
+    contents {
+      items {
+        id
+        recipeID
+        order
+        content
+        image
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    image
+    reviews {
+      items {
+        id
+        user
+        recipeID
+        content
+        image
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+    favNum
+    createdAt
+    updatedAt
+    delFlg
+  }
+}
+mutation CreateProcedure(
+  $input: CreateProcedureInput!
+  $condition: ModelProcedureConditionInput
+) {
+  createProcedure(input: $input, condition: $condition) {
+    id
+    recipeID
+    order
+    content
+    image
+    recipe {
+      id
+      user
+      type
+      title
+      protein
+      fat
+      carbo
+      state
+      materials
+      contents {
+        nextToken
+      }
+      image
+      reviews {
+        nextToken
+      }
+      favNum
+      createdAt
+      updatedAt
+      delFlg
+    }
+    createdAt
+    updatedAt
+  }
+}
+mutation UpdateProcedure(
+  $input: UpdateProcedureInput!
+  $condition: ModelProcedureConditionInput
+) {
+  updateProcedure(input: $input, condition: $condition) {
+    id
+    recipeID
+    order
+    content
+    image
+    recipe {
+      id
+      user
+      type
+      title
+      protein
+      fat
+      carbo
+      state
+      materials
+      contents {
+        nextToken
+      }
+      image
+      reviews {
+        nextToken
+      }
+      favNum
+      createdAt
+      updatedAt
+      delFlg
+    }
+    createdAt
+    updatedAt
+  }
+}
+mutation DeleteProcedure(
+  $input: DeleteProcedureInput!
+  $condition: ModelProcedureConditionInput
+) {
+  deleteProcedure(input: $input, condition: $condition) {
+    id
+    recipeID
+    order
+    content
+    image
+    recipe {
+      id
+      user
+      type
+      title
+      protein
+      fat
+      carbo
+      state
+      materials
+      contents {
+        nextToken
+      }
+      image
+      reviews {
+        nextToken
+      }
+      favNum
+      createdAt
+      updatedAt
+      delFlg
+    }
+    createdAt
+    updatedAt
+  }
+}
+mutation CreateReview(
+  $input: CreateReviewInput!
+  $condition: ModelReviewConditionInput
+) {
+  createReview(input: $input, condition: $condition) {
+    id
+    user
+    recipeID
+    content
+    image
+    recipe {
+      id
+      user
+      type
+      title
+      protein
+      fat
+      carbo
+      state
+      materials
+      contents {
+        nextToken
+      }
+      image
+      reviews {
+        nextToken
+      }
+      favNum
+      createdAt
+      updatedAt
+      delFlg
+    }
+    createdAt
+    updatedAt
+  }
+}
+mutation UpdateReview(
+  $input: UpdateReviewInput!
+  $condition: ModelReviewConditionInput
+) {
+  updateReview(input: $input, condition: $condition) {
+    id
+    user
+    recipeID
+    content
+    image
+    recipe {
+      id
+      user
+      type
+      title
+      protein
+      fat
+      carbo
+      state
+      materials
+      contents {
+        nextToken
+      }
+      image
+      reviews {
+        nextToken
+      }
+      favNum
+      createdAt
+      updatedAt
+      delFlg
+    }
+    createdAt
+    updatedAt
+  }
+}
+mutation DeleteReview(
+  $input: DeleteReviewInput!
+  $condition: ModelReviewConditionInput
+) {
+  deleteReview(input: $input, condition: $condition) {
+    id
+    user
+    recipeID
+    content
+    image
+    recipe {
+      id
+      user
+      type
+      title
+      protein
+      fat
+      carbo
+      state
+      materials
+      contents {
+        nextToken
+      }
+      image
+      reviews {
+        nextToken
+      }
+      favNum
+      createdAt
+      updatedAt
+      delFlg
+    }
+    createdAt
+    updatedAt
+  }
+}
+mutation CreateUser(
+  $input: CreateUserInput!
+  $condition: ModelUserConditionInput
+) {
+  createUser(input: $input, condition: $condition) {
+    id
+    name
+    displayName
+    email
+    description
+    createdAt
+    updatedAt
+  }
+}
+mutation UpdateUser(
+  $input: UpdateUserInput!
+  $condition: ModelUserConditionInput
+) {
+  updateUser(input: $input, condition: $condition) {
+    id
+    name
+    displayName
+    email
+    description
+    createdAt
+    updatedAt
+  }
+}
+mutation DeleteUser(
+  $input: DeleteUserInput!
+  $condition: ModelUserConditionInput
+) {
+  deleteUser(input: $input, condition: $condition) {
+    id
+    name
+    displayName
+    email
+    description
+    createdAt
+    updatedAt
+  }
+}
+mutation CreateFav(
+  $input: CreateFavInput!
+  $condition: ModelFavConditionInput
+) {
+  createFav(input: $input, condition: $condition) {
+    id
+    userID
+    recipeID
+    createdAt
+    updatedAt
+  }
+}
+mutation UpdateFav(
+  $input: UpdateFavInput!
+  $condition: ModelFavConditionInput
+) {
+  updateFav(input: $input, condition: $condition) {
+    id
+    userID
+    recipeID
+    createdAt
+    updatedAt
+  }
+}
+mutation DeleteFav(
+  $input: DeleteFavInput!
+  $condition: ModelFavConditionInput
+) {
+  deleteFav(input: $input, condition: $condition) {
+    id
+    userID
+    recipeID
+    createdAt
+    updatedAt
+  }
+}
