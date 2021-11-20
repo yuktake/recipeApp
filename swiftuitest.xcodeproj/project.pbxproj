@@ -313,7 +313,6 @@
 		CA0CD3E826ABADAD00600723 /* Search.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA0CD3E726ABADAD00600723 /* Search.swift */; };
 		CA0CD3EA26ABADDF00600723 /* Favorite.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA0CD3E926ABADDF00600723 /* Favorite.swift */; };
 		CA0CD3EC26ABAE0000600723 /* ProfileView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA0CD3EB26ABAE0000600723 /* ProfileView.swift */; };
-		CA0CD3EF26ABB58F00600723 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = CA0CD3EE26ABB58F00600723 /* SDWebImageSwiftUI */; };
 		CA0CD3F126ABC36400600723 /* RecipeDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA0CD3F026ABC36400600723 /* RecipeDetail.swift */; };
 		CA0CD3F326ABC50300600723 /* RecipeData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA0CD3F226ABC50300600723 /* RecipeData.swift */; };
 		CA0CD3F526ABCACE00600723 /* FavStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA0CD3F426ABCACE00600723 /* FavStore.swift */; };
@@ -329,11 +328,11 @@
 		CA61A0EB26F360C800394A53 /* LaunchScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA61A0EA26F360C800394A53 /* LaunchScreen.swift */; };
 		CA6C199826B69C0F0064FE2D /* CreateRecipeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA6C199726B69C0F0064FE2D /* CreateRecipeViewModel.swift */; };
 		CA7BA1B826B18EA800375492 /* BlurView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA7BA1B726B18EA800375492 /* BlurView.swift */; };
-		CA8A971426B6B92C003671F0 /* SearchResultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8A971326B6B92C003671F0 /* SearchResultView.swift */; };
 		CA8A971626B6B94D003671F0 /* RecipesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8A971526B6B94D003671F0 /* RecipesViewModel.swift */; };
 		CA8D645E2737AC8E00A93D79 /* Detail.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA8D645D2737AC8E00A93D79 /* Detail.swift */; };
 		CA92596B26B044C100611A75 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA92596A26B044C000611A75 /* LoginView.swift */; };
 		CA9FFE8D271AE7AB00B4C41D /* Network.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA9FFE8C271AE7AB00B4C41D /* Network.swift */; };
+		CAA830C3273DCE050023C6F1 /* GraphQLExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA830C2273DCE050023C6F1 /* GraphQLExtension.swift */; };
 		CAA903AA26B4271200803AAC /* UserStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA903A926B4271200803AAC /* UserStore.swift */; };
 		CAA903AC26B4D7D400803AAC /* MakeRecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA903AB26B4D7D400803AAC /* MakeRecipeView.swift */; };
 		CAA903AF26B4E68700803AAC /* TextfieldIcon.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA903AE26B4E68600803AAC /* TextfieldIcon.swift */; };
@@ -345,7 +344,6 @@
 		CAA903BE26B4F3D900803AAC /* ImagePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA903BD26B4F3D900803AAC /* ImagePicker.swift */; };
 		CAA903C026B4F42600803AAC /* GradientTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA903BF26B4F42600803AAC /* GradientTextField.swift */; };
 		CAA903C226B5208F00803AAC /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA903C126B5208F00803AAC /* AvatarView.swift */; };
-		CAA97D9A26D0D14400EE960F /* SearchResultRecipesStore.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA97D9926D0D14400EE960F /* SearchResultRecipesStore.swift */; };
 		CAB6A43026ABA1B300AF5C99 /* swiftuitestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAB6A42F26ABA1B300AF5C99 /* swiftuitestApp.swift */; };
 		CAB6A43226ABA1B300AF5C99 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAB6A43126ABA1B300AF5C99 /* ContentView.swift */; };
 		CAB6A43426ABA1B400AF5C99 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CAB6A43326ABA1B400AF5C99 /* Assets.xcassets */; };
@@ -360,7 +358,7 @@
 		CAB9C7D526BF617D001F3A23 /* AWSDataStorePlugin in Frameworks */ = {isa = PBXBuildFile; productRef = CAB9C7D426BF617D001F3A23 /* AWSDataStorePlugin */; };
 		CAB9C7D726BF617D001F3A23 /* AWSAPIPlugin in Frameworks */ = {isa = PBXBuildFile; productRef = CAB9C7D626BF617D001F3A23 /* AWSAPIPlugin */; };
 		CACEEFB54D82E72E2F2D4095 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C656504056135DC69794442C /* User.swift */; };
-		CADE1081270F0854003A15A2 /* UserRecipeList.swift in Sources */ = {isa = PBXBuildFile; fileRef = CADE1080270F0854003A15A2 /* UserRecipeList.swift */; };
+		CADC39A62743128900E96708 /* FavData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CADC39A52743128900E96708 /* FavData.swift */; };
 		CADE1083270F0FA9003A15A2 /* UserRecipesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CADE1082270F0FA9003A15A2 /* UserRecipesViewModel.swift */; };
 		CAE9544626F36AC1000E86BE /* ImageCroppingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE9544526F36AC1000E86BE /* ImageCroppingView.swift */; };
 		CAF35CB426B3E98F001DD9A5 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = CAF35CB226B3E98F001DD9A5 /* loading.json */; };
@@ -476,11 +474,11 @@
 		CA61A0EA26F360C800394A53 /* LaunchScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreen.swift; sourceTree = "<group>"; };
 		CA6C199726B69C0F0064FE2D /* CreateRecipeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRecipeViewModel.swift; sourceTree = "<group>"; };
 		CA7BA1B726B18EA800375492 /* BlurView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlurView.swift; sourceTree = "<group>"; };
-		CA8A971326B6B92C003671F0 /* SearchResultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultView.swift; sourceTree = "<group>"; };
 		CA8A971526B6B94D003671F0 /* RecipesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipesViewModel.swift; sourceTree = "<group>"; };
 		CA8D645D2737AC8E00A93D79 /* Detail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Detail.swift; sourceTree = "<group>"; };
 		CA92596A26B044C000611A75 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
 		CA9FFE8C271AE7AB00B4C41D /* Network.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Network.swift; sourceTree = "<group>"; };
+		CAA830C2273DCE050023C6F1 /* GraphQLExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphQLExtension.swift; sourceTree = "<group>"; };
 		CAA903A926B4271200803AAC /* UserStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserStore.swift; sourceTree = "<group>"; };
 		CAA903AB26B4D7D400803AAC /* MakeRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MakeRecipeView.swift; sourceTree = "<group>"; };
 		CAA903AE26B4E68600803AAC /* TextfieldIcon.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextfieldIcon.swift; sourceTree = "<group>"; };
@@ -492,7 +490,6 @@
 		CAA903BD26B4F3D900803AAC /* ImagePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImagePicker.swift; sourceTree = "<group>"; };
 		CAA903BF26B4F42600803AAC /* GradientTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GradientTextField.swift; sourceTree = "<group>"; };
 		CAA903C126B5208F00803AAC /* AvatarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AvatarView.swift; sourceTree = "<group>"; };
-		CAA97D9926D0D14400EE960F /* SearchResultRecipesStore.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchResultRecipesStore.swift; sourceTree = "<group>"; };
 		CAB6A42C26ABA1B300AF5C99 /* swiftuitest.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = swiftuitest.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		CAB6A42F26ABA1B300AF5C99 /* swiftuitestApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = swiftuitestApp.swift; sourceTree = "<group>"; };
 		CAB6A43126ABA1B300AF5C99 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -501,7 +498,7 @@
 		CAB6A43826ABA1B400AF5C99 /* Persistence.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Persistence.swift; sourceTree = "<group>"; };
 		CAB6A43B26ABA1B400AF5C99 /* swiftuitest.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = swiftuitest.xcdatamodel; sourceTree = "<group>"; };
 		CAB6A43D26ABA1B400AF5C99 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		CADE1080270F0854003A15A2 /* UserRecipeList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRecipeList.swift; sourceTree = "<group>"; };
+		CADC39A52743128900E96708 /* FavData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavData.swift; sourceTree = "<group>"; };
 		CADE1082270F0FA9003A15A2 /* UserRecipesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRecipesViewModel.swift; sourceTree = "<group>"; };
 		CAE9544526F36AC1000E86BE /* ImageCroppingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCroppingView.swift; sourceTree = "<group>"; };
 		CAF35CB226B3E98F001DD9A5 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
@@ -522,7 +519,6 @@
 				CAB9C7CB26BF617D001F3A23 /* Amplify in Frameworks */,
 				CAB9C7D126BF617D001F3A23 /* AWSPluginsCore in Frameworks */,
 				CAB9C7D526BF617D001F3A23 /* AWSDataStorePlugin in Frameworks */,
-				CA0CD3EF26ABB58F00600723 /* SDWebImageSwiftUI in Frameworks */,
 				CAF35CB826B3EA2F001DD9A5 /* Lottie in Frameworks */,
 				CAB9C7D726BF617D001F3A23 /* AWSAPIPlugin in Frameworks */,
 				CAB9C7CD26BF617D001F3A23 /* AWSCognitoAuthPlugin in Frameworks */,
@@ -568,6 +564,24 @@
 			path = Fonts;
 			sourceTree = "<group>";
 		};
+		CA50395B274885EF00110F63 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				CADC39A52743128900E96708 /* FavData.swift */,
+				CA0CD3F226ABC50300600723 /* RecipeData.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		CA50395C2748862900110F63 /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				CA272DC726C2CEAE004A2BCF /* Recipe+Extensions.swift */,
+				CAA830C2273DCE050023C6F1 /* GraphQLExtension.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
 		CA6C199626B69BF10064FE2D /* ViewModels */ = {
 			isa = PBXGroup;
 			children = (
@@ -593,6 +607,8 @@
 		CAA903B226B4E88400803AAC /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
+				CAE9544526F36AC1000E86BE /* ImageCroppingView.swift */,
+				CA9FFE8C271AE7AB00B4C41D /* Network.swift */,
 				CAA903B326B4E8A900803AAC /* VisualEffectBlur.swift */,
 				CAA903BD26B4F3D900803AAC /* ImagePicker.swift */,
 			);
@@ -627,28 +643,23 @@
 				CA0CD3E926ABADDF00600723 /* Favorite.swift */,
 				CA0CD3F426ABCACE00600723 /* FavStore.swift */,
 				CA0CD3E526ABA70200600723 /* Home.swift */,
-				CAE9544526F36AC1000E86BE /* ImageCroppingView.swift */,
 				CA61A0EA26F360C800394A53 /* LaunchScreen.swift */,
 				CA92596A26B044C000611A75 /* LoginView.swift */,
 				CAF35CB926B3EA7A001DD9A5 /* LottieView.swift */,
 				CAF35CBB26B3ED57001DD9A5 /* LoadingView.swift */,
 				CAA903AB26B4D7D400803AAC /* MakeRecipeView.swift */,
-				CA9FFE8C271AE7AB00B4C41D /* Network.swift */,
 				CA0CD3EB26ABAE0000600723 /* ProfileView.swift */,
 				CA0CD3F026ABC36400600723 /* RecipeDetail.swift */,
 				CA07A46926F5836700EFF37B /* RecipeEdit.swift */,
-				CA272DC726C2CEAE004A2BCF /* Recipe+Extensions.swift */,
-				CA0CD3F226ABC50300600723 /* RecipeData.swift */,
 				CA4E85E52712F94A008E2C85 /* ReviewView.swift */,
 				CAA903BB26B4F2DF00803AAC /* SettingView.swift */,
 				CAF35CBD26B3EFC5001DD9A5 /* SuccessView.swift */,
-				CA8A971326B6B92C003671F0 /* SearchResultView.swift */,
 				CA0CD3E726ABADAD00600723 /* Search.swift */,
-				CAA97D9926D0D14400EE960F /* SearchResultRecipesStore.swift */,
 				CAB6A42F26ABA1B300AF5C99 /* swiftuitestApp.swift */,
 				CA0CD3E326ABA6DF00600723 /* TabBar.swift */,
-				CADE1080270F0854003A15A2 /* UserRecipeList.swift */,
 				CAA903A926B4271200803AAC /* UserStore.swift */,
+				CA50395C2748862900110F63 /* Extensions */,
+				CA50395B274885EF00110F63 /* Model */,
 				CA6C199626B69BF10064FE2D /* ViewModels */,
 				CAA903AD26B4E63B00803AAC /* Views */,
 				CAA903B226B4E88400803AAC /* Helpers */,
@@ -701,7 +712,6 @@
 			);
 			name = swiftuitest;
 			packageProductDependencies = (
-				CA0CD3EE26ABB58F00600723 /* SDWebImageSwiftUI */,
 				CAF35CB726B3EA2F001DD9A5 /* Lottie */,
 				CAB9C7CA26BF617D001F3A23 /* Amplify */,
 				CAB9C7CC26BF617D001F3A23 /* AWSCognitoAuthPlugin */,
@@ -739,7 +749,6 @@
 			);
 			mainGroup = CAB6A42326ABA1B300AF5C99;
 			packageReferences = (
-				CA0CD3ED26ABB58F00600723 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
 				CAF35CB626B3EA2F001DD9A5 /* XCRemoteSwiftPackageReference "lottie-ios" */,
 				CAB9C7C926BF617D001F3A23 /* XCRemoteSwiftPackageReference "amplify-ios" */,
 			);
@@ -845,7 +854,6 @@
 				CAA903AF26B4E68700803AAC /* TextfieldIcon.swift in Sources */,
 				CAF35CBC26B3ED57001DD9A5 /* LoadingView.swift in Sources */,
 				CAB6A43026ABA1B300AF5C99 /* swiftuitestApp.swift in Sources */,
-				CA8A971426B6B92C003671F0 /* SearchResultView.swift in Sources */,
 				CAB6A43C26ABA1B400AF5C99 /* swiftuitest.xcdatamodeld in Sources */,
 				CA0CD3E626ABA70200600723 /* Home.swift in Sources */,
 				CA0CD3E426ABA6DF00600723 /* TabBar.swift in Sources */,
@@ -869,7 +877,6 @@
 				883DD6DC22A563547D56DEFC /* AmplifyModels.swift in Sources */,
 				4212C1ADA202B89591F59A60 /* Recipe+Schema.swift in Sources */,
 				126E26DEE26860EF4926225D /* Recipe.swift in Sources */,
-				CAA97D9A26D0D14400EE960F /* SearchResultRecipesStore.swift in Sources */,
 				26AB4E6294A97EA3C9EA428B /* AmplifyModels.swift in Sources */,
 				656A61A3CA30DD52A883898F /* Recipe+Schema.swift in Sources */,
 				CA9FFE8D271AE7AB00B4C41D /* Network.swift in Sources */,
@@ -937,7 +944,6 @@
 				408E7CC09097C76588E70CEF /* Recipe.swift in Sources */,
 				31D1192545B9B2481501FDCE /* Review+Schema.swift in Sources */,
 				B7E022756A170111C974384E /* Review.swift in Sources */,
-				CADE1081270F0854003A15A2 /* UserRecipeList.swift in Sources */,
 				B509C58A739A5B50C8302622 /* User+Schema.swift in Sources */,
 				593AC02A971773C447E1A7A4 /* User.swift in Sources */,
 				68B4F59B62BB4A9178F74FCB /* AmplifyModels.swift in Sources */,
@@ -947,6 +953,7 @@
 				96049081E309B61B07B2D0BF /* Recipe.swift in Sources */,
 				FA3133B8CE92574D68221CD2 /* Review+Schema.swift in Sources */,
 				CA4E85E62712F94A008E2C85 /* ReviewView.swift in Sources */,
+				CADC39A62743128900E96708 /* FavData.swift in Sources */,
 				810CA80B2AD1491C6934AF03 /* Review.swift in Sources */,
 				4F8B0DDD9FC7E685EA3187D7 /* User+Schema.swift in Sources */,
 				724622A07EE96A49E8FC91C9 /* User.swift in Sources */,
@@ -970,6 +977,7 @@
 				70D45541773B2721B029B219 /* User.swift in Sources */,
 				1A33526F02423743600D8A05 /* AmplifyModels.swift in Sources */,
 				4EF7F2C1563F61E36B8323F0 /* Procedure+Schema.swift in Sources */,
+				CAA830C3273DCE050023C6F1 /* GraphQLExtension.swift in Sources */,
 				D7B0F5F7DB991AF3AECF7841 /* Procedure.swift in Sources */,
 				02E4CBF07A2457EDDF693B36 /* Recipe+Schema.swift in Sources */,
 				019600C767874ABBCDB2C0C7 /* Recipe.swift in Sources */,
@@ -1408,14 +1416,6 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
-		CA0CD3ED26ABB58F00600723 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI.git";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.0.2;
-			};
-		};
 		CAB9C7C926BF617D001F3A23 /* XCRemoteSwiftPackageReference "amplify-ios" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/aws-amplify/amplify-ios";
@@ -1435,11 +1435,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		CA0CD3EE26ABB58F00600723 /* SDWebImageSwiftUI */ = {
-			isa = XCSwiftPackageProductDependency;
-			package = CA0CD3ED26ABB58F00600723 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
-			productName = SDWebImageSwiftUI;
-		};
 		CAB9C7CA26BF617D001F3A23 /* Amplify */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = CAB9C7C926BF617D001F3A23 /* XCRemoteSwiftPackageReference "amplify-ios" */;

@@ -241,7 +241,7 @@ struct Home: View {
                                         .shadow(color: .init(red: 0.1, green: 0.1, blue: 0.1), radius: 11 , x: 0, y: 4)
                                     )
                                 }.background(Color.clear.opacity(0.4)).frame(height:self.itemHeight)
-                                    .padding(.leading, 20)
+//                                    .padding(.leading, 20)
                                     .padding(.trailing, 20)
                                     .padding(.bottom, 20)
                             }

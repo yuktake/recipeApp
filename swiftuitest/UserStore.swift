@@ -10,6 +10,8 @@ import Combine
 import Amplify
 import AWSPluginsCore
 import Foundation
+// Listのエラー対策
+//import SwiftUI
 
 class UserStore: ObservableObject {
     @Published var isLogged = UserDefaults.standard.bool(forKey: "isLogged"){
@@ -26,6 +28,7 @@ class UserStore: ObservableObject {
     
     @Published var myRecipes:[RecipeData] = []
     @Published var imageDatum = [String:Data]()
+    // 使わない？
     @Published var userDatum = [String:Data]()
     
     @Published var username = UserDefaults.standard.string(forKey: "username"){
@@ -44,22 +47,229 @@ class UserStore: ObservableObject {
         }
     }
     // fav
-    @Published var fav:[String:RecipeData] = [:]
+    @Published var fav = [String:RecipeData]()
+//    @Published var fav = [RecipeData]()
+    
+    @Published var favRecipes:[FavData] = []
     @Published var favImageDatum = [String:Data]()
-    @Published var localFavs:[String:String] = (UserDefaults.standard.dictionary(forKey: "favs") ?? [:]) as! [String:String]{
-        didSet {
-            UserDefaults.standard.set(localFavs, forKey: "favs")
-            self.getInitFavs()
-        }
-    }
+    @Published var localFavs:[String:String] = [:]
+    @Published var favArray:[String] = []
+    
+//    (UserDefaults.standard.dictionary(forKey: "favs") ?? [:]) as! [String:String]{
+//        didSet {
+//            UserDefaults.standard.set(localFavs, forKey: "favs")
+//            self.getInitFavs()
+//        }
+//    }
     @Published var token: String = ""
+    @Published var favToken: String = ""
     
     var currentPage: List<Recipe>?
     
     init(){
         if (isLogged) {
-            self.getFavs()
+//            self.getFavs()
             self.getMyRecipes()
+            self.getFavsFromServer()
+        }
+    }
+    
+    func asyncProcess(completion: @escaping () -> Void) {
+        DispatchQueue.main.async {
+            completion()
+        }
+    }
+    
+    func getFavsFromServer() {
+        let group = DispatchGroup()
+//        self.favImageDatum = (UserDefaults.standard.dictionary(forKey: "favImageDatum") ?? [:]) as! [String:Data]
+//        print("favImageDatum")
+//        print(self.favImageDatum)
+        
+//        let fav = Fav.keys
+//        let predicate = fav.userID == UserDefaults.standard.string(forKey: "sub")
+//        Amplify.API.query(request: .list(Fav.self, where: predicate)) { event in
+        
+        Amplify.API.query(request: .getFavsByDate(userId: self.sub!)) { event in
+            switch event {
+            case .success(let result):
+                switch result {
+                case .success(let query):
+                    let favs = query.getItems()
+                    DispatchQueue.main.async {
+                        self.favToken = query.getNextToken()
+                    }
+                    print("Successfully retrieved list of favs: \(favs)")
+                    favs.forEach { fav in
+                        group.enter()
+                        self.asyncProcess() { () -> Void in
+//                            self.getRecipeDetail(fav: fav, group: group)
+                            DispatchQueue.main.async{
+//                                self.favArray.append(fav.recipeID)
+                                if !self.favRecipes.contains(where: {$0.id == fav.recipeID}) {
+                                    self.favRecipes.append(FavData(id: fav.recipeID))
+                                }
+                            }
+                            Amplify.Storage.downloadData(key: "recipes/\(fav.recipeID).jpg") { result in
+                                switch result {
+                                case .success(let imageData):
+                                    DispatchQueue.main.async{
+        //                                self.localFavs[recipe.id] = recipe.id
+                                        self.favImageDatum[fav.recipeID] = imageData
+                                    }
+                                    group.leave()
+                                case .failure(let error):
+                                    print("Failed to download image data - \(error)")
+                                }
+                            }
+                            print("get recipe detail")
+                        }
+//                        print("fav from server")
+//                        print(fav.recipeID)
+                    }
+                    group.notify(queue: .main) {
+//                        self.fav = self.fav.sorted(by: { lRecipe, rRecipe -> Bool in
+//                            return lRecipe.create_at > rRecipe.create_at
+//                        })
+//                        _ = self.fav.keys.sorted(by: { lRecipe, rRecipe -> Bool in
+//                            return lRecipe > rRecipe
+//                        })
+                        
+                        
+                        print("doneeeeeeeeeeeeeee")
+                    }
+                case .failure(let error):
+                    print("Got failed result with \(error.errorDescription)")
+                }
+            case .failure(let error):
+                print("Got failed event with error \(error)")
+            }
+        }
+    }
+    
+    func getFavsFromServerNextPage(nextToken: String) {
+        print("listFavNextPage")
+        let group = DispatchGroup()
+        Amplify.API.query(request:.getFavsByDateNextPage(userid: self.sub!, nextToken: nextToken)) { event in
+            switch event {
+            case .success(let result):
+                switch result {
+                case .success(let query):
+                    let favs = query.getItems()
+                    DispatchQueue.main.async {
+                        self.favToken = query.getNextToken()
+                    }
+                    print("Successfully retrieved next list of favs:")
+                    
+                    favs.forEach { fav in
+                        print(fav.recipeID)
+                        group.enter()
+                        self.asyncProcess() { () -> Void in
+                            DispatchQueue.main.async{
+    //                                self.favArray.append(fav.recipeID)
+                                if !self.favRecipes.contains(where: {$0.id == fav.recipeID}) {
+                                    self.favRecipes.append(FavData(id: fav.recipeID))
+                                }
+                            }
+//                            self.getRecipeDetail(fav: fav, group: group)
+                            Amplify.Storage.downloadData(key: "recipes/\(fav.recipeID).jpg") { result in
+                                switch result {
+                                case .success(let imageData):
+                                    DispatchQueue.main.async{
+        //                                self.localFavs[recipe.id] = recipe.id
+                                        self.favImageDatum[fav.recipeID] = imageData
+                                    }
+                                    group.leave()
+                                case .failure(let error):
+                                    print("Failed to download image data - \(error)")
+                                }
+                            }
+                            print("get next recipe detail")
+                        }
+                    }
+                    group.notify(queue: .main) {
+//                        self.fav = self.fav.sorted(by: { lRecipe, rRecipe -> Bool in
+//                            return lRecipe.create_at > rRecipe.create_at
+//                        })
+                        print("next doneeeeeeeeeeeeeee")
+                    }
+                case .failure(let error):
+                    print("Got failed get next result with \(error.errorDescription)")
+                    print(error.recoverySuggestion)
+                    print(error.debugDescription)
+                }
+            case .failure(let error):
+                print("Got failed get next event with error \(error)")
+            }
+        }
+    }
+    
+    func getRecipeDetail(fav: Fav, group:DispatchGroup) {
+        Amplify.API.query(request: .getRecipeForDetail(id: fav.recipeID)) { event in
+            switch event {
+            case .success(let result):
+                switch result {
+                case .success(let recipe):
+//                    print("Successfully retrieved recipe: \(recipe)")
+                    if (recipe.delFlg == 1) {
+//                        self.deleted = true
+                        return
+                    }
+                    Amplify.Storage.downloadData(key: "recipes/\(recipe.id).jpg") { result in
+                        switch result {
+                        case .success(let imageData):
+                            DispatchQueue.main.async{
+//                                self.localFavs[recipe.id] = recipe.id
+                                self.favArray.append(recipe.id)
+                                self.favImageDatum[recipe.id] = imageData
+                            }
+                        case .failure(let error):
+                            print("Failed to download image data - \(error)")
+                        }
+                    }
+//                    self.fav[recipe.id] = RecipeData(
+//                        id: recipe.id,
+//                        userId: recipe.user,
+//                        title: recipe.title,
+//                        protein: String(recipe.protein),
+//                        fat: String(recipe.fat),
+//                        carbo: String(recipe.carbo),
+//                        state: recipe.state,
+//                        materials: recipe.materials,
+//                        contents: [],
+//                        reviews: [],
+//                        image: recipe.image,
+//                        favNum: recipe.favNum,
+//                        create_at: recipe.createdAt!,
+//                        update_at: recipe.updatedAt!,
+//                        delFlg: recipe.delFlg
+//                    )
+//                    DispatchQueue.main.async {
+//                        self.fav.append(RecipeData(
+//                            id: recipe.id,
+//                            userId: recipe.user,
+//                            title: recipe.title,
+//                            protein: String(recipe.protein),
+//                            fat: String(recipe.fat),
+//                            carbo: String(recipe.carbo),
+//                            state: recipe.state,
+//                            materials: recipe.materials,
+//                            contents: [],
+//                            reviews: [],
+//                            image: recipe.image,
+//                            favNum: recipe.favNum,
+//                            create_at: recipe.createdAt!,
+//                            update_at: recipe.updatedAt!,
+//                            delFlg: recipe.delFlg
+//                        ))
+//                    }
+                    group.leave()
+                case .failure(let error):
+                    print("Got failed result with \(error.errorDescription)")
+                }
+            case .failure(let error):
+                print("Got failed event with error \(error)")
+            }
         }
     }
     
@@ -72,6 +282,7 @@ class UserStore: ObservableObject {
         self.description = nil
         self.image = nil
         self.fav = [:]
+//        self.fav = []
         self.favImageDatum = [:]
         self.localFavs = [:]
     }
@@ -91,31 +302,32 @@ class UserStore: ObservableObject {
                     let recipes = query.getItems()
                     self.token = query.getNextToken()
                     recipes.forEach { item in
-                        print("my recipeeeee")
-                        print(item.title)
+//                        print("my recipeeeee")
+//                        print(item.title)
 
                         DispatchQueue.main.async {
-                            self.myRecipes.append(
-                                RecipeData(
-                                    id:item.id,
-                                    userId:item.user,
-                                    title:item.title,
-                                    protein:String(item.protein),
-                                    fat:String(item.fat),
-                                    carbo:String(item.carbo),
-                                    state:item.state,
-                                    materials:item.materials,
-                                    contents:[],
-                                    reviews: [],
-                                    image:item.image,
-                                    favNum: item.favNum,
-                                    create_at: item.createdAt!,
-                                    update_at: item.updatedAt!,
-                                    delFlg: item.delFlg
+                            if !self.myRecipes.contains(where: {$0.id == item.id}) {
+                                self.myRecipes.append(
+                                    RecipeData(
+                                        id:item.id,
+                                        userId:item.user,
+                                        title:item.title,
+                                        protein:String(item.protein),
+                                        fat:String(item.fat),
+                                        carbo:String(item.carbo),
+                                        state:item.state,
+                                        materials:item.materials,
+                                        contents:[],
+                                        reviews: [],
+                                        image:item.image,
+                                        favNum: item.favNum,
+                                        create_at: item.createdAt!,
+                                        update_at: item.updatedAt!,
+                                        delFlg: item.delFlg
                                 ))
+                            }
                         }
-                        let options = StorageDownloadDataRequest.Options(accessLevel: .guest)
-                        Amplify.Storage.downloadData(key: item.image, options: options) { result in
+                        Amplify.Storage.downloadData(key: item.image) { result in
                             switch result {
                             case .success(let imageData):
                                 DispatchQueue.main.async{
@@ -126,16 +338,16 @@ class UserStore: ObservableObject {
                             }
                         }
                         // profile image
-                        Amplify.Storage.downloadData(key: "users/\(item.user).jpg", options: options) { result in
-                            switch result {
-                            case .success(let imageData):
-                                DispatchQueue.main.async{
-                                    self.userDatum[item.id] = imageData
-                                }
-                            case .failure(let error):
-                                print("Failed to download image data - \(error)")
-                            }
-                        }
+//                        Amplify.Storage.downloadData(key: "users/\(item.user).jpg") { result in
+//                            switch result {
+//                            case .success(let imageData):
+//                                DispatchQueue.main.async{
+//                                    self.userDatum[item.id] = imageData
+//                                }
+//                            case .failure(let error):
+//                                print("Failed to download image data - \(error)")
+//                            }
+//                        }
                     }
                 case .failure(let error):
                     print("Got failed recent result with \(error.errorDescription)")
@@ -150,8 +362,7 @@ class UserStore: ObservableObject {
     
     func listNextPage(nextToken: String) {
         print("listNextPage")
-        Amplify.API.query(request:.getMyRecipesByDateNextPage(userid: self.sub!, nextToken: nextToken)
-        ) { event in
+        Amplify.API.query(request:.getMyRecipesByDateNextPage(userid: self.sub!, nextToken: nextToken)) { event in
             switch event {
             case .success(let result):
                 switch result {
@@ -167,27 +378,28 @@ class UserStore: ObservableObject {
                         print(item.title)
 
                         DispatchQueue.main.async {
-                            self.myRecipes.append(
-                                RecipeData(
-                                    id:item.id,
-                                    userId:item.user,
-                                    title:item.title,
-                                    protein:String(item.protein),
-                                    fat:String(item.fat),
-                                    carbo:String(item.carbo),
-                                    state:item.state,
-                                    materials:item.materials,
-                                    contents:[],
-                                    reviews: [],
-                                    image:item.image,
-                                    favNum: item.favNum,
-                                    create_at: item.createdAt!,
-                                    update_at: item.updatedAt!,
-                                    delFlg: item.delFlg
+                            if !self.myRecipes.contains(where: {$0.id == item.id}) {
+                                self.myRecipes.append(
+                                    RecipeData(
+                                        id:item.id,
+                                        userId:item.user,
+                                        title:item.title,
+                                        protein:String(item.protein),
+                                        fat:String(item.fat),
+                                        carbo:String(item.carbo),
+                                        state:item.state,
+                                        materials:item.materials,
+                                        contents:[],
+                                        reviews: [],
+                                        image:item.image,
+                                        favNum: item.favNum,
+                                        create_at: item.createdAt!,
+                                        update_at: item.updatedAt!,
+                                        delFlg: item.delFlg
                                 ))
+                            }
                         }
-                        let options = StorageDownloadDataRequest.Options(accessLevel: .guest)
-                        Amplify.Storage.downloadData(key: item.image, options: options) { result in
+                        Amplify.Storage.downloadData(key: item.image) { result in
                             switch result {
                             case .success(let imageData):
                                 DispatchQueue.main.async{
@@ -197,17 +409,17 @@ class UserStore: ObservableObject {
                                 print("Failed to download image data - \(error)")
                             }
                         }
-                        // profile image
-                        Amplify.Storage.downloadData(key: "users/\(item.user).jpg", options: options) { result in
-                            switch result {
-                            case .success(let imageData):
-                                DispatchQueue.main.async{
-                                    self.userDatum[item.id] = imageData
-                                }
-                            case .failure(let error):
-                                print("Failed to download image data - \(error)")
-                            }
-                        }
+//                        // profile image
+//                        Amplify.Storage.downloadData(key: "users/\(item.user).jpg", options: options) { result in
+//                            switch result {
+//                            case .success(let imageData):
+//                                DispatchQueue.main.async{
+//                                    self.userDatum[item.id] = imageData
+//                                }
+//                            case .failure(let error):
+//                                print("Failed to download image data - \(error)")
+//                            }
+//                        }
                     }
                 case .failure(let error):
                     print("Got failed get next result with \(error.errorDescription)")
@@ -238,40 +450,41 @@ class UserStore: ObservableObject {
 //                        UserDefaults.standard.set(user.displayName, forKey: "username")
                         print("sub")
                         print(self.sub)
-                        let options = StorageDownloadDataRequest.Options(accessLevel: .guest)
-                        Amplify.Storage.downloadData(key: "users/\(user.id).jpg", options: options) { result in
+                        Amplify.Storage.downloadData(key: "users/\(user.id).jpg") { result in
                             switch result {
                             case .success(let imageData):
                                 DispatchQueue.main.async{
                                     self.image = imageData
                                 }
+                                self.getMyRecipes()
+                                self.getFavsFromServer()
                             case .failure(let error):
                                 print("Failed to download image data - \(error)")
                             }
                         }
                         
-                        let fav = Fav.keys
-                        let predicate = fav.userID == self.sub
-                        var local_favs_dict:[String:String] = [:]
-                        Amplify.API.query(request: .list(Fav.self, where: predicate)) { event in
-                            switch event {
-                            case .success(let result):
-                                switch result {
-                                case .success(let favs):
-                                    print("Successfully retrieved list of favs: \(favs)")
-                                    favs.forEach { fav in
-                                        local_favs_dict[fav.recipeID] = fav.recipeID
-                                    }
-                                    DispatchQueue.main.async{
-                                        self.localFavs = local_favs_dict
-                                    }
-                                case .failure(let error):
-                                    print("Got failed result with \(error.errorDescription)")
-                                }
-                            case .failure(let error):
-                                print("Got failed event with error \(error)")
-                            }
-                        }
+//                        let fav = Fav.keys
+//                        let predicate = fav.userID == self.sub
+//                        var local_favs_dict:[String:String] = [:]
+//                        Amplify.API.query(request: .list(Fav.self, where: predicate)) { event in
+//                            switch event {
+//                            case .success(let result):
+//                                switch result {
+//                                case .success(let favs):
+//                                    print("Successfully retrieved list of favs: \(favs)")
+//                                    favs.forEach { fav in
+//                                        local_favs_dict[fav.recipeID] = fav.recipeID
+//                                    }
+//                                    DispatchQueue.main.async{
+//                                        self.localFavs = local_favs_dict
+//                                    }
+//                                case .failure(let error):
+//                                    print("Got failed result with \(error.errorDescription)")
+//                                }
+//                            case .failure(let error):
+//                                print("Got failed event with error \(error)")
+//                            }
+//                        }
                     }
                 case .failure(let error):
                     print("Got failed result with \(error.errorDescription)")
@@ -316,26 +529,25 @@ class UserStore: ObservableObject {
                         print("Successfully retrieved recipe:\(recipe)")
                             
                         DispatchQueue.main.async {
-                            self.fav[recipe.id] = RecipeData(
-                                id: recipe.id,
-                                userId: recipe.user,
-                                title: recipe.title,
-                                protein: String(recipe.protein),
-                                fat: String(recipe.fat),
-                                carbo: String(recipe.carbo),
-                                state: recipe.state,
-                                materials: recipe.materials,
-                                contents: [],
-                                reviews: [],
-                                image: recipe.image,
-                                favNum: recipe.favNum,
-                                create_at: recipe.createdAt!,
-                                update_at: recipe.updatedAt!,
-                                delFlg: recipe.delFlg
-                            )
+//                            self.fav[recipe.id] = RecipeData(
+//                                id: recipe.id,
+//                                userId: recipe.user,
+//                                title: recipe.title,
+//                                protein: String(recipe.protein),
+//                                fat: String(recipe.fat),
+//                                carbo: String(recipe.carbo),
+//                                state: recipe.state,
+//                                materials: recipe.materials,
+//                                contents: [],
+//                                reviews: [],
+//                                image: recipe.image,
+//                                favNum: recipe.favNum,
+//                                create_at: recipe.createdAt!,
+//                                update_at: recipe.updatedAt!,
+//                                delFlg: recipe.delFlg
+//                            )
                         }
-                        let options = StorageDownloadDataRequest.Options(accessLevel: .guest)
-                        Amplify.Storage.downloadData(key: recipe.image,options: options) { result in
+                        Amplify.Storage.downloadData(key: recipe.image) { result in
                             switch result {
                             case .success(let imageData):
                                 DispatchQueue.main.async{
@@ -359,8 +571,8 @@ class UserStore: ObservableObject {
     
     func getFavs() {
         print("get favsss")
-        print(self.localFavs)
-        var tmp_favs = self.localFavs
+        var lofavs = (UserDefaults.standard.dictionary(forKey: "favs") ?? [:]) as! [String:String]
+        print(lofavs)
         let fav = Fav.keys
         let predicate = fav.userID == UserDefaults.standard.string(forKey: "sub")
         Amplify.API.query(request: .list(Fav.self, where: predicate)) { event in
@@ -370,80 +582,28 @@ class UserStore: ObservableObject {
                 case .success(let favs):
                     print("Successfully retrieved list of favs: \(favs)")
                     favs.forEach { fav in
-                        if !self.localFavs.keys.contains(fav.recipeID) {
+                        if !lofavs.keys.contains(fav.recipeID) {
                             // delete
-                            self.deleteFav(recipeId: fav.recipeID)
+                            print("delete \(fav.recipeID)")
+//                            self.deleteFav(recipeId: fav.recipeID)
                         } else {
-                            tmp_favs.removeValue(forKey: fav.recipeID)
-                        }
-                    }
-                    if !tmp_favs.isEmpty {
-                        tmp_favs.forEach { new_fav in
-                            self.crateFav(recipeId: new_fav.key)
-                        }
-                    }
-                case .failure(let error):
-                    print("Got failed result with \(error.errorDescription)")
-                }
-            case .failure(let error):
-                print("Got failed event with error \(error)")
-            }
-        }
-        self.getInitFavs()
-    }
-    
-    func crateFav(recipeId: String) {
-        let fav = Fav(
-            userID: UserDefaults.standard.string(forKey: "sub")!,
-            recipeID: recipeId
-        )
-        Amplify.API.mutate(request: .create(fav)) { event in
-            switch event {
-            case .success(let result):
-                switch result {
-                case .success(let fav):
-                    print("Successfully created fav: \(fav)")
-                    self.localFavs[recipeId] = recipeId
-                case .failure(let error):
-                    print("Got failed result with \(error.errorDescription)")
-                }
-            case .failure(let error):
-                print("Got failed event with error \(error)")
-            }
-        }
-    }
-    
-    func deleteFav(recipeId: String) {
-        let f = Fav.keys
-        var predicate = QueryPredicateGroup.init()
-        predicate = predicate.and(f.recipeID == recipeId)
-        predicate = predicate.and(f.userID == UserDefaults.standard.string(forKey: "sub"))
-        Amplify.API.mutate(request: .paginatedList(Fav.self, where: predicate, limit:1 )) { event in
-            switch event {
-            case .success(let result):
-                switch result {
-                case .success(let favs):
-                    print("Successfully get favs: \(favs)")
-                    if favs.isEmpty {
-                        return
-                    }
-                    let favorite = favs[0]
-                    Amplify.API.mutate(request: .delete(favorite)) { event in
-                        switch event {
-                        case .success(let result):
-                            switch result {
-                            case .success(let fav):
-                                print("Successfully delete fav: \(fav)")
-//                                self.fav.removeValue(forKey: favorite.recipeID)
-                                self.localFavs.removeValue(forKey: favorite.recipeID)
-                            case .failure(let error):
-                                print("Got failed result with \(error.errorDescription)")
+                            if let _ = lofavs[fav.recipeID] {
+                                // exist
+                                print("remove \(fav.recipeID)")
+                                lofavs.removeValue(forKey: fav.recipeID)
                             }
-                        case .failure(let error):
-                            print("Got failed event with error \(error)")
                         }
                     }
-                    //
+                    if !lofavs.isEmpty {
+                        lofavs.forEach { new_fav in
+                            print("create \(new_fav.key)")
+//                            self.crateFav(recipeId: new_fav.key)
+                        }
+                    }
+                    
+//                    self.localFavs = lofavs
+//                    UserDefaults.standard.set(lofavs, forKey: "favs")
+//                    self.getInitFavs()
                 case .failure(let error):
                     print("Got failed result with \(error.errorDescription)")
                 }
@@ -451,5 +611,6 @@ class UserStore: ObservableObject {
                 print("Got failed event with error \(error)")
             }
         }
+//        self.getInitFavs()
     }
 }

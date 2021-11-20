@@ -15,6 +15,8 @@ struct TabBar: View {
     @State var tabSelection = 1
     @State private var tappedTwice = false
     
+    @State var isShowTutorialView: Bool = false
+    
     var body: some View {
         var handler: Binding<Int> { Binding(
             get : {
@@ -89,6 +91,23 @@ struct TabBar: View {
                 Text("Profile")
             }
             .tag(4)
+        }
+        .onAppear{
+            firstVisitSetup()
+        }
+        .fullScreenCover(isPresented: $isShowTutorialView, content: {
+            
+        })
+    }
+    
+    func firstVisitSetup(){
+        let visit = UserDefaults.standard.bool(forKey: "visit")
+        if visit{
+            print("Access More Than Once")
+        }else{
+            print("First Access")
+            self.isShowTutorialView.toggle()
+            UserDefaults.standard.set(true, forKey: "visit")
         }
     }
 }

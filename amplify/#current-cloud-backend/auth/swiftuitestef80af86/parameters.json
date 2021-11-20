@@ -1,6 +1,6 @@
 {
     "identityPoolName": "swiftuitestef80af86_identitypool_ef80af86",
-    "allowUnauthenticatedIdentities": false,
+    "allowUnauthenticatedIdentities": true,
     "resourceNameTruncated": "swiftuef80af86",
     "userPoolName": "swiftuitestef80af86_userpool_ef80af86",
     "autoVerifiedAttributes": [

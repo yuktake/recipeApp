@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SDWebImageSwiftUI
 
 struct AvatarView: View {
     @Binding var showModal: Bool

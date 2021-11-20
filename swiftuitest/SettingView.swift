@@ -25,10 +25,9 @@ struct SettingsView: View {
         group.enter()
         if let imageData = profile?.jpegData(compressionQuality: 0.5) {
             let key = "users/\(user.sub!).jpg"
-            let options = StorageUploadDataRequest.Options(accessLevel: .guest)
             DispatchQueue.main.async {
                 user.image = imageData
-                Amplify.Storage.uploadData(key: key, data: imageData,options: options) { result in
+                Amplify.Storage.uploadData(key: key, data: imageData) { result in
                     switch result {
                     case .success:
                         print("upload image success")

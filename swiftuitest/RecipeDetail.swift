@@ -118,8 +118,7 @@ struct RecipeDetail: View {
                         self.tmpRecipe.materials = recipe.materials
                     }
                     procedureNum = recipe.contents?.count ?? -1
-                    let options = StorageDownloadDataRequest.Options(accessLevel: .guest)
-                    Amplify.Storage.downloadData(key: recipe.image,options: options) { result in
+                    Amplify.Storage.downloadData(key: recipe.image) { result in
                         switch result {
                         case .success(let imageData):
                             DispatchQueue.main.async{
@@ -129,7 +128,7 @@ struct RecipeDetail: View {
                             print("Failed to download image data - \(error)")
                         }
                     }
-                    Amplify.Storage.downloadData(key: "\(recipe.user).jpg",options: options) { result in
+                    Amplify.Storage.downloadData(key: "\(recipe.user).jpg") { result in
                         switch result {
                         case .success(let imageData):
                             DispatchQueue.main.async{
@@ -146,7 +145,7 @@ struct RecipeDetail: View {
                         DispatchQueue.main.async {
                             self.procedures.append(procedure)
                         }
-                        Amplify.Storage.downloadData(key: procedure.image!,options: options) { result in
+                        Amplify.Storage.downloadData(key: procedure.image!) { result in
                             switch result {
                             case .success(let imageData):
                                 DispatchQueue.main.async{
@@ -166,7 +165,7 @@ struct RecipeDetail: View {
                             }
                             self.reviews.append(review)
                         }
-                        Amplify.Storage.downloadData(key: review.image!,options: options) { result in
+                        Amplify.Storage.downloadData(key: review.image!) { result in
                             switch result {
                             case .success(let imageData):
                                 DispatchQueue.main.async{
@@ -227,17 +226,22 @@ struct RecipeDetail: View {
                         if user.isLogged {
                             Button(
                                 action:{
-                                    if self.user.fav.keys.contains(recipe.id) {
-                                        favorite = false
-                                        self.user.fav.removeValue(forKey: recipe.id)
-                                        self.user.localFavs.removeValue(forKey: recipe.id)
-                                    } else {
-                                        favorite = true
-                                        self.user.fav[recipe.id] = recipe
-                                        self.user.localFavs[recipe.id] = recipe.id
-                                    }
+//                                    if self.user.fav.keys.contains(recipe.id) {
+//                                        favorite = false
+//                                        self.user.fav.removeValue(forKey: recipe.id)
+//                                        self.user.localFavs.removeValue(forKey: recipe.id)
+//                                        self.user.favImageDatum.removeValue(forKey: recipe.id)
+//                                        UserDefaults.standard.set(self.user.localFavs, forKey: "favs")
+//                                    } else {
+//                                        favorite = true
+//                                        self.user.fav[recipe.id] = recipe
+//                                        self.user.localFavs[recipe.id] = recipe.id
+//                                        self.user.favImageDatum[recipe.id] = image
+//                                        UserDefaults.standard.set(self.user.localFavs, forKey: "favs")
+////                                        user.getInitFavs()
+//                                    }
                                 }, label: {
-                                    Image(systemName: favorite ? "star.fill":"star")
+                                    Image(systemName: favorite ? "heart.fill":"heart")
                                         .font(.title)
                                         .padding()
                                         .frame(width: 30, height: 30)
@@ -431,7 +435,7 @@ struct RecipeDetail: View {
                 }
             }
             .onAppear{
-                self.favorite = self.user.fav.keys.contains(recipe.id) ? true : false
+//                self.favorite = self.user.fav.keys.contains(recipe.id) ? true : false
                 screen = UIScreen.main.bounds.size
                 if (self.procedures.count == 0) {
                     load(updated: false)

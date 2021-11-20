@@ -50,8 +50,12 @@ type User @model{
   description: String
 }
 
-type Fav @model{
+type Fav @model
+@key(name: "favsByDate",fields: ["type", "createdAt"], queryField: "favsByDate")
+{
   id: ID!
   userID: String!
   recipeID: String!
+  type: String!
+  createdAt: String
 }

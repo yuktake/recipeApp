@@ -223,12 +223,10 @@ struct RecipeEdit: View {
             key = "procedures/"+UUID().uuidString + ".jpg"
         }
         
-        let options = StorageUploadDataRequest.Options(accessLevel: .guest)
         DispatchQueue.main.async {
             Amplify.Storage.uploadData(
                 key: key,
-                data: imageData,
-                options: options
+                data: imageData
             ) { result in
                 switch result {
                 case .success(let k):

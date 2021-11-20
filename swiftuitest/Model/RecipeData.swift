@@ -21,6 +21,7 @@ struct RecipeData:Identifiable,Codable {
     var reviews: [Review]
     var image: String
     var favNum: Int
+    var fav_created_at: String?
     var create_at:String
     var update_at:String
     var delFlg: Int
@@ -37,5 +38,17 @@ func load() -> [RecipeData] {
     }
     return encodedData.map {
         try! JSONDecoder().decode(RecipeData.self, from: $0)
+    }
+}
+
+extension UserDefaults {
+    func load<T: Codable>(_ type: T.Type, with key: String, usingDecoder decoder: JSONDecoder = JSONDecoder()) -> T? {
+        guard let data = self.value(forKey: key) as? Data else { return nil }
+        return try? decoder.decode(type.self, from: data)
+    }
+ 
+    func sets<T: Codable>(object: T, forKey key: String, usingEncoder encoder: JSONEncoder = JSONEncoder()) {
+        let data = try? encoder.encode(object)
+        self.set(data, forKey: key)
     }
 }

@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import SDWebImageSwiftUI
 
 struct Search: View {
     @State var keyword = ""
@@ -15,11 +14,11 @@ struct Search: View {
     @State var carbo:Double? = nil
     @State var state = 2
     @State var isFocused = false
+    @State var sort_state = 0
     
     @State var nextIndex = 1
     @State var rowIndex = UserDefaults.standard.integer(forKey: "rowIndex")
     
-    @State var sort_state = 0
     @State var isActive : Bool = false
     @EnvironmentObject var viewModel: RecipesViewModel
     
@@ -199,11 +198,8 @@ struct Search: View {
                                     }
                                 }
                                 
-            //                    ForEach(viewModel.recipes, content: { recipe in
-                                // ??? 正しくは-1だけど初期が空なのでエラーになる
                                 ForEach(0..<viewModel.recipes.count, id: \.self) { i in
                                     let recipe = viewModel.recipes[i]
-                                    // rowviewで独立させてfavと併用させるべき
                                     ZStack {
                                         favRowView(
                                             fav: recipe,
@@ -212,12 +208,13 @@ struct Search: View {
                                         )
                                         .onAppear {
                                             // 最低３つないといけない
-                                            if i == viewModel.recipes.count - 2 {
-//                                                viewModel.listNextPage()
-                                                viewModel.listNextRecentPage()
+                                            if i == viewModel.recipes.count && self.viewModel.next {
+                                                // viewmodel側でソートによって呼び出す関数を分岐させる
+                                                viewModel.getNext(sort:sort_state)
+//                                                viewModel.listNextRecentPage()
                                             }
                                         }
-                                        .onTapGesture{
+                                        .onTapGesture {
                                             UserDefaults.standard.set(i,forKey: "rowIndex")
                                             withAnimation(.spring()){
                                                 show.toggle()

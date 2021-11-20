@@ -15,46 +15,163 @@ struct Favorite: View {
     var body: some View {
         NavigationView{
             ScrollView(){
-                ForEach(store.fav.keys.sorted(),id: \.self){ key in
-                    ZStack {
-                        favRowView(
-                            fav: store.fav[key]!,
-                            image: store.favImageDatum[key] ?? Data(),
-                            animation: animation
-                        )
-                        NavigationLink(
-                            destination:RecipeDetail(
-                                recipe:store.fav[key]!,
-                                editable: false
-                                , isFirstViewActive: $isActive
-                            )
-                            ,isActive: self.$isActive
-                        ){
-                            HStack {}
-                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-                            .onTapGesture {
-                                print("favorite view")
-                                self.isActive = true
+//                ForEach(store.fav.keys.sorted(),id: \.self){ key in
+//                    ZStack {
+//                        favRowView(
+//                            fav: store.fav[key]!,
+//                            image: store.favImageDatum[key] ?? Data(),
+//                            animation: animation
+//                        )
+//                        NavigationLink(
+//                            destination:RecipeDetail(
+//                                recipe:store.fav[key]!,
+//                                editable: false
+//                                , isFirstViewActive: $isActive
+//                            )
+//                            ,isActive: self.$isActive
+//                        ){
+//                            HStack {}
+//                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+//                            .onTapGesture {
+//                                print("favorite view")
+//                                self.isActive = true
+//                            }
+//                        }
+//                        .isDetailLink(false)
+//                    }
+//                }
+                
+//                ForEach(0...store.fav.count){ index in
+                
+//                ForEach(store.fav.indices, id: \.self) { index in
+//                    ZStack {
+//                        favRowView(
+//                            fav: store.fav[index],
+//                            image: store.favImageDatum[store.fav[index].id] ?? Data(),
+//                            animation: animation
+//                        )
+//                        .onAppear{
+//                            if index == store.fav.count - 2 {
+//                                store.getFavsFromServerNextPage(nextToken: self.store.favToken)
+//                            }
+//                        }
+//                        NavigationLink(
+//                            destination:RecipeDetail(
+//                                recipe:store.fav[index],
+//                                editable: false
+//                                , isFirstViewActive: $isActive
+//                            )
+//                            ,isActive: self.$isActive
+//                        ){
+//                            HStack {}
+//                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+//                            .onTapGesture {
+//                                print("favorite view")
+//                                self.isActive = true
+//                            }
+//                        }
+//                        .isDetailLink(false)
+//                    }
+//                }
+                
+//                ForEach(store.fav.keys.sorted(),id: \.self){ key in
+//                ForEach(store.localFavs.keys.sorted(),id: \.self){ key in
+//                ForEach(store.favArray,id: \.self){ key in
+                
+                if self.store.isLogged {
+                    if (store.favRecipes.count >= 1) {
+                        LazyVGrid(columns: Array(repeating: GridItem(), count: 3)) { // カラム数の指定
+                            ForEach(0...store.favRecipes.count-1,id: \.self) { i in
+                                ZStack {
+                                    if let fav = store.favRecipes[i] {
+            //                            favRowView(
+                                        ////                            fav: store.fav[key]!,
+                                        //                            fav: store.localFavs[key],
+                                        //                            image: store.favImageDatum[key] ?? Data(),
+                                        //                            animation: animation
+                                        //                        )
+                                                                favTmpView(
+                                        //                            id: store.localFavs[key] ?? "",
+                                                                    id: fav.id,
+                                                                    image: store.favImageDatum[fav.id] ?? Data(),
+                                                                    animation: animation
+                                                                )
+                                                                .onAppear{
+            //                                                        if index == store.fav.keys.count - 2 {
+            //                                                            store.getFavsFromServerNextPage(nextToken: self.store.favToken)
+            //                                                        }
+                                                                    if store.isLogged {
+                                                                        if i == store.favRecipes.count - 2 {
+                                                                           store.getFavsFromServerNextPage(nextToken: self.store.favToken)
+                                                                       }
+                                                                    }
+                                                                }
+                                        //                        NavigationLink(
+                                        //                            destination:RecipeDetail(
+                                        //                                recipe:store.fav[key]!,
+                                        //                                editable: false
+                                        //                                , isFirstViewActive: $isActive
+                                        //                            )
+                                        //                            ,isActive: self.$isActive
+                                        //                        ){
+                                        //                            HStack {}
+                                        //                            .frame(maxWidth: .infinity, maxHeight: .infinity)
+                                        //                            .onTapGesture {
+                                        //                                print("favorite view")
+                                        //                                self.isActive = true
+                                        //                            }
+                                        //                        }
+                                        //                        .isDetailLink(false)
+                                    }
+                                }
                             }
                         }
-                        .isDetailLink(false)
                     }
                 }
             }
             .navigationBarTitle(Text("Favorite"))
         }
         .navigationBarHidden(true)
-//        .onAppear {
-//            if (store.fav.isEmpty) {
-//                store.getFavs()
+        .onAppear {
+//            self.store.fav = self.store.fav.sorted(by: { lRecipe, rRecipe -> Bool in
+//                return lRecipe.create_at > rRecipe.create_at
+//            })
+//            self.store.fav.forEach{ fav in
+//                print("sorted fav")
+//                print(fav.id)
 //            }
-//        }
+        }
     }
 }
 
 struct Favorite_Previews: PreviewProvider {
     static var previews: some View {
         Favorite()
+    }
+}
+
+struct favTmpView: View {
+    var id:String
+    var image:Data
+    var animation: Namespace.ID
+    var body: some View {
+        if let image = UIImage(data:image) {
+            Image(uiImage: image)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .matchedGeometryEffect(id: "image\(id)", in: animation)
+//                .frame(width: 80, height: 80)
+                .background(Color.black)
+//                .cornerRadius(20)
+//                .padding(.horizontal, 4)
+//                .padding(.bottom, 8)
+        } else {
+            LottieView(filename: "search")
+                .frame(width:80, height: 80)
+//                .cornerRadius(20)
+//                .padding(.horizontal, 4)
+//                .padding(.bottom, 8)
+        }
     }
 }
 

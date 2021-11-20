@@ -59,8 +59,7 @@ class UserRecipesViewModel: ObservableObject {
                                 delFlg: item.delFlg
                             ))
                         }
-                        let options = StorageDownloadDataRequest.Options(accessLevel: .guest)
-                        Amplify.Storage.downloadData(key: item.image,options: options) { result in
+                        Amplify.Storage.downloadData(key: item.image) { result in
                             switch result {
                             case .success(let imageData):
                                 DispatchQueue.main.async{
@@ -118,8 +117,7 @@ class UserRecipesViewModel: ObservableObject {
                                 delFlg: item.delFlg
                             ))
                         }
-                        let options = StorageDownloadDataRequest.Options(accessLevel: .guest)
-                        Amplify.Storage.downloadData(key: item.image,options: options) { result in
+                        Amplify.Storage.downloadData(key: item.image) { result in
                             switch result {
                             case .success(let imageData):
                                 DispatchQueue.main.async{

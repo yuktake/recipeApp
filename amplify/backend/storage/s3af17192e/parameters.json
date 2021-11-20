@@ -18,18 +18,18 @@
     "s3:ListBucket",
     "s3:DeleteObject"
   ],
+  "triggerFunction": "NONE",
   "s3PermissionsAuthenticatedPublic": "s3:PutObject,s3:GetObject,s3:DeleteObject",
-  "s3PublicPolicy": "Public_policy_6dd217fa",
+  "s3PublicPolicy": "Public_policy_5b1281ed",
   "s3PermissionsAuthenticatedUploads": "s3:PutObject",
-  "s3UploadsPolicy": "Uploads_policy_6dd217fa",
+  "s3UploadsPolicy": "Uploads_policy_5b1281ed",
   "s3PermissionsAuthenticatedProtected": "s3:PutObject,s3:GetObject,s3:DeleteObject",
-  "s3ProtectedPolicy": "Protected_policy_c3a4c7c4",
+  "s3ProtectedPolicy": "Protected_policy_3e3bac6c",
   "s3PermissionsAuthenticatedPrivate": "s3:PutObject,s3:GetObject,s3:DeleteObject",
-  "s3PrivatePolicy": "Private_policy_c3a4c7c4",
+  "s3PrivatePolicy": "Private_policy_3e3bac6c",
   "AuthenticatedAllowList": "ALLOW",
-  "s3ReadPolicy": "read_policy_6dd217fa",
+  "s3ReadPolicy": "read_policy_5b1281ed",
   "s3PermissionsGuestPublic": "s3:GetObject",
   "s3PermissionsGuestUploads": "DISALLOW",
-  "GuestAllowList": "ALLOW",
-  "triggerFunction": "NONE"
+  "GuestAllowList": "ALLOW"
 }

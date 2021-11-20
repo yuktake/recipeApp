@@ -151,7 +151,7 @@ struct ProfileView: View {
                                             .foregroundColor(.white)
                                             .opacity(0.7)
                                             .font(.system(size: 17, weight: .semibold, design:.rounded))
-                                        Text("designcode.io")
+                                        Text("company")
                                             .foregroundColor(.white.opacity(0.7))
                                             .font(.footnote)
                                         
@@ -222,7 +222,7 @@ struct ProfileView: View {
                                                         PostView(
                                                             recipe: recipe,
                                                             header: user.imageDatum[recipe.id] ?? Data(),
-                                                            profile: user.userDatum[recipe.id] ?? Data(),
+                                                            profile: user.image ?? Data(),
                                                             username: user.username ?? ""
                                                         )
                                                         .onTapGesture{
@@ -232,7 +232,7 @@ struct ProfileView: View {
                                                         }
                                                         .onAppear {
                                                             // 最低３つないといけない
-                                                            if i == user.myRecipes.count - 2 {
+                                                            if i == user.myRecipes.count - 1 {
                                                                 if (!user.token.isEmpty) {
                                                                     user.listNextPage(nextToken: user.token)
                                                                 }

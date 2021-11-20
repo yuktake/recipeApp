@@ -88,9 +88,8 @@ struct MakeRecipeView: View {
         } else {
             key = "procedures/"+UUID().uuidString + ".jpg"
         }
-        let options = StorageUploadDataRequest.Options(accessLevel: .guest)
         DispatchQueue.main.async {
-            Amplify.Storage.uploadData(key: key, data: imageData,options: options) { result in
+            Amplify.Storage.uploadData(key: key, data: imageData) { result in
                 switch result {
                 case .success:
                     print("upload image success")
