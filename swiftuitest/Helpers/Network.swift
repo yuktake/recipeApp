@@ -19,10 +19,12 @@ class Network: ObservableObject {
     
     func checkConnection() {
         monitor.pathUpdateHandler = { path in
-            if path.status == .satisfied {
-                    self.connected = true
-            } else {
-                    self.connected = false
+            DispatchQueue.main.async {
+                if path.status == .satisfied {
+                        self.connected = true
+                } else {
+                        self.connected = false
+                }
             }
         }
         monitor.start(queue: queue)

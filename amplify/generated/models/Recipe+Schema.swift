@@ -9,6 +9,7 @@ extension Recipe {
     case user
     case type
     case title
+    case calorie
     case protein
     case fat
     case carbo
@@ -43,6 +44,7 @@ extension Recipe {
       .field(recipe.user, is: .required, ofType: .string),
       .field(recipe.type, is: .required, ofType: .string),
       .field(recipe.title, is: .required, ofType: .string),
+      .field(recipe.calorie, is: .required, ofType: .int),
       .field(recipe.protein, is: .required, ofType: .double),
       .field(recipe.fat, is: .required, ofType: .double),
       .field(recipe.carbo, is: .required, ofType: .double),

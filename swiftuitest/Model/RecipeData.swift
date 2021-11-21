@@ -12,6 +12,7 @@ struct RecipeData:Identifiable,Codable {
     var id = UUID().uuidString
     var userId:String
     var title: String
+    var calorie: Int
     var protein:String
     var fat:String
     var carbo:String

@@ -45,6 +45,10 @@
             ],
             "verificationMechanisms": [
                 "EMAIL"
+            ],
+            "socialProviders": [],
+            "usernameAttributes": [
+                "EMAIL"
             ]
         }
     },

@@ -7,6 +7,7 @@ public struct Recipe: Model {
   public var user: String
   public var type: String
   public var title: String
+  public var calorie: Int
   public var protein: Double
   public var fat: Double
   public var carbo: Double
@@ -24,6 +25,7 @@ public struct Recipe: Model {
       user: String,
       type: String,
       title: String,
+      calorie: Int,
       protein: Double,
       fat: Double,
       carbo: Double,
@@ -40,6 +42,7 @@ public struct Recipe: Model {
       self.user = user
       self.type = type
       self.title = title
+      self.calorie = calorie
       self.protein = protein
       self.fat = fat
       self.carbo = carbo

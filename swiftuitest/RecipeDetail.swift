@@ -35,6 +35,7 @@ struct RecipeDetail: View {
     @State var tmpRecipe: RecipeData = RecipeData(
         userId: "",
         title: "",
+        calorie: 0,
         protein: String(0.0),
         fat: String(0.0),
         carbo: String(0.0),
@@ -58,6 +59,7 @@ struct RecipeDetail: View {
             user: self.recipe.userId,
             type: "Recipe",
             title: self.recipe.title,
+            calorie: self.recipe.calorie,
             protein: Double(self.recipe.protein) ?? 0.0,
             fat: Double(self.recipe.fat) ?? 0.0,
             carbo: Double(self.recipe.carbo) ?? 0.0,
@@ -111,6 +113,7 @@ struct RecipeDetail: View {
                         self.tmpRecipe.id = recipe.id
                         self.tmpRecipe.userId = recipe.user
                         self.tmpRecipe.title = recipe.title
+                        self.tmpRecipe.calorie = recipe.calorie
                         self.tmpRecipe.protein = String(recipe.protein)
                         self.tmpRecipe.fat = String(recipe.fat)
                         self.tmpRecipe.carbo = String(recipe.carbo)
@@ -488,6 +491,7 @@ struct RecipeDetail_Previews: PreviewProvider {
                 id: "1",
                 userId:"1",
                 title:"title",
+                calorie: 0,
                 protein: String(1),
                 fat: String(1),
                 carbo: String(1),

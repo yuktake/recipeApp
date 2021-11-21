@@ -15,7 +15,7 @@ struct MakeRecipeView: View {
     @State var shouldShowProcedureImagePicker:[Bool] = [false]
     @State var shouldShowProcedureImageCropper:[Bool] = [false]
     @State var header: UIImage? = nil
-    @State var procedureImages: [UIImage?] = [nil]
+    @State var procedureImages: [UIImage?] = []
     @State var screen: CGSize! = UIScreen.main.bounds.size
     @State var showModal:Bool = false
     @State var pickerImageIndex:Int = -1
@@ -32,7 +32,7 @@ struct MakeRecipeView: View {
     var disableForm: Bool {
         viewModel.recipe.title.isEmpty ||
         viewModel.recipe.materials.isEmpty ||
-        procedureImages.contains(nil) ||
+//        procedureImages.contains(nil) ||
         header == nil ||
         viewModel.recipe.contents.filter {$0.content.isEmpty}.count != 0
     }
@@ -60,13 +60,13 @@ struct MakeRecipeView: View {
             upload(image: header,index: -1,group: group)
             print("# End header")
         }
-        for (index,image) in self.procedureImages.enumerated() {
-            group.enter()
-            asyncProcess(text:"procedure") { () -> Void in
-                upload(image: image,index: index,group:group)
-                print("# End procedure")
-            }
-        }
+//        for (index,image) in self.procedureImages.enumerated() {
+//            group.enter()
+//            asyncProcess(text:"procedure") { () -> Void in
+//                upload(image: image,index: index,group:group)
+//                print("# End procedure")
+//            }
+//        }
         
         group.notify(queue: .main) {
             viewModel.createRecipe(recipe: viewModel.recipe)
@@ -83,10 +83,11 @@ struct MakeRecipeView: View {
             return
         }
         var key = ""
+        let uuid = UUID().uuidString
         if (index == -1) {
-            key = "recipes/"+UUID().uuidString + ".jpg"
+            key = "recipes/\(uuid).jpg"
         } else {
-            key = "procedures/"+UUID().uuidString + ".jpg"
+            key = "procedures/\(uuid).jpg"
         }
         DispatchQueue.main.async {
             Amplify.Storage.uploadData(key: key, data: imageData) { result in
@@ -95,6 +96,7 @@ struct MakeRecipeView: View {
                     print("upload image success")
                     if index == -1 {
                         viewModel.recipe.image = key
+                        viewModel.recipe.id = uuid
                     } else {
                         viewModel.recipe.contents[index].image = key
                     }
@@ -208,15 +210,15 @@ struct MakeRecipeView: View {
                                         )
                                         .frame(width:screen.width*0.6)
                                         
-                                        ImageButton(
-                                            showModal: $showModal,
-                                            pickerImageIndex: $pickerImageIndex,
-                                            procedureImage: $procedureImages[index],
-                                            showPicker: $shouldShowProcedureImagePicker[index],
-                                            showCropper: $shouldShowProcedureImageCropper[index],
-                                            width: screen.width,
-                                            index: index
-                                        )
+//                                        ImageButton(
+//                                            showModal: $showModal,
+//                                            pickerImageIndex: $pickerImageIndex,
+//                                            procedureImage: $procedureImages[index],
+//                                            showPicker: $shouldShowProcedureImagePicker[index],
+//                                            showCropper: $shouldShowProcedureImageCropper[index],
+//                                            width: screen.width,
+//                                            index: index
+//                                        )
                                     }
                                     .frame(height:screen.height*0.2)
                                 }
@@ -243,9 +245,9 @@ struct MakeRecipeView: View {
                     
                     HStack {
                         Button(action: {
-                            if (viewModel.recipe.contents.count >= 10) {
+                            if (viewModel.recipe.contents.count >= 5) {
                                 self.showingAlert = true
-                                self.alertText = "手順は１０までです。"
+                                self.alertText = "手順は5つまでです。"
                                 return
                             }
                             viewModel.recipe.contents.append(

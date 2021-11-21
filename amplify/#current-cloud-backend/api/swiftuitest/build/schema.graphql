@@ -3,6 +3,7 @@ type Recipe {
   user: String!
   type: String!
   title: String!
+  calorie: Int!
   protein: Float!
   fat: Float!
   carbo: Float!
@@ -146,6 +147,7 @@ input ModelRecipeFilterInput {
   user: ModelStringInput
   type: ModelStringInput
   title: ModelStringInput
+  calorie: ModelIntInput
   protein: ModelFloatInput
   fat: ModelFloatInput
   carbo: ModelFloatInput
@@ -199,6 +201,7 @@ input CreateRecipeInput {
   user: String!
   type: String!
   title: String!
+  calorie: Int!
   protein: Float!
   fat: Float!
   carbo: Float!
@@ -216,6 +219,7 @@ input UpdateRecipeInput {
   user: String
   type: String
   title: String
+  calorie: Int
   protein: Float
   fat: Float
   carbo: Float
@@ -254,6 +258,7 @@ input ModelRecipeConditionInput {
   user: ModelStringInput
   type: ModelStringInput
   title: ModelStringInput
+  calorie: ModelIntInput
   protein: ModelFloatInput
   fat: ModelFloatInput
   carbo: ModelFloatInput

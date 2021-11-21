@@ -49,6 +49,7 @@ struct RecipeEdit: View {
     @State var recipe = RecipeData(
         userId: UserDefaults.standard.string(forKey: "sub") ?? "",
         title: "",
+        calorie: 0,
         protein: String(0.0),
         fat: String(0.0),
         carbo: String(0.0),
@@ -153,6 +154,7 @@ struct RecipeEdit: View {
                 user: self.recipe.userId,
                 type: "Recipe",
                 title: self.recipe.title,
+                calorie: self.recipe.calorie,
                 protein: Double(self.recipe.protein) ?? 0.0,
                 fat: Double(self.recipe.fat) ?? 0.0,
                 carbo: Double(self.recipe.carbo) ?? 0.0,
@@ -623,6 +625,7 @@ struct RecipeEdit_Previews: PreviewProvider {
                 id: "1",
                 userId:"1",
                 title:"title",
+                calorie: 0,
                 protein: String(1),
                 fat: String(1),
                 carbo: String(1),

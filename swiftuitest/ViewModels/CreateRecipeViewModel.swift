@@ -13,6 +13,7 @@ class CreateRecipeViewModel: ObservableObject {
     @Published var recipe = RecipeData(
         userId: UserDefaults.standard.string(forKey: "sub") ?? "",
         title: "",
+        calorie: 0,
         protein: String(0.0),
         fat: String(0.0),
         carbo: String(0.0),
@@ -40,6 +41,7 @@ class CreateRecipeViewModel: ObservableObject {
             user: recipe.userId,
             type: "Recipe",
             title: recipe.title,
+            calorie: recipe.calorie,
             protein: Double(recipe.protein) ?? 0.0,
             fat: Double(recipe.fat) ?? 0.0,
             carbo: Double(recipe.carbo) ?? 0.0,
@@ -73,35 +75,6 @@ class CreateRecipeViewModel: ObservableObject {
                 print("Got failed event with error \(error)")
             }
         }
-        
-//        Amplify.DataStore.save(amplify_recipe) { result in
-//            switch(result) {
-//               case .success(let savedItem):
-//                print("Saved item: \(savedItem.title)")
-//                for procedure in procedures {
-//                    Amplify.DataStore.save(procedure) { procedureResult in
-//                        switch procedureResult {
-//                        case .success:
-//                            print("procedure saved!")
-//                        case .failure(let error):
-//                            print("procedure Error adding comment - \(error.localizedDescription)")
-//                        }
-//                    }
-//                }
-//                for review in reviews {
-//                    Amplify.DataStore.save(review) { reviewResult in
-//                        switch reviewResult {
-//                        case .success:
-//                            print("review saved!")
-//                        case .failure(let error):
-//                            print("review Error adding comment - \(error.localizedDescription)")
-//                        }
-//                    }
-//                }
-//               case .failure(let error):
-//                   print("Could not save item to DataStore: \(error)")
-//            }
-//        }
         
     }
     

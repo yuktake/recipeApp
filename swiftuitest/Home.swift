@@ -31,6 +31,7 @@ struct Home: View {
         id: "1",
         userId:"1",
         title:"title",
+        calorie: 0,
         protein: String(1),
         fat: String(1),
         carbo: String(1),

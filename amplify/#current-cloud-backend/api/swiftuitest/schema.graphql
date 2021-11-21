@@ -8,6 +8,7 @@ type Recipe @model
   user: String!
   type: String!
   title: String!
+  calorie: Int!
   protein: Float!
   fat: Float!
   carbo: Float!

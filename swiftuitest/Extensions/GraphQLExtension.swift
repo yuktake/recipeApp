@@ -33,6 +33,7 @@ extension GraphQLRequest
                     user
                     type
                     title
+                    calorie
                     protein
                     fat
                     carbo
@@ -85,6 +86,7 @@ extension GraphQLRequest
                     user
                     type
                     title
+                    calorie
                     protein
                     fat
                     carbo
@@ -137,6 +139,7 @@ extension GraphQLRequest
                     user
                     type
                     title
+                    calorie
                     protein
                     fat
                     carbo
@@ -187,6 +190,7 @@ extension GraphQLRequest
                     user
                     type
                     title
+                    calorie
                     protein
                     fat
                     carbo
@@ -239,6 +243,7 @@ extension GraphQLRequest
                     user
                     type
                     title
+                    calorie
                     protein
                     fat
                     carbo
@@ -292,6 +297,7 @@ extension GraphQLRequest
                     user
                     type
                     title
+                    calorie
                     protein
                     fat
                     carbo
@@ -345,6 +351,7 @@ extension GraphQLRequest
                     user
                     type
                     title
+                    calorie
                     protein
                     fat
                     carbo
@@ -398,6 +405,7 @@ extension GraphQLRequest
                     user
                     type
                     title
+                    calorie
                     protein
                     fat
                     carbo
@@ -511,6 +519,7 @@ extension GraphQLRequest
                     user
                     type
                     title
+                    calorie
                     protein
                     fat
                     carbo
@@ -553,6 +562,7 @@ extension GraphQLRequest
                     user
                     type
                     title
+                    calorie
                     protein
                     fat
                     carbo
@@ -591,6 +601,7 @@ extension GraphQLRequest
                 user
                 type
                 title
+                calorie
                 protein
                 fat
                 carbo

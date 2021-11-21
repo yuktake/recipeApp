@@ -8,6 +8,7 @@ mutation CreateRecipe(
     user
     type
     title
+    calorie
     protein
     fat
     carbo
@@ -53,6 +54,7 @@ mutation UpdateRecipe(
     user
     type
     title
+    calorie
     protein
     fat
     carbo
@@ -98,6 +100,7 @@ mutation DeleteRecipe(
     user
     type
     title
+    calorie
     protein
     fat
     carbo
@@ -149,6 +152,7 @@ mutation CreateProcedure(
       user
       type
       title
+      calorie
       protein
       fat
       carbo
@@ -185,6 +189,7 @@ mutation UpdateProcedure(
       user
       type
       title
+      calorie
       protein
       fat
       carbo
@@ -221,6 +226,7 @@ mutation DeleteProcedure(
       user
       type
       title
+      calorie
       protein
       fat
       carbo
@@ -257,6 +263,7 @@ mutation CreateReview(
       user
       type
       title
+      calorie
       protein
       fat
       carbo
@@ -293,6 +300,7 @@ mutation UpdateReview(
       user
       type
       title
+      calorie
       protein
       fat
       carbo
@@ -329,6 +337,7 @@ mutation DeleteReview(
       user
       type
       title
+      calorie
       protein
       fat
       carbo
@@ -400,6 +409,7 @@ mutation CreateFav(
     id
     userID
     recipeID
+    type
     createdAt
     updatedAt
   }
@@ -412,6 +422,7 @@ mutation UpdateFav(
     id
     userID
     recipeID
+    type
     createdAt
     updatedAt
   }
@@ -424,6 +435,7 @@ mutation DeleteFav(
     id
     userID
     recipeID
+    type
     createdAt
     updatedAt
   }

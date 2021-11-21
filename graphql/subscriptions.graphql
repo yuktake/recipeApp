@@ -5,6 +5,7 @@ subscription OnCreateRecipe {
     user
     type
     title
+    calorie
     protein
     fat
     carbo
@@ -47,6 +48,7 @@ subscription OnUpdateRecipe {
     user
     type
     title
+    calorie
     protein
     fat
     carbo
@@ -89,6 +91,7 @@ subscription OnDeleteRecipe {
     user
     type
     title
+    calorie
     protein
     fat
     carbo
@@ -137,6 +140,7 @@ subscription OnCreateProcedure {
       user
       type
       title
+      calorie
       protein
       fat
       carbo
@@ -170,6 +174,7 @@ subscription OnUpdateProcedure {
       user
       type
       title
+      calorie
       protein
       fat
       carbo
@@ -203,6 +208,7 @@ subscription OnDeleteProcedure {
       user
       type
       title
+      calorie
       protein
       fat
       carbo
@@ -236,6 +242,7 @@ subscription OnCreateReview {
       user
       type
       title
+      calorie
       protein
       fat
       carbo
@@ -269,6 +276,7 @@ subscription OnUpdateReview {
       user
       type
       title
+      calorie
       protein
       fat
       carbo
@@ -302,6 +310,7 @@ subscription OnDeleteReview {
       user
       type
       title
+      calorie
       protein
       fat
       carbo
@@ -361,6 +370,7 @@ subscription OnCreateFav {
     id
     userID
     recipeID
+    type
     createdAt
     updatedAt
   }
@@ -370,6 +380,7 @@ subscription OnUpdateFav {
     id
     userID
     recipeID
+    type
     createdAt
     updatedAt
   }
@@ -379,6 +390,7 @@ subscription OnDeleteFav {
     id
     userID
     recipeID
+    type
     createdAt
     updatedAt
   }

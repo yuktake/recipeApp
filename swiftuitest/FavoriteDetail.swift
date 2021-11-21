@@ -1,20 +1,25 @@
 //
-//  Detail.swift
+//  FavoriteDetail.swift
 //  swiftuitest
 //
-//  Created by Koshi Yukitake on 2021/11/07.
+//  Created by Koshi Yukitake on 2021/11/21.
 //
 
 import SwiftUI
 import Amplify
 import AWSPluginsCore
 
-struct Detail: View {
-    @Binding var selectedItem: RecipeData
+struct FavoriteDetail: View {
+    
     @Binding var show: Bool
     @Binding var header:Data
+    
     var animation: Namespace.ID
     var screen = UIScreen.main.bounds.size
+    var selectedId: String
+    
+    // offsetScrollView用
+    @State var verticalOffset: CGFloat = 0.0
     
     @EnvironmentObject var user:UserStore
     
@@ -88,8 +93,8 @@ struct Detail: View {
                     print("Successfully created fav: \(fav)")
                     self.changing = false
                     self.favorite = true
-                    self.user.favImageDatum[selectedItem.id] = header
-                    self.user.favRecipes.insert(FavData(id:selectedItem.id), at: 0)
+                    self.user.favImageDatum[selectedId] = header
+                    self.user.favRecipes.insert(FavData(id:selectedId), at: 0)
                 case .failure(let error):
                     print("Got failed result with \(error.errorDescription)")
                 }
@@ -123,10 +128,11 @@ struct Detail: View {
                                 print("Successfully delete fav: \(fav)")
                                 self.changing = false
                                 self.favorite = false
-                                if let firstIndex = self.user.favRecipes.firstIndex(where: {$0.id == selectedItem.id}) {
+                                if let firstIndex = self.user.favRecipes.firstIndex(where: {$0.id == selectedId}) {
                                     self.user.favRecipes.remove(at: firstIndex)
                                 }
-                                self.user.favImageDatum.removeValue(forKey: selectedItem.id)
+                                self.user.favImageDatum.removeValue(forKey: selectedId)
+//                                UserDefaults.standard.set(self.user.favImageDatum, forKey: "favImageDatum")
                             case .failure(let error):
                                 print("Got failed result with \(error.errorDescription)")
                             }
@@ -146,9 +152,8 @@ struct Detail: View {
     
     func load(updated: Bool){
         // get recipe
-        tmpRecipe = selectedItem
-        self.procedures = []
-        Amplify.API.query(request: .getRecipeForDetail(id: selectedItem.id)) { event in
+//        self.procedures = []
+        Amplify.API.query(request: .getRecipeForDetail(id: selectedId)) { event in
             switch event {
             case .success(let result):
                 switch result {
@@ -186,7 +191,7 @@ struct Detail: View {
                                 self.reviewable = true
                             }
                             self.reviews.append(review)
-                        }                        
+                        }
                     }
                     self.edited = false
                 case .failure(let error):
@@ -199,26 +204,40 @@ struct Detail: View {
     }
     
     var body: some View {
-        //　parallex
-        ScrollView(showsIndicators: false, content: {
-            GeometryReader { reader in
-                if let image = UIImage(data:header) {
-                    Image(uiImage: image)
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .offset(y: -reader.frame(in: .global).minY)
-                        .frame(
-                            width: UIScreen.main.bounds.width,
-                            height: reader.frame(in: .global).minY + (UIScreen.main.bounds.height * 0.7)
-                        )
-                }
-            }
-            .frame(height: screen.height * 0.7)
-            
-            VStack(alignment:.leading ,spacing: 15) {
+        // 拡大遷移
+        // 親ViewのZStackの上に表示
+        if let image = UIImage(data:header) {
+            Image(uiImage: image)
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .padding()
+        }
+
+        Color.black
+            .opacity(0.5)
+        
+//        VStack {
+//            HStack {
+//                Button(action: {
+//                    // closing
+//                    withAnimation(.spring()){
+//                        show.toggle()
+//                    }
+//                }) {
+//                    Image(systemName: "chevron.left")
+//                        .font(.title)
+//                        .foregroundColor(.white)
+//                        .padding(.leading,25)
+//                        .padding(.top,25)
+//                }
+//                Spacer()
+//            }
+            OffsetableScrollView { point in
+                verticalOffset = point.y
+            } content: {
                 VStack {
                     HStack {
-                        Text(selectedItem.title)
+                        Text(tmpRecipe.title)
                             .font(.system(size:35,weight: .bold))
                             .foregroundColor(.white)
                         Spacer()
@@ -227,10 +246,10 @@ struct Detail: View {
                                 Button(
                                     action:{
                                         self.changing = true
-                                        if self.user.favRecipes.contains(where: {$0.id == selectedItem.id}) {
-                                            self.deleteFav(recipeId: selectedItem.id)
+                                        if self.user.favRecipes.contains(where: {$0.id == selectedId}) {
+                                            self.deleteFav(recipeId: selectedId)
                                         } else {
-                                            self.addFav(recipeId: selectedItem.id)
+                                            self.addFav(recipeId: selectedId)
                                         }
                                     }, label: {
                                         Image(systemName: favorite ? "heart.fill":"heart")
@@ -240,7 +259,7 @@ struct Detail: View {
                                 )
                                 .disabled(changing)
                             }
-                            Text("\(selectedItem.calorie)kcal")
+                            Text("\(tmpRecipe.calorie)kcal")
                                 .font(.caption)
                                 .foregroundColor(.white)
                         }
@@ -262,7 +281,7 @@ struct Detail: View {
                     HStack(spacing: 15) {
                         VStack {
                             HStack {
-                                Text(selectedItem.protein)
+                                Text(tmpRecipe.protein)
                                     .font(.system(size:20,weight: .bold))
                                     .foregroundColor(.white)
                                 Text("g")
@@ -278,7 +297,7 @@ struct Detail: View {
                         Spacer()
                         VStack {
                             HStack {
-                                Text(selectedItem.fat)
+                                Text(tmpRecipe.fat)
                                     .font(.system(size:20,weight: .bold))
                                     .foregroundColor(.white)
                                 Text("g")
@@ -295,7 +314,7 @@ struct Detail: View {
                         
                         VStack {
                             HStack {
-                                Text(selectedItem.carbo)
+                                Text(tmpRecipe.carbo)
                                     .font(.system(size:20,weight: .bold))
                                     .foregroundColor(.white)
                                 Text("g")
@@ -308,82 +327,117 @@ struct Detail: View {
                                 .foregroundColor(.white)
                         }
                     }
-                }
-                .frame(height: screen.height * 0.2)
-                
-                
-                Text("材料")
-                    .font(.system(size:20,weight: .bold))
-                    .foregroundColor(.white)
-                
-                Text(selectedItem.materials)
-                    .padding(.top, 10)
-                    .foregroundColor(.white)
-                    .padding(.top,5)
-                
-                ForEach(0..<procedures.count, id: \.self) { index in
+                    
                     HStack {
-                        Text("手順\(index+1)")
-                            .font(.system(size: 20,weight: .bold))
-                            .foregroundColor(.white)
-                            .padding(.leading)
+                        Text("材料")
                         Spacer()
                     }
-                    HStack(spacing:8) {
-                        VStack {
-                            Text(procedures[index].content)
-                                .padding(8)
-                                .frame(width: screen.width*0.8, alignment: .topLeading)
-                        }
-                        .background(
-                            BlurView(style: .systemMaterial)
-                        )
-                        .clipShape(
-                            RoundedRectangle(
-                                cornerRadius: 30,
-                                style: .continuous
-                            )
-                        )
-                        .shadow(
-                            color: .black.opacity(0.15),
-                            radius: 20, x:0, y:20
-                        )
+                    .padding(.top, 16)
+
+                    HStack {
+                        Text(tmpRecipe.materials)
+                        Spacer()
                     }
-                    .padding(.horizontal)
+                    .padding(.top)
+
+                    VStack(alignment: .leading, spacing: 16) {
+                        ForEach(0..<procedures.count, id:\.self){ i in
+                            HStack {
+                                Text("手順\(i+1)")
+                                Spacer()
+                            }
+                            HStack {
+                                Text(procedures[i].content)
+                                    .frame(width: screen.width * 0.7, alignment: .topLeading)
+                                Spacer()
+                            }
+                        }
+                    }
+                    .padding(.top)
+                }
+                .padding(.horizontal,32)
+                .padding(.top,36)
+            }
+            .overlay(
+                Button(action: {
+                    // closing
+                    withAnimation(.spring()){
+                        show.toggle()
+                    }
+                }) {
+                    Image(systemName: "chevron.left")
+                        .font(.title)
+                        .foregroundColor(.white)
+                        .padding(.leading,25)
+                        .padding(.top,25)
+                },alignment: .topLeading
+            )
+            .frame(
+                width: UIScreen.main.bounds.width,
+                height: UIScreen.main.bounds.height * 0.9
+            )
+//            .padding(.top, 32)
+            .onAppear{
+                if user.isLogged {
+                    self.getFav(recipeId: selectedId)
+                }
+                if (self.procedures.count == 0) {
+                    load(updated: true)
                 }
             }
-            .padding(.vertical,25)
-            .padding(.horizontal)
-            .background(.black)
-            .cornerRadius(20)
-            .offset(y: -35)
-        })
-        .edgesIgnoringSafeArea(.all)
-        .background(Color.black.edgesIgnoringSafeArea(.all))
-        .overlay(
-            Button(action: {
-                // closing
-                withAnimation(.spring()){
-                    show = false
-                }
-            }) {
-                Image(systemName: "chevron.left")
-                    .font(.title)
-                    .foregroundColor(.white)
-                    .padding(.leading,25)
-                    .padding(.top,25)
-            }
-            ,alignment: .topLeading
-        )
-        .onAppear{
-//            self.favorite = self.user.favRecipes.contains(where: {$0.id == selectedItem.id}) ? true : false
-            if user.isLogged {
-                self.getFav(recipeId: selectedItem.id)
-            }
-            
-            if (self.procedures.count == 0) {
-                load(updated: false)
-            }
-        }
+//        }
+        
     }
 }
+
+
+private struct OffsetPreferenceKey: PreferenceKey {
+    static var defaultValue: CGPoint = .zero
+    
+    static func reduce(value: inout CGPoint, nextValue: () -> CGPoint) {
+        
+    }
+}
+
+struct OffsetableScrollView<T: View>: View {
+    let axes: Axis.Set
+    let showsIndicator: Bool
+    let offsetChanged: (CGPoint) -> Void
+    let content: T
+    
+    init(
+        axes: Axis.Set = .vertical,
+        showsIndicator: Bool = true,
+        offsetChanged: @escaping (CGPoint) -> Void = {_ in },
+        @ViewBuilder content: () -> T
+    ){
+        self.axes = axes
+        self.showsIndicator = showsIndicator
+        self.offsetChanged = offsetChanged
+        self.content = content()
+    }
+    
+    var body: some View {
+        ScrollView(
+            axes,
+            showsIndicators: showsIndicator
+        ) {
+            GeometryReader{ proxy in
+                Color.clear.preference(
+                    key: OffsetPreferenceKey.self,
+                    value: proxy.frame(in: .named("ScrollView")).origin
+                )
+            }
+            .frame(width:0, height:0)
+            content
+        }
+        .coordinateSpace(name: "ScrollView")
+        .onPreferenceChange(OffsetPreferenceKey.self, perform: offsetChanged)
+    }
+}
+
+//struct FavoriteDetail_Previews: PreviewProvider {
+//    static var previews: some View {
+//        FavoriteDetail()
+//    }
+//}
