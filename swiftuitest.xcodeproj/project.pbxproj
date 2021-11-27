@@ -363,6 +363,9 @@
 		CACEEFB54D82E72E2F2D4095 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C656504056135DC69794442C /* User.swift */; };
 		CADC39A62743128900E96708 /* FavData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CADC39A52743128900E96708 /* FavData.swift */; };
 		CADE1083270F0FA9003A15A2 /* UserRecipesViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CADE1082270F0FA9003A15A2 /* UserRecipesViewModel.swift */; };
+		CAE1F977274B0D3100376A8B /* tutorial1.json in Resources */ = {isa = PBXBuildFile; fileRef = CAE1F975274B0D3000376A8B /* tutorial1.json */; };
+		CAE1F978274B0D3100376A8B /* tutorial2.json in Resources */ = {isa = PBXBuildFile; fileRef = CAE1F976274B0D3100376A8B /* tutorial2.json */; };
+		CAE1F97A274B107700376A8B /* tutorial3.json in Resources */ = {isa = PBXBuildFile; fileRef = CAE1F979274B107700376A8B /* tutorial3.json */; };
 		CAE9544626F36AC1000E86BE /* ImageCroppingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAE9544526F36AC1000E86BE /* ImageCroppingView.swift */; };
 		CAF35CB426B3E98F001DD9A5 /* loading.json in Resources */ = {isa = PBXBuildFile; fileRef = CAF35CB226B3E98F001DD9A5 /* loading.json */; };
 		CAF35CB526B3E98F001DD9A5 /* success.json in Resources */ = {isa = PBXBuildFile; fileRef = CAF35CB326B3E98F001DD9A5 /* success.json */; };
@@ -506,6 +509,9 @@
 		CAB6A43D26ABA1B400AF5C99 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CADC39A52743128900E96708 /* FavData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavData.swift; sourceTree = "<group>"; };
 		CADE1082270F0FA9003A15A2 /* UserRecipesViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserRecipesViewModel.swift; sourceTree = "<group>"; };
+		CAE1F975274B0D3000376A8B /* tutorial1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = tutorial1.json; sourceTree = "<group>"; };
+		CAE1F976274B0D3100376A8B /* tutorial2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = tutorial2.json; sourceTree = "<group>"; };
+		CAE1F979274B107700376A8B /* tutorial3.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = tutorial3.json; sourceTree = "<group>"; };
 		CAE9544526F36AC1000E86BE /* ImageCroppingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageCroppingView.swift; sourceTree = "<group>"; };
 		CAF35CB226B3E98F001DD9A5 /* loading.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = loading.json; sourceTree = "<group>"; };
 		CAF35CB326B3E98F001DD9A5 /* success.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = success.json; sourceTree = "<group>"; };
@@ -694,6 +700,9 @@
 		CAF35CB126B3E98F001DD9A5 /* Lottie */ = {
 			isa = PBXGroup;
 			children = (
+				CAE1F979274B107700376A8B /* tutorial3.json */,
+				CAE1F975274B0D3000376A8B /* tutorial1.json */,
+				CAE1F976274B0D3100376A8B /* tutorial2.json */,
 				CA2900D226EDF43600389EEE /* login.json */,
 				CA2900D026EDF33200389EEE /* search.json */,
 				CA2900CE26EDED1400389EEE /* splash.json */,
@@ -779,6 +788,7 @@
 				CA0CD3F726AC235F00600723 /* BlackOpsOne-Regular.ttf in Resources */,
 				CA401F8026BFB44C0061998B /* awsconfiguration.json in Resources */,
 				CA401F8126BFB44C0061998B /* amplifyconfiguration.json in Resources */,
+				CAE1F978274B0D3100376A8B /* tutorial2.json in Resources */,
 				CAB6A43726ABA1B400AF5C99 /* Preview Assets.xcassets in Resources */,
 				CAF35CB426B3E98F001DD9A5 /* loading.json in Resources */,
 				CA2900CF26EDED1400389EEE /* splash.json in Resources */,
@@ -787,6 +797,7 @@
 				8EC04ECB2FAED6471653F6A6 /* amplifyconfiguration.json in Resources */,
 				FB2F6C3501A03052AB8496FC /* awsconfiguration.json in Resources */,
 				B6BF8C6BB2C1E649F6DB2323 /* amplifyconfiguration.json in Resources */,
+				CAE1F977274B0D3100376A8B /* tutorial1.json in Resources */,
 				2A01EF03C2A381E75824E9FF /* awsconfiguration.json in Resources */,
 				CA2900D326EDF43600389EEE /* login.json in Resources */,
 				DD0D61C0CC5910CFE6359E71 /* amplifyconfiguration.json in Resources */,
@@ -805,6 +816,7 @@
 				A706B27FE4CCF32328116E8D /* amplifyconfiguration.json in Resources */,
 				D328DB990522C29B1D8629FF /* awsconfiguration.json in Resources */,
 				99FFE636B9BC3371D318E382 /* amplifyconfiguration.json in Resources */,
+				CAE1F97A274B107700376A8B /* tutorial3.json in Resources */,
 				7CE7AFAE1B1BDDBA5F7A1546 /* awsconfiguration.json in Resources */,
 				3129920B82E4E86FEFBEB292 /* amplifyconfiguration.json in Resources */,
 				0483C81891FCF5625DFD85E2 /* awsconfiguration.json in Resources */,
@@ -832,7 +844,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\n";
+			shellScript = "
+";
 		};
 /* End PBXShellScriptBuildPhase section */
 

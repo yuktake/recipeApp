@@ -15,6 +15,11 @@ struct Detail: View {
     @Binding var header:Data
     var animation: Namespace.ID
     var screen = UIScreen.main.bounds.size
+    var state:[Int:String] = [
+        1: "減量中",
+        2: "体重維持",
+        3: "増量中"
+    ]
     
     @EnvironmentObject var user:UserStore
     
@@ -246,7 +251,7 @@ struct Detail: View {
                         }
                     }
                     HStack {
-                        Text("減量中")
+                        Text(state[tmpRecipe.state] ?? "")
                             .font(.system(size:10))
                             .padding(.horizontal, 14)
                             .background(

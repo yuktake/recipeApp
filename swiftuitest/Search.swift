@@ -215,29 +215,12 @@ struct Search: View {
                                             }
                                             .onTapGesture {
                                                 withAnimation(.spring()){
-//                                                    show.toggle()
                                                     show = true
                                                     index = i
                                                     selectedImage = viewModel.imageDatum[recipe.id] ?? Data()
                                                 }
                                             }
                                         }
-//                                        NavigationLink(
-//                                            destination:RecipeDetail(
-//                                                recipe:recipe,
-//                                                editable: false
-//                                                , isFirstViewActive: $isActive
-//                                            )
-//                                            ,isActive: self.$isActive
-//                                        ){
-//                                            HStack {}
-//                                            .frame(maxWidth: .infinity, maxHeight: .infinity)
-//                                            .onTapGesture{
-//                                                print("search view")
-//                                                self.isActive = true
-//                                            }
-//                                        }
-//                                        .isDetailLink(false)
                                     }
                                 }
                             }

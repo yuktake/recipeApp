@@ -12,10 +12,10 @@ import UniformTypeIdentifiers
 struct MakeRecipeView: View {
     @State var shouldShowHeaderImagePicker:Bool = false
     @State var shouldShowHeaderCropper:Bool = false
-    @State var shouldShowProcedureImagePicker:[Bool] = [false]
-    @State var shouldShowProcedureImageCropper:[Bool] = [false]
+//    @State var shouldShowProcedureImagePicker:[Bool] = [false]
+//    @State var shouldShowProcedureImageCropper:[Bool] = [false]
     @State var header: UIImage? = nil
-    @State var procedureImages: [UIImage?] = []
+//    @State var procedureImages: [UIImage?] = []
     @State var screen: CGSize! = UIScreen.main.bounds.size
     @State var showModal:Bool = false
     @State var pickerImageIndex:Int = -1
@@ -41,8 +41,7 @@ struct MakeRecipeView: View {
         UITableView.appearance().showsVerticalScrollIndicator = false
     }
     
-    func asyncProcess(text: String,completion: @escaping () -> Void) {
-        print("start \(text)")
+    func asyncProcess(completion: @escaping () -> Void) {
         DispatchQueue.main.async {
             completion()
         }
@@ -56,8 +55,8 @@ struct MakeRecipeView: View {
         let group = DispatchGroup()
         self.isLoading = true
         group.enter()
-        asyncProcess(text:"header") { () -> Void in
-            upload(image: header,index: -1,group: group)
+        asyncProcess { () -> Void in
+            upload(image: header,group: group)
             print("# End header")
         }
 //        for (index,image) in self.procedureImages.enumerated() {
@@ -78,28 +77,20 @@ struct MakeRecipeView: View {
         }
     }
     
-    func upload(image:UIImage?,index:Int = -1,group:DispatchGroup) {
+    func upload(image:UIImage?,group:DispatchGroup) {
         guard let imageData = image?.jpegData(compressionQuality: 0.5) else {
             return
         }
         var key = ""
         let uuid = UUID().uuidString
-        if (index == -1) {
-            key = "recipes/\(uuid).jpg"
-        } else {
-            key = "procedures/\(uuid).jpg"
-        }
+        key = "recipes/\(uuid).jpg"
         DispatchQueue.main.async {
             Amplify.Storage.uploadData(key: key, data: imageData) { result in
                 switch result {
                 case .success:
                     print("upload image success")
-                    if index == -1 {
-                        viewModel.recipe.image = key
-                        viewModel.recipe.id = uuid
-                    } else {
-                        viewModel.recipe.contents[index].image = key
-                    }
+                    viewModel.recipe.image = key
+                    viewModel.recipe.id = uuid
                     group.leave()
                 case .failure(let error):
                     print("upload data error \(error)")
@@ -196,10 +187,11 @@ struct MakeRecipeView: View {
                             ForEach(0..<viewModel.recipe.contents.count, id:\.self) { index in
                                 VStack {
                                     TitleView(
-                                        contents: $viewModel.recipe.contents, shouldShowProcedureImagePicker: $shouldShowProcedureImagePicker,
-                                        shouldShowProcedureImageCropper: $shouldShowProcedureImageCropper,
-                                        procedureImages: $procedureImages,
-                                        procedureTmp: $procedureTmp,
+                                        contents: $viewModel.recipe.contents,
+//                                        shouldShowProcedureImagePicker: $shouldShowProcedureImagePicker,
+//                                        shouldShowProcedureImageCropper: $shouldShowProcedureImageCropper,
+//                                        procedureImages: $procedureImages,
+//                                        procedureTmp: $procedureTmp,
                                         index: index,
                                         height: screen.height
                                     )
@@ -230,10 +222,10 @@ struct MakeRecipeView: View {
                                     delegate: MyDropDelegate(
                                         item: index,
                                         items: $procedureTmp,
-                                        images: $procedureImages,
+//                                        images: $procedureImages,
                                         contents: $viewModel.recipe.contents,
-                                        pickers: $shouldShowProcedureImagePicker,
-                                        croppers: $shouldShowProcedureImageCropper,
+//                                        pickers: $shouldShowProcedureImagePicker,
+//                                        croppers: $shouldShowProcedureImageCropper,
                                         draggedItem: $draggedItem
                                     )
                                 )
@@ -257,9 +249,9 @@ struct MakeRecipeView: View {
                                     image: ""
                                 )
                             )
-                            shouldShowProcedureImagePicker.append(false)
-                            shouldShowProcedureImageCropper.append(false)
-                            procedureImages.append(nil)
+//                            shouldShowProcedureImagePicker.append(false)
+//                            shouldShowProcedureImageCropper.append(false)
+//                            procedureImages.append(nil)
                             procedureTmp.append(UUID().uuidString)
                             print("add!!!")
                             print(viewModel.recipe.contents.count)
@@ -306,7 +298,7 @@ struct MakeRecipeView: View {
                         if (pickerImageIndex == -1) {
                             shouldShowHeaderImagePicker.toggle()
                         } else {
-                            shouldShowProcedureImagePicker[pickerImageIndex].toggle()
+//                            shouldShowProcedureImagePicker[pickerImageIndex].toggle()
                         }
                     },
                     .destructive(Text("Delete Photo")) {
@@ -314,7 +306,7 @@ struct MakeRecipeView: View {
                         if (pickerImageIndex == -1) {
                             header = nil
                         } else {
-                            procedureImages[pickerImageIndex] = nil
+//                            procedureImages[pickerImageIndex] = nil
                         }
                     },
                     .cancel() {
@@ -365,10 +357,10 @@ struct FormView: View {
 
 struct TitleView: View {
     @Binding var contents: [Procedure]
-    @Binding var shouldShowProcedureImagePicker: [Bool]
-    @Binding var shouldShowProcedureImageCropper: [Bool]
-    @Binding var procedureImages: [UIImage?]
-    @Binding var procedureTmp: [String]
+//    @Binding var shouldShowProcedureImagePicker: [Bool]
+//    @Binding var shouldShowProcedureImageCropper: [Bool]
+//    @Binding var procedureImages: [UIImage?]
+//    @Binding var procedureTmp: [String]
     
     var index: Int
     var height: CGFloat
@@ -378,10 +370,10 @@ struct TitleView: View {
             if index >= 1 {
                 Button(action: {
                     contents.remove(at: index)
-                    shouldShowProcedureImagePicker.remove(at: index)
-                    shouldShowProcedureImageCropper.remove(at: index)
-                    procedureImages.remove(at: index)
-                    procedureTmp.remove(at: index)
+//                    shouldShowProcedureImagePicker.remove(at: index)
+//                    shouldShowProcedureImageCropper.remove(at: index)
+//                    procedureImages.remove(at: index)
+//                    procedureTmp.remove(at: index)
                 }, label: {
                     Image(systemName: "xmark.circle")
                         .background(Color.purple)
@@ -478,10 +470,7 @@ struct MyDropDelegate : DropDelegate {
 
     let item : Int
     @Binding var items : [String]
-    @Binding var images : [UIImage?]
     @Binding var contents : [Procedure]
-    @Binding var pickers : [Bool]
-    @Binding var croppers : [Bool]
     @Binding var draggedItem : String?
 
     func performDrop(info: DropInfo) -> Bool {
@@ -497,10 +486,7 @@ struct MyDropDelegate : DropDelegate {
             let to = items.firstIndex(of: items[item])!
             withAnimation(.default) {
                 self.items.move(fromOffsets: IndexSet(integer: from), toOffset: to > from ? to + 1 : to)
-                self.images.move(fromOffsets: IndexSet(integer: from), toOffset: to > from ? to + 1 : to)
                 self.contents.move(fromOffsets: IndexSet(integer: from), toOffset: to > from ? to + 1 : to)
-                self.pickers.move(fromOffsets: IndexSet(integer: from), toOffset: to > from ? to + 1 : to)
-                self.croppers.move(fromOffsets: IndexSet(integer: from), toOffset: to > from ? to + 1 : to)
             }
         }
     }

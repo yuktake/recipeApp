@@ -16,7 +16,22 @@ struct Intro: Identifiable {
 }
 
 var intros: [Intro] = [
-    Intro(image: "food", title: "title1", description: "description", color: Color.blue),
-    Intro(image: "food2", title: "title2", description: "description2", color: Color.yellow),
-    Intro(image: "food3", title: "title3", description: "description3", color: Color.pink)
+    Intro(
+        image: "tutorial2",
+        title: "できること",
+        description: "このアプリでは皆さんに投稿していただいた\n1人分の簡単レシピをカロリーやPFC別に検索することができます。",
+        color: Color.blue
+    ),
+    Intro(
+        image: "tutorial1",
+        title: "運動をされている方",
+        description: "体型管理を目的としているため\nレシピの工程はシンプルなものばかりです。",
+        color: Color.yellow
+    ),
+    Intro(
+        image: "tutorial3",
+        title: "あなたのレシピ",
+        description: "あなたのおすすめのレシピがあれば\nぜひ共有してみてください！",
+        color: Color.pink
+    )
 ]

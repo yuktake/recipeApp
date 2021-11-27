@@ -15,6 +15,9 @@ struct ProfileView: View {
     @EnvironmentObject var user: UserStore
 
     @State var index: Int = 0
+    @State var currentImage: Data = Data()
+    @State var showModal: Bool = false
+    @State var showAlert: Bool = false
     @State var isDetail: Bool = false
     @State var refresh = Refresh(started: false, released: false)
     
@@ -33,6 +36,61 @@ struct ProfileView: View {
             }
         }
     }
+    
+    func deleteRecipe() {
+        let recipe = user.myRecipes[index]
+        let amplifyRecipe = Recipe(
+            id: recipe.id,
+            user: recipe.userId,
+            type: "Recipe",
+            title: recipe.title,
+            calorie: recipe.calorie,
+            protein: Double(recipe.protein) ?? 0.0,
+            fat: Double(recipe.fat) ?? 0.0,
+            carbo: Double(recipe.carbo) ?? 0.0,
+            state: recipe.state,
+            materials: recipe.materials,
+            image: recipe.image,
+            favNum: recipe.favNum,
+            createdAt: recipe.create_at,
+            updatedAt: recipe.update_at,
+            delFlg: 1
+        )
+        Amplify.API.mutate(request: .update(amplifyRecipe)) { event in
+            switch event {
+            case .success(let result):
+                switch result {
+                case .success(let a):
+                    print("Successfully delete recipe: \(a)")
+                    // myRecipesから削除する
+                    DispatchQueue.main.async {
+                        user.myRecipes.remove(at: index)
+                    }
+                    print("All Process Done!")
+                case .failure(let error):
+                    print("Got failed update result with \(error.errorDescription)")
+                    break
+                }
+            case .failure(let error):
+                print("Got failed update event with error \(error)")
+                break
+            }
+        }
+        
+    }
+    
+//    func actionChange(_ tag: Int){
+//        switch tag {
+//        case 1:
+//            self.showModal.toggle()
+//            break
+//        case 2:
+//            self.showAlert.toggle()
+//            break
+//        default:
+//            break
+//        }
+//    }
     
     var body: some View {
         ZStack {
@@ -194,85 +252,6 @@ struct ProfileView: View {
                             .padding()
                             
                             if user.isLogged {
-    //                            ScrollView(.horizontal, showsIndicators: false){
-    //                                HStack(spacing: 30){
-                                        if (user.myRecipes.count >= 1) {
-                                            NavigationLink(
-                                                destination:
-                                                RecipeDetail(recipe: user.myRecipes[index], editable: true, isFirstViewActive: self.$isActive)
-                                                ,isActive: $isActive
-                                            ) {
-                                                EmptyView()
-                                            }
-                                            .isDetailLink(false)
-                                            
-                                            ForEach(0...user.myRecipes.count-1,id: \.self) { i in
-                                                if let recipe = user.myRecipes[i] {
-    //                                                NavigationLink(
-    //                                                    destination:RecipeDetail(recipe: recipe, editable: true
-    //                                                                             , isFirstViewActive: self.$isActive
-    //                                                                            )
-    //                                                    ,isActive: $isActive
-    //                                                ) {
-//                                                        SectionView(
-//                                                            recipe: recipe,
-//                                                            header: user.imageDatum[recipe.id] ?? Data(),
-//                                                            profile: user.userDatum[recipe.id] ?? Data()
-//                                                        )
-                                                        PostView(
-                                                            recipe: recipe,
-                                                            header: user.imageDatum[recipe.id] ?? Data(),
-                                                            profile: user.image ?? Data(),
-                                                            username: user.username ?? ""
-                                                        )
-                                                        .onTapGesture{
-                                                            print("section view")
-                                                            self.index = i
-                                                            self.isActive = true
-                                                        }
-                                                        .onAppear {
-                                                            // 最低３つないといけない
-                                                            if i == user.myRecipes.count - 1 {
-                                                                if (!user.token.isEmpty) {
-                                                                    user.listNextPage(nextToken: user.token)
-                                                                }
-                                                            }
-                                                        }
-    //                                                }
-    //                                                .isDetailLink(false)
-                                                }
-                                                
-                                            }
-                                            
-                                            
-    //                                        Button {} label: {
-    //                                            NavigationLink(
-    //                                                destination: UserRecipeList(
-    //                                                    isFirstViewActive: self.$isActive
-    //                                                )
-    //                                                ,isActive: self.$isActive
-    //                                            ) {
-    //                                                Image(systemName: "ellipsis.circle.fill")
-    //                                                    .font(.system(size: 32, weight: .medium))
-    //                                                    .frame(width: 32, height: 32)
-    //                                                    .foregroundColor(.primary)
-    //                                                    .onTapGesture{
-    //                                                        print("profile view elipsis")
-    //                                                        self.isActive = true
-    //                                                    }
-    //                                            }
-    //                                            .isDetailLink(false)
-    //                                        }
-    //                                        .padding(.trailing)
-                                        }
-    //                                }
-    //                                .padding(.horizontal)
-    //                                .onAppear{
-    //                                    print("user.recentRecipes")
-    //                                    print(user.recentRecipes)
-    //                                }
-    //                            }
-
                                 VStack {
                                     Button {
                                         print("tap signout")
@@ -315,14 +294,76 @@ struct ProfileView: View {
                                     }
                                 }
                                 .padding(.horizontal)
+                                
+                                if (user.myRecipes.count >= 1) {
+                                    NavigationLink(
+                                        destination:
+                                        RecipeDetail(recipe: user.myRecipes[index], editable: true, isFirstViewActive: self.$isActive)
+                                        ,isActive: $isActive
+                                    ) {
+                                        EmptyView()
+                                    }
+                                    .isDetailLink(false)
+                                    
+                                    ForEach(0...user.myRecipes.count-1,id: \.self) { i in
+                                        if let recipe = user.myRecipes[i] {
+                                            UserView(
+                                                profile: user.image ?? Data(),
+                                                username: user.username ?? "",
+                                                recipeId: recipe.id,
+                                                i: i,
+                                                index: $index,
+                                                showModal: $showModal,
+                                                showAlert: $showAlert,
+                                                currentImage: $currentImage
+                                            )
+                                            PostView(
+                                                recipe: recipe,
+                                                header: user.imageDatum[recipe.id] ?? Data()
+                                            )
+                                            .onTapGesture{
+                                                print("section view")
+                                                self.index = i
+                                                self.isActive = true
+                                            }
+                                            .onAppear {
+                                                // 最低３つないといけない
+                                                if i == user.myRecipes.count - 1 {
+                                                    if (!user.token.isEmpty) {
+                                                        user.listNextPage(nextToken: user.token)
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
+                                }
                             }
                         }
                     }
                     .offset(y: refresh.released ? 40 : -20)
                 }
                 .navigationBarHidden(true)
-               
-            // end of navigationView
+                .sheet(isPresented: $showModal){
+                    RecipeEdit(
+                        detail_recipe: user.myRecipes[index],
+                        detail_image: $currentImage,
+                        showSheet: $showModal
+                    )
+                }
+                .alert(isPresented: $showAlert) {
+                    Alert(
+                        title: Text("Warning"),
+                        message: Text("このレシピを削除しますか？"),
+                        primaryButton: .cancel(Text("キャンセル")),
+                        secondaryButton: .destructive(
+                            Text("削除"),
+                            action: {
+                               print("delete")
+                                deleteRecipe()
+                            }
+                        )
+                    )
+                }
             }
         }
         .navigationBarHidden(true)
@@ -335,6 +376,101 @@ struct ProfileView_Previews: PreviewProvider {
     static var previews: some View {
         ProfileView(tabSelection:.constant(4))
             .environmentObject(UserStore())
+    }
+}
+
+struct UserView: View {
+    var profile: Data
+    var username: String
+    var recipeId: String
+    var i: Int
+    @Binding var index: Int
+    @Binding var showModal: Bool
+    @Binding var showAlert: Bool
+    @Binding var currentImage: Data
+    
+    @EnvironmentObject var user: UserStore
+    
+    var body: some View {
+        HStack {
+            if let image = UIImage(data: profile) {
+                Image(uiImage: image)
+                    .resizable()
+                    .clipShape(Circle())
+                    .frame(width: 60, height: 60)
+                    .clipped()
+            }
+            VStack(alignment: .leading, spacing: 4) {
+                Text(username).font(.headline)
+            }
+            .padding(.leading, 8)
+            
+            Spacer()
+            
+            Menu {
+                Button(
+                    role: .destructive,
+                    action: {
+                        showAlert = true
+                    }, label: {
+                        Text("削除")
+                    }
+                )
+                .foregroundColor(Color.red)
+                Button(action: {
+                    showModal = true
+                }, label: {
+                    Text("編集")
+                })
+            } label: {
+                Label(
+                    title: {},
+                    icon: {
+                        Image(systemName: "ellipsis")
+                            .foregroundColor(.white)
+                    }
+                )
+                .frame(width: 24, height: 24)
+            }
+            .padding(.trailing,24)
+            .onTapGesture {
+                withAnimation(.spring()){
+                    currentImage = user.imageDatum[recipeId] ?? Data()
+                    index = i
+                }
+            }
+        }
+        .padding(.leading, 16)
+        .padding(.top, 16)
+    }
+}
+
+struct PostView: View {
+    var recipe: RecipeData
+    var header: Data
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 16) {
+            
+            Text(recipe.title)
+                .lineLimit(nil)
+                .padding(.leading, 16)
+                .padding(.trailing, 32)
+            
+            if let image = UIImage(data: header) {
+                Image(uiImage: image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+            }
+            HStack {
+                Text(recipe.create_at).font(.subheadline)
+                Spacer()
+            }
+        }
+        .padding(.bottom, -8)
+        Divider()
+            .padding(.top)
+            .foregroundColor(.white)
     }
 }
 

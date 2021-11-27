@@ -392,28 +392,28 @@ struct RecipeDetail: View {
                 
                 ToolbarItem(placement: .navigationBarTrailing){
                     if self.editable && procedureNum == procedureImages.count {
-                        NavigationLink(
-                            destination:RecipeEdit(
-//                                detail_recipe: recipe,
-                                detail_recipe: tmpRecipe,
-                                detail_image: image,
-                                detail_procedures: procedures,
-                                detail_procedures_images: procedureImages,
-                                edited: $edited
-                                ,isFirstViewActive: $isFirstViewActive
-                            )
-                            ,isActive: $isActive
-                        ){
-//                            Text("Edit")
-                            
-                            Button(action: {
-                                self.isActive = true
-                            }, label: {
-                                Text("Edit")
-                            })
-                            
-                        }
-                        .isDetailLink(false)
+//                        NavigationLink(
+//                            destination:RecipeEdit(
+////                                detail_recipe: recipe,
+//                                detail_recipe: tmpRecipe,
+//                                detail_image: image,
+////                                detail_procedures: procedures,
+////                                detail_procedures_images: procedureImages,
+////                                edited: $edited
+////                                ,isFirstViewActive: $isFirstViewActive
+//                            )
+//                            ,isActive: $isActive
+//                        ){
+////                            Text("Edit")
+//                            
+//                            Button(action: {
+//                                self.isActive = true
+//                            }, label: {
+//                                Text("Edit")
+//                            })
+//                            
+//                        }
+//                        .isDetailLink(false)
                         
                         
 //                        Menu {

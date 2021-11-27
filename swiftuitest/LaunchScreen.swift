@@ -52,18 +52,18 @@ struct LaunchScreen: View {
                 VStack {
                     OffsetPageTabView(offset: $offset) {
                         HStack {
-                            ForEach(0..<3) { _ in
+                            ForEach(0..<intros.count) { i in
                                 VStack {
-                                    Image(systemName: "xmark")
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
+                                    LottieView(filename: intros[i].image)
                                         .frame(height: size.height / 3)
+                                        .cornerRadius(20)
+                                        .padding(.horizontal, 4)
                                     
                                     VStack(alignment: .leading, spacing: 22) {
-                                        Text("Title")
+                                        Text(intros[i].title)
                                             .font(.largeTitle.bold())
                                         
-                                        Text("Description")
+                                        Text(intros[i].description)
                                             .fontWeight(.semibold)
                                             .foregroundColor(.secondary)
                                     }

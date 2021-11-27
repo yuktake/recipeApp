@@ -17,6 +17,11 @@ struct FavoriteDetail: View {
     var animation: Namespace.ID
     var screen = UIScreen.main.bounds.size
     var selectedId: String
+    var state:[Int:String] = [
+        1: "減量中",
+        2: "体重維持",
+        3: "増量中"
+    ]
     
     // offsetScrollView用
     @State var verticalOffset: CGFloat = 0.0
@@ -265,7 +270,7 @@ struct FavoriteDetail: View {
                         }
                     }
                     HStack {
-                        Text("減量中")
+                        Text(state[tmpRecipe.state] ?? "")
                             .font(.system(size:10))
                             .padding(.horizontal, 14)
                             .background(
@@ -376,7 +381,6 @@ struct FavoriteDetail: View {
                 width: UIScreen.main.bounds.width,
                 height: UIScreen.main.bounds.height * 0.9
             )
-//            .padding(.top, 32)
             .onAppear{
                 if user.isLogged {
                     self.getFav(recipeId: selectedId)

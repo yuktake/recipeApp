@@ -453,47 +453,6 @@ struct SectionView: View {
     }
 }
 
-struct PostView: View {
-    var recipe: RecipeData
-    var header: Data
-    var profile: Data
-    var username: String
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            HStack {
-                if let image = UIImage(data: profile) {
-                    Image(uiImage: image)
-                        .resizable()
-                        .clipShape(Circle())
-                        .frame(width: 60, height: 60)
-                        .clipped()
-                }
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(username).font(.headline)
-                    Text(recipe.create_at).font(.subheadline)
-                }
-                .padding(.leading, 8)
-            }
-            .padding(.leading, 16)
-            .padding(.top, 16)
-            
-            Text(recipe.title)
-                .lineLimit(nil)
-                .padding(.leading, 16)
-                .padding(.trailing, 32)
-            
-            if let image = UIImage(data:header) {
-                Image(uiImage: image)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-            }
-        }
-//        .padding(.leading, -20)
-        .padding(.bottom, -8)
-    }
-}
-
 struct InfiniteStackedCardView: View {
     @Binding var cards: [RecipeData]
     var card: RecipeData
