@@ -12,10 +12,7 @@ import UniformTypeIdentifiers
 struct MakeRecipeView: View {
     @State var shouldShowHeaderImagePicker:Bool = false
     @State var shouldShowHeaderCropper:Bool = false
-//    @State var shouldShowProcedureImagePicker:[Bool] = [false]
-//    @State var shouldShowProcedureImageCropper:[Bool] = [false]
     @State var header: UIImage? = nil
-//    @State var procedureImages: [UIImage?] = []
     @State var screen: CGSize! = UIScreen.main.bounds.size
     @State var showModal:Bool = false
     @State var pickerImageIndex:Int = -1
@@ -27,12 +24,13 @@ struct MakeRecipeView: View {
     @State var procedureTmp: [String] = ["1"]
     
     @ObservedObject var viewModel = CreateRecipeViewModel()
+    @EnvironmentObject var user: UserStore
+    
     @Environment(\.presentationMode) var presentationMode
     
     var disableForm: Bool {
         viewModel.recipe.title.isEmpty ||
         viewModel.recipe.materials.isEmpty ||
-//        procedureImages.contains(nil) ||
         header == nil ||
         viewModel.recipe.contents.filter {$0.content.isEmpty}.count != 0
     }
@@ -51,51 +49,62 @@ struct MakeRecipeView: View {
         UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
     }
     
+    func asyncProcessExample(completion: @escaping () -> Void) {
+        print("#Start")
+        completion()
+    }
+    
+    // asyncとgroupは非同期直列ではなく、非同期複数が完了した時のnotify
     func post(){
         let group = DispatchGroup()
-        self.isLoading = true
-        group.enter()
-        asyncProcess { () -> Void in
-            upload(image: header,group: group)
-            print("# End header")
+//        let dispatchQueue = DispatchQueue(label: "queue")
+        guard let imageData = header?.jpegData(compressionQuality: 0.5) else {
+            return
         }
-//        for (index,image) in self.procedureImages.enumerated() {
-//            group.enter()
-//            asyncProcess(text:"procedure") { () -> Void in
-//                upload(image: image,index: index,group:group)
-//                print("# End procedure")
+        let uuid = UUID().uuidString
+        self.isLoading = true
+        
+//        viewModel.upload(group: group, dispatchQueue: dispatchQueue, imageData: imageData)
+//        print("# End header")
+//        viewModel.createRecipeTest(group: group, dispatchQueue: dispatchQueue, recipe: viewModel.recipe)
+//        print("# End Recipe")
+//        group.notify(queue: .main) {
+//            DispatchQueue.main.asyncAfter(deadline: .now()+1){
+//                print("All Process Done!")
+//                self.isLoading = false
+//                self.user.myRecipes.insert(viewModel.recipe, at: 0)
+//                self.user.imageDatum[viewModel.recipe.id] = imageData
+//                dismiss()
 //            }
 //        }
         
+        group.enter()
+        asyncProcess { () -> Void in
+            upload(id: uuid, imageData: imageData, group: group)
+        }
+
         group.notify(queue: .main) {
-            viewModel.createRecipe(recipe: viewModel.recipe)
             print("All Process Done!")
-            DispatchQueue.main.asyncAfter(deadline: .now()+2){
+            DispatchQueue.main.asyncAfter(deadline: .now()+1){
                 self.isLoading = false
+                self.user.myRecipes.insert(viewModel.recipe, at: 0)
+                self.user.imageDatum[viewModel.recipe.id] = imageData
                 dismiss()
             }
         }
     }
     
-    func upload(image:UIImage?,group:DispatchGroup) {
-        guard let imageData = image?.jpegData(compressionQuality: 0.5) else {
-            return
-        }
+    func upload(id: String, imageData: Data, group: DispatchGroup) {
         var key = ""
-        let uuid = UUID().uuidString
-        key = "recipes/\(uuid).jpg"
-        DispatchQueue.main.async {
-            Amplify.Storage.uploadData(key: key, data: imageData) { result in
-                switch result {
-                case .success:
-                    print("upload image success")
-                    viewModel.recipe.image = key
-                    viewModel.recipe.id = uuid
-                    group.leave()
-                case .failure(let error):
-                    print("upload data error \(error)")
-                    group.leave()
-                }
+        key = "recipes/\(id).jpg"
+        Amplify.Storage.uploadData(key: key, data: imageData) { result in
+            switch result {
+            case .success:
+                print("upload image success")
+                viewModel.createRecipe(id: id, recipe: viewModel.recipe, group: group)
+            case .failure(let error):
+                print("upload data error \(error)")
+                group.leave()
             }
         }
     }
@@ -116,7 +125,6 @@ struct MakeRecipeView: View {
                     HStack {
                         Button(action:{
                             showModal.toggle()
-//                            shouldShowHeaderImagePicker.toggle()
                             pickerImageIndex = -1
                         }, label: {
                             if let image = header {
@@ -159,6 +167,19 @@ struct MakeRecipeView: View {
                             FormView(iconImage: "f.circle.fill", placeholder: "AT", numberPad: true, text: $viewModel.recipe.fat)
                             FormView(iconImage: "c.circle.fill", placeholder: "ARBO", numberPad: true, text: $viewModel.recipe.carbo)
                         }
+                        HStack {
+                            FormView(
+                                iconImage: "pencil",
+                                placeholder: "Calorie",
+                                numberPad: true,
+                                text: $viewModel.recipe.calorie
+                            )
+                                .frame(width: screen.width  * 0.4)
+                            Text("kcal")
+                                .font(.caption)
+                                .foregroundColor(.white)
+                            Spacer()
+                        }
                         Picker(selection: $viewModel.recipe.state, label: Text("状態")) {
                             Text("減量中").tag(1)
                             Text("体重維持").tag(2)
@@ -188,10 +209,6 @@ struct MakeRecipeView: View {
                                 VStack {
                                     TitleView(
                                         contents: $viewModel.recipe.contents,
-//                                        shouldShowProcedureImagePicker: $shouldShowProcedureImagePicker,
-//                                        shouldShowProcedureImageCropper: $shouldShowProcedureImageCropper,
-//                                        procedureImages: $procedureImages,
-//                                        procedureTmp: $procedureTmp,
                                         index: index,
                                         height: screen.height
                                     )
@@ -201,16 +218,6 @@ struct MakeRecipeView: View {
                                             contents: $viewModel.recipe.contents[index].content
                                         )
                                         .frame(width:screen.width*0.6)
-                                        
-//                                        ImageButton(
-//                                            showModal: $showModal,
-//                                            pickerImageIndex: $pickerImageIndex,
-//                                            procedureImage: $procedureImages[index],
-//                                            showPicker: $shouldShowProcedureImagePicker[index],
-//                                            showCropper: $shouldShowProcedureImageCropper[index],
-//                                            width: screen.width,
-//                                            index: index
-//                                        )
                                     }
                                     .frame(height:screen.height*0.2)
                                 }
@@ -222,10 +229,7 @@ struct MakeRecipeView: View {
                                     delegate: MyDropDelegate(
                                         item: index,
                                         items: $procedureTmp,
-//                                        images: $procedureImages,
                                         contents: $viewModel.recipe.contents,
-//                                        pickers: $shouldShowProcedureImagePicker,
-//                                        croppers: $shouldShowProcedureImageCropper,
                                         draggedItem: $draggedItem
                                     )
                                 )
@@ -249,9 +253,6 @@ struct MakeRecipeView: View {
                                     image: ""
                                 )
                             )
-//                            shouldShowProcedureImagePicker.append(false)
-//                            shouldShowProcedureImageCropper.append(false)
-//                            procedureImages.append(nil)
                             procedureTmp.append(UUID().uuidString)
                             print("add!!!")
                             print(viewModel.recipe.contents.count)
@@ -275,7 +276,7 @@ struct MakeRecipeView: View {
                             print("push!!!")
                         }){
                             Text("Post")
-//                                .foregroundColor(.black)
+                                .foregroundColor(.black)
                         }
                         .padding(12)
                         .padding(.horizontal, 30)
@@ -295,19 +296,11 @@ struct MakeRecipeView: View {
                 ActionSheet(title: Text("Select Photo"),message: Text("Choose"),buttons: [
                     .default(Text("Photo Library")) {
                         showModal.toggle()
-                        if (pickerImageIndex == -1) {
-                            shouldShowHeaderImagePicker.toggle()
-                        } else {
-//                            shouldShowProcedureImagePicker[pickerImageIndex].toggle()
-                        }
+                        shouldShowHeaderImagePicker.toggle()
                     },
                     .destructive(Text("Delete Photo")) {
                         showModal.toggle()
-                        if (pickerImageIndex == -1) {
-                            header = nil
-                        } else {
-//                            procedureImages[pickerImageIndex] = nil
-                        }
+                        header = nil
                     },
                     .cancel() {
                         showModal.toggle()
@@ -357,10 +350,6 @@ struct FormView: View {
 
 struct TitleView: View {
     @Binding var contents: [Procedure]
-//    @Binding var shouldShowProcedureImagePicker: [Bool]
-//    @Binding var shouldShowProcedureImageCropper: [Bool]
-//    @Binding var procedureImages: [UIImage?]
-//    @Binding var procedureTmp: [String]
     
     var index: Int
     var height: CGFloat
@@ -370,10 +359,6 @@ struct TitleView: View {
             if index >= 1 {
                 Button(action: {
                     contents.remove(at: index)
-//                    shouldShowProcedureImagePicker.remove(at: index)
-//                    shouldShowProcedureImageCropper.remove(at: index)
-//                    procedureImages.remove(at: index)
-//                    procedureTmp.remove(at: index)
                 }, label: {
                     Image(systemName: "xmark.circle")
                         .background(Color.purple)
@@ -412,57 +397,6 @@ struct TextAreaView: View {
             .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
             .shadow(color: .black.opacity(0.15), radius: 20, x:0, y:20)
         }
-    }
-}
-
-struct ImageButton: View {
-    @Binding var showModal:Bool
-    @Binding var pickerImageIndex:Int
-    @Binding var procedureImage: UIImage?
-    
-    @Binding var showPicker: Bool
-    @Binding var showCropper: Bool
-    
-    var width:CGFloat
-    var index:Int
-    
-    var body: some View {
-        Button(action:{
-            showModal.toggle()
-            pickerImageIndex = index
-        }, label: {
-            VStack(alignment: .center) {
-                if let image = self.procedureImage {
-                    Image(uiImage: image)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: width*0.2)
-                } else {
-                    Image(systemName: "camera")
-                        .font(.largeTitle)
-                        .padding()
-                        .background(Color.purple)
-                        .foregroundColor(.white)
-                        .clipShape(Circle())
-                }
-            }
-        })
-            .buttonStyle(BorderlessButtonStyle())
-            .sheet(isPresented: $showPicker, content: {
-                ImagePicker(
-                    sourceType: .photoLibrary,
-                    selectedImage: $procedureImage,
-                    showModal: $showModal,
-                    cropperShown: $showCropper
-                )
-            })
-            .sheet(isPresented: $showCropper){
-                ImageCroppingView(
-                    shown: $showCropper,
-                    image: procedureImage!,
-                    croppedImage: $procedureImage
-                )
-            }
     }
 }
 

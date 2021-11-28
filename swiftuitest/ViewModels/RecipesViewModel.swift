@@ -26,10 +26,6 @@ class RecipesViewModel: ObservableObject {
   
     func fetchData(protein:Double,fat:Double,carbo:Double,state:Int,keyword:String,sort:Int) {
         self.recipes = []
-        let formatter: DateFormatter = DateFormatter()
-        formatter.calendar = Calendar(identifier: .gregorian)
-        formatter.dateFormat = "yyyy/MM/dd HH:mm:ss Z"
-        let now = Date()
         
         let r = Recipe.keys
         var predicate = QueryPredicateGroup.init()
@@ -133,7 +129,7 @@ class RecipesViewModel: ObservableObject {
                                 id:item.id,
                                 userId:item.user,
                                 title:item.title,
-                                calorie: item.calorie,
+                                calorie: String(item.calorie),
                                 protein:String(item.protein),
                                 fat:String(item.fat),
                                 carbo:String(item.carbo),
@@ -148,7 +144,7 @@ class RecipesViewModel: ObservableObject {
                                 delFlg: item.delFlg
                             ))
                         }
-                        Amplify.Storage.downloadData(key: item.image) { result in
+                        Amplify.Storage.downloadData(key: "recipes/\(item.id).jpg") { result in
                             switch result {
                             case .success(let imageData):
                                 DispatchQueue.main.async{
@@ -202,7 +198,7 @@ class RecipesViewModel: ObservableObject {
                                 id:item.id,
                                 userId:item.user,
                                 title:item.title,
-                                calorie: item.calorie,
+                                calorie: String(item.calorie),
                                 protein:String(item.protein),
                                 fat:String(item.fat),
                                 carbo:String(item.carbo),
@@ -217,7 +213,7 @@ class RecipesViewModel: ObservableObject {
                                 delFlg: item.delFlg
                             ))
                         }
-                        Amplify.Storage.downloadData(key: item.image) { result in
+                        Amplify.Storage.downloadData(key: "recipes/\(item.id).jpg") { result in
                             switch result {
                             case .success(let imageData):
                                 DispatchQueue.main.async{
@@ -271,7 +267,7 @@ class RecipesViewModel: ObservableObject {
                                 id:item.id,
                                 userId:item.user,
                                 title:item.title,
-                                calorie: item.calorie,
+                                calorie: String(item.calorie),
                                 protein:String(item.protein),
                                 fat:String(item.fat),
                                 carbo:String(item.carbo),
@@ -286,7 +282,7 @@ class RecipesViewModel: ObservableObject {
                                 delFlg: item.delFlg
                             ))
                         }
-                        Amplify.Storage.downloadData(key: item.image) { result in
+                        Amplify.Storage.downloadData(key: "recipes/\(item.id).jpg") { result in
                             switch result {
                             case .success(let imageData):
                                 DispatchQueue.main.async{
@@ -339,7 +335,7 @@ class RecipesViewModel: ObservableObject {
                                 id:item.id,
                                 userId:item.user,
                                 title:item.title,
-                                calorie: item.calorie,
+                                calorie: String(item.calorie),
                                 protein:String(item.protein),
                                 fat:String(item.fat),
                                 carbo:String(item.carbo),
@@ -354,7 +350,7 @@ class RecipesViewModel: ObservableObject {
                                 delFlg: item.delFlg
                             ))
                         }
-                        Amplify.Storage.downloadData(key: item.image) { result in
+                        Amplify.Storage.downloadData(key: "recipes/\(item.id).jpg") { result in
                             switch result {
                             case .success(let imageData):
                                 DispatchQueue.main.async{
@@ -432,7 +428,7 @@ class RecipesViewModel: ObservableObject {
                                     id:item.id,
                                     userId:item.user,
                                     title:item.title,
-                                    calorie: item.calorie,
+                                    calorie: String(item.calorie),
                                     protein:String(item.protein),
                                     fat:String(item.fat),
                                     carbo:String(item.carbo),
@@ -447,7 +443,7 @@ class RecipesViewModel: ObservableObject {
                                     delFlg: item.delFlg
                                 ))
                         }
-                        Amplify.Storage.downloadData(key: item.image) { result in
+                        Amplify.Storage.downloadData(key: "recipes/\(item.id).jpg") { result in
                             switch result {
                             case .success(let imageData):
                                 print("next image success")
@@ -506,7 +502,7 @@ class RecipesViewModel: ObservableObject {
                                     id:item.id,
                                     userId:item.user,
                                     title:item.title,
-                                    calorie: item.calorie,
+                                    calorie: String(item.calorie),
                                     protein:String(item.protein),
                                     fat:String(item.fat),
                                     carbo:String(item.carbo),
@@ -521,7 +517,7 @@ class RecipesViewModel: ObservableObject {
                                     delFlg: item.delFlg
                                 ))
                         }
-                        Amplify.Storage.downloadData(key: item.image) { result in
+                        Amplify.Storage.downloadData(key: "recipes/\(item.id).jpg") { result in
                             switch result {
                             case .success(let imageData):
                                 print("next image success")
@@ -580,7 +576,7 @@ class RecipesViewModel: ObservableObject {
                                     id:item.id,
                                     userId:item.user,
                                     title:item.title,
-                                    calorie: item.calorie,
+                                    calorie: String(item.calorie),
                                     protein:String(item.protein),
                                     fat:String(item.fat),
                                     carbo:String(item.carbo),
@@ -595,7 +591,7 @@ class RecipesViewModel: ObservableObject {
                                     delFlg: item.delFlg
                                 ))
                         }
-                        Amplify.Storage.downloadData(key: item.image) { result in
+                        Amplify.Storage.downloadData(key: "recipes/\(item.id).jpg") { result in
                             switch result {
                             case .success(let imageData):
                                 print("next image success")
@@ -654,7 +650,7 @@ class RecipesViewModel: ObservableObject {
                                     id:item.id,
                                     userId:item.user,
                                     title:item.title,
-                                    calorie: item.calorie,
+                                    calorie: String(item.calorie),
                                     protein:String(item.protein),
                                     fat:String(item.fat),
                                     carbo:String(item.carbo),
@@ -669,7 +665,7 @@ class RecipesViewModel: ObservableObject {
                                     delFlg: item.delFlg
                                 ))
                         }
-                        Amplify.Storage.downloadData(key: item.image) { result in
+                        Amplify.Storage.downloadData(key: "recipes/\(item.id).jpg") { result in
                             switch result {
                             case .success(let imageData):
                                 print("next image success")

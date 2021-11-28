@@ -35,7 +35,7 @@ struct RecipeDetail: View {
     @State var tmpRecipe: RecipeData = RecipeData(
         userId: "",
         title: "",
-        calorie: 0,
+        calorie: String(0),
         protein: String(0.0),
         fat: String(0.0),
         carbo: String(0.0),
@@ -59,7 +59,7 @@ struct RecipeDetail: View {
             user: self.recipe.userId,
             type: "Recipe",
             title: self.recipe.title,
-            calorie: self.recipe.calorie,
+            calorie: Int(self.recipe.calorie) ?? 0,
             protein: Double(self.recipe.protein) ?? 0.0,
             fat: Double(self.recipe.fat) ?? 0.0,
             carbo: Double(self.recipe.carbo) ?? 0.0,
@@ -113,7 +113,7 @@ struct RecipeDetail: View {
                         self.tmpRecipe.id = recipe.id
                         self.tmpRecipe.userId = recipe.user
                         self.tmpRecipe.title = recipe.title
-                        self.tmpRecipe.calorie = recipe.calorie
+                        self.tmpRecipe.calorie = String(recipe.calorie)
                         self.tmpRecipe.protein = String(recipe.protein)
                         self.tmpRecipe.fat = String(recipe.fat)
                         self.tmpRecipe.carbo = String(recipe.carbo)
@@ -121,7 +121,7 @@ struct RecipeDetail: View {
                         self.tmpRecipe.materials = recipe.materials
                     }
                     procedureNum = recipe.contents?.count ?? -1
-                    Amplify.Storage.downloadData(key: recipe.image) { result in
+                    Amplify.Storage.downloadData(key: "recipes/\(recipe.id).jpg") { result in
                         switch result {
                         case .success(let imageData):
                             DispatchQueue.main.async{
@@ -131,7 +131,7 @@ struct RecipeDetail: View {
                             print("Failed to download image data - \(error)")
                         }
                     }
-                    Amplify.Storage.downloadData(key: "\(recipe.user).jpg") { result in
+                    Amplify.Storage.downloadData(key: "user/\(recipe.user).jpg") { result in
                         switch result {
                         case .success(let imageData):
                             DispatchQueue.main.async{
@@ -147,16 +147,6 @@ struct RecipeDetail: View {
                         print("contentttttt")
                         DispatchQueue.main.async {
                             self.procedures.append(procedure)
-                        }
-                        Amplify.Storage.downloadData(key: procedure.image!) { result in
-                            switch result {
-                            case .success(let imageData):
-                                DispatchQueue.main.async{
-                                    self.procedureImages[procedure.id] = imageData
-                                }
-                            case .failure(let error):
-                                print("Failed to download image data - \(error)")
-                            }
                         }
                     }
 
@@ -491,7 +481,7 @@ struct RecipeDetail_Previews: PreviewProvider {
                 id: "1",
                 userId:"1",
                 title:"title",
-                calorie: 0,
+                calorie: String(0),
                 protein: String(1),
                 fat: String(1),
                 carbo: String(1),

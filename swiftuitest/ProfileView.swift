@@ -44,7 +44,7 @@ struct ProfileView: View {
             user: recipe.userId,
             type: "Recipe",
             title: recipe.title,
-            calorie: recipe.calorie,
+            calorie: Int(recipe.calorie) ?? 0,
             protein: Double(recipe.protein) ?? 0.0,
             fat: Double(recipe.fat) ?? 0.0,
             carbo: Double(recipe.carbo) ?? 0.0,

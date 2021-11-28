@@ -13,7 +13,7 @@ class CreateRecipeViewModel: ObservableObject {
     @Published var recipe = RecipeData(
         userId: UserDefaults.standard.string(forKey: "sub") ?? "",
         title: "",
-        calorie: 0,
+        calorie: String(0),
         protein: String(0.0),
         fat: String(0.0),
         carbo: String(0.0),
@@ -30,18 +30,17 @@ class CreateRecipeViewModel: ObservableObject {
         delFlg: 0
     )
     
-    func createRecipe(recipe: RecipeData) {
-        let formatter: DateFormatter = DateFormatter()
-        formatter.calendar = Calendar(identifier: .gregorian)
-        formatter.dateFormat = "yyyy/MM/dd HH:mm:ss Z"
-        let now = Date()
-        
+    func createRecipe(
+        id: String,
+        recipe: RecipeData,
+        group: DispatchGroup
+    ) {
         let amplify_recipe = Recipe(
-            id: recipe.id,
+            id: id,
             user: recipe.userId,
             type: "Recipe",
             title: recipe.title,
-            calorie: recipe.calorie,
+            calorie: Int(recipe.calorie) ?? 0,
             protein: Double(recipe.protein) ?? 0.0,
             fat: Double(recipe.fat) ?? 0.0,
             carbo: Double(recipe.carbo) ?? 0.0,
@@ -52,6 +51,7 @@ class CreateRecipeViewModel: ObservableObject {
             delFlg: 0
         )
         
+        let subgroup = DispatchGroup()
         var procedures: [Procedure] = []
         recipe.contents.forEach{ content in
             procedures.append(Procedure(order: content.order,content: content.content, image: content.image!, recipe: amplify_recipe))
@@ -66,36 +66,41 @@ class CreateRecipeViewModel: ObservableObject {
                 case .success(let recipe):
                     print("Successfully created recipe: \(recipe)")
                     procedures.forEach{ p in
-                        self.createProcedure(procedure: p)
+                        subgroup.enter()
+                        self.createProcedure(procedure: p, group: subgroup)
+                    }
+                    subgroup.notify(queue: .main) {
+                        print("subgroup end")
+                        group.leave()
                     }
                 case .failure(let error):
                     print("Got failed result with \(error.errorDescription)")
+                    group.leave()
                 }
             case .failure(let error):
                 print("Got failed event with error \(error)")
+                group.leave()
             }
         }
         
     }
     
-    func createProcedure(procedure: Procedure) {
+    func createProcedure(procedure: Procedure, group: DispatchGroup) {
         Amplify.API.mutate(request: .create(procedure)) { event in
             switch event {
             case .success(let result):
                 switch result {
                 case .success(let procedure):
                     print("Successfully created procedure: \(procedure)")
-                    
+                    group.leave()
                 case .failure(let error):
                     print("Got failed result with \(error.errorDescription)")
+                    group.leave()
                 }
             case .failure(let error):
                 print("Got failed event with error \(error)")
+                group.leave()
             }
         }
-    }
-    
-    func save() {
-        createRecipe(recipe: recipe)
     }
 }

@@ -21,10 +21,7 @@ struct swiftuitestApp: App {
             LaunchScreen()
 //                .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .environmentObject(UserStore())
-                .environmentObject(FavStore())
                 .environmentObject(RecipesViewModel())
-//                .environmentObject(CreateRecipeViewModel())
-                .environmentObject(UserRecipesViewModel())
                 .environmentObject(Network())
         }
     }

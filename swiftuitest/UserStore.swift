@@ -103,9 +103,7 @@ class UserStore: ObservableObject {
                     favs.forEach { fav in
                         group.enter()
                         self.asyncProcess() { () -> Void in
-//                            self.getRecipeDetail(fav: fav, group: group)
                             DispatchQueue.main.async{
-//                                self.favArray.append(fav.recipeID)
                                 if !self.favRecipes.contains(where: {$0.id == fav.recipeID}) {
                                     self.favRecipes.append(FavData(id: fav.recipeID))
                                 }
@@ -114,7 +112,6 @@ class UserStore: ObservableObject {
                                 switch result {
                                 case .success(let imageData):
                                     DispatchQueue.main.async{
-        //                                self.localFavs[recipe.id] = recipe.id
                                         self.favImageDatum[fav.recipeID] = imageData
                                     }
                                     group.leave()
@@ -124,18 +121,8 @@ class UserStore: ObservableObject {
                             }
                             print("get recipe detail")
                         }
-//                        print("fav from server")
-//                        print(fav.recipeID)
                     }
                     group.notify(queue: .main) {
-//                        self.fav = self.fav.sorted(by: { lRecipe, rRecipe -> Bool in
-//                            return lRecipe.create_at > rRecipe.create_at
-//                        })
-//                        _ = self.fav.keys.sorted(by: { lRecipe, rRecipe -> Bool in
-//                            return lRecipe > rRecipe
-//                        })
-                        
-                        
                         print("doneeeeeeeeeeeeeee")
                     }
                 case .failure(let error):
@@ -233,9 +220,6 @@ class UserStore: ObservableObject {
                     let recipes = query.getItems()
                     self.token = query.getNextToken()
                     recipes.forEach { item in
-//                        print("my recipeeeee")
-//                        print(item.title)
-
                         DispatchQueue.main.async {
                             if !self.myRecipes.contains(where: {$0.id == item.id}) {
                                 self.myRecipes.append(
@@ -243,7 +227,7 @@ class UserStore: ObservableObject {
                                         id:item.id,
                                         userId:item.user,
                                         title:item.title,
-                                        calorie: item.calorie,
+                                        calorie: String(item.calorie),
                                         protein:String(item.protein),
                                         fat:String(item.fat),
                                         carbo:String(item.carbo),
@@ -259,7 +243,7 @@ class UserStore: ObservableObject {
                                 ))
                             }
                         }
-                        Amplify.Storage.downloadData(key: item.image) { result in
+                        Amplify.Storage.downloadData(key: "recipes/\(item.id).jpg") { result in
                             switch result {
                             case .success(let imageData):
                                 DispatchQueue.main.async{
@@ -305,7 +289,7 @@ class UserStore: ObservableObject {
                                         id:item.id,
                                         userId:item.user,
                                         title:item.title,
-                                        calorie: item.calorie,
+                                        calorie: String(item.calorie),
                                         protein:String(item.protein),
                                         fat:String(item.fat),
                                         carbo:String(item.carbo),
@@ -321,7 +305,7 @@ class UserStore: ObservableObject {
                                 ))
                             }
                         }
-                        Amplify.Storage.downloadData(key: item.image) { result in
+                        Amplify.Storage.downloadData(key: "recipes/\(item.image).jpg") { result in
                             switch result {
                             case .success(let imageData):
                                 DispatchQueue.main.async{
@@ -331,17 +315,6 @@ class UserStore: ObservableObject {
                                 print("Failed to download image data - \(error)")
                             }
                         }
-//                        // profile image
-//                        Amplify.Storage.downloadData(key: "users/\(item.user).jpg", options: options) { result in
-//                            switch result {
-//                            case .success(let imageData):
-//                                DispatchQueue.main.async{
-//                                    self.userDatum[item.id] = imageData
-//                                }
-//                            case .failure(let error):
-//                                print("Failed to download image data - \(error)")
-//                            }
-//                        }
                     }
                 case .failure(let error):
                     print("Got failed get next result with \(error.errorDescription)")

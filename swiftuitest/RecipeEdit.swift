@@ -38,7 +38,7 @@ struct RecipeEdit: View {
     @State var recipe = RecipeData(
         userId: UserDefaults.standard.string(forKey: "sub") ?? "",
         title: "",
-        calorie: 0,
+        calorie: String(0),
         protein: String(0.0),
         fat: String(0.0),
         carbo: String(0.0),
@@ -76,7 +76,7 @@ struct RecipeEdit: View {
                 switch result {
                 case .success(let recipe):
                     print("Successfully retrieved recipe: \(recipe)")
-                    self.recipe.calorie = recipe.calorie
+                    self.recipe.calorie = String(recipe.calorie)
                     self.recipe.protein = String(recipe.protein)
                     self.recipe.fat = String(recipe.fat)
                     self.recipe.carbo = String(recipe.carbo)
@@ -132,7 +132,7 @@ struct RecipeEdit: View {
             user: self.recipe.userId,
             type: "Recipe",
             title: self.recipe.title,
-            calorie: self.recipe.calorie,
+            calorie: Int(self.recipe.calorie) ?? 0,
             protein: Double(self.recipe.protein) ?? 0.0,
             fat: Double(self.recipe.fat) ?? 0.0,
             carbo: Double(self.recipe.carbo) ?? 0.0,
