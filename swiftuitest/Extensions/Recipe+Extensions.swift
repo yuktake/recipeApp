@@ -14,6 +14,10 @@ extension Procedure: Identifiable{
     
 }
 
+extension Review: Identifiable{
+    
+}
+
 extension UserDefaults {
     func object<T: Codable>(_ type: T.Type, with key: String, usingDecoder decoder: JSONDecoder = JSONDecoder()) -> T? {
         guard let data = self.value(forKey: key) as? Data else { return nil }

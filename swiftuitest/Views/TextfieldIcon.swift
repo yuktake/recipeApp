@@ -36,10 +36,10 @@ struct TextfieldIcon: View {
                                 }
                             }
                     }
-                    Color("tertiaryBackground")
-                        .cornerRadius(12)
-                        .opacity(0.8)
-                        .blur(radius: 3.0)
+//                    Color("tertiaryBackground")
+//                        .cornerRadius(12)
+//                        .opacity(0.8)
+//                        .blur(radius: 3.0)
                 }
             }
             .cornerRadius(12)

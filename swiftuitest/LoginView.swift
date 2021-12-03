@@ -164,9 +164,9 @@ struct LoginView: View {
             Color.black.edgesIgnoringSafeArea(.all)
             ScrollView {
                 ZStack(alignment: .top) {
-                    Color("background2")
-                        .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-                        .edgesIgnoringSafeArea(.bottom)
+//                    Color("background2")
+//                        .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+//                        .edgesIgnoringSafeArea(.bottom)
                     VStack {
                         CoverView()
                         
@@ -339,7 +339,7 @@ struct LoginView: View {
                                 HStack(spacing: 16) {
                                     ZStack {
                                         Circle()
-                                            .foregroundColor(Color("pink-gradient-1"))
+//                                            .foregroundColor(Color("pink-gradient-1"))
                                             .frame(width: 66, height: 66, alignment: .center)
                                         Image(systemName: "person.fill")
                                             .foregroundColor(.white)
@@ -399,9 +399,9 @@ struct LoginView: View {
                         }
                         .background(RoundedRectangle(cornerRadius: 30)
                                         .stroke(Color.white.opacity(0.2))
-                                        .background(Color("secondaryBackground").opacity(0.5))
+//                                        .background(Color("secondaryBackground").opacity(0.5))
                                         .background(VisualEffectBlur(blurStyle: .dark))
-                                        .shadow(color: Color("shadowColor").opacity(0.5), radius: 60, x: 0, y: 30)
+//                                        .shadow(color: Color("shadowColor").opacity(0.5), radius: 60, x: 0, y: 30)
                         )
                         .cornerRadius(30)
                         .padding(.horizontal)
@@ -414,7 +414,7 @@ struct LoginView: View {
                                 HStack(spacing: 16) {
                                     ZStack {
                                         Circle()
-                                            .foregroundColor(Color("pink-gradient-1"))
+//                                            .foregroundColor(Color("pink-gradient-1"))
                                             .frame(width: 66, height: 66, alignment: .center)
                                         Image(systemName: "person.fill")
                                             .foregroundColor(.white)
@@ -471,9 +471,9 @@ struct LoginView: View {
                         }
                         .background(RoundedRectangle(cornerRadius: 30)
                                         .stroke(Color.white.opacity(0.2))
-                                        .background(Color("secondaryBackground").opacity(0.5))
+//                                        .background(Color("secondaryBackground").opacity(0.5))
                                         .background(VisualEffectBlur(blurStyle: .dark))
-                                        .shadow(color: Color("shadowColor").opacity(0.5), radius: 60, x: 0, y: 30)
+//                                        .shadow(color: Color("shadowColor").opacity(0.5), radius: 60, x: 0, y: 30)
                         )
                         .cornerRadius(30)
                         .padding(.horizontal)

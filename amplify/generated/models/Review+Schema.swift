@@ -30,7 +30,7 @@ extension Review {
       .id(),
       .field(review.user, is: .required, ofType: .string),
       .field(review.content, is: .required, ofType: .string),
-      .field(review.image, is: .optional, ofType: .string),
+      .field(review.image, is: .required, ofType: .string),
       .belongsTo(review.recipe, is: .optional, ofType: Recipe.self, targetName: "recipeID"),
       .field(review.createdAt, is: .optional, isReadOnly: true, ofType: .dateTime),
       .field(review.updatedAt, is: .optional, isReadOnly: true, ofType: .dateTime)

@@ -445,7 +445,7 @@ extension GraphQLRequest
             favsByDate(
                 type: "Fav",
                 filter: {userID:{eq: $userId}},
-                limit: 5,
+                limit: 30,
                 sortDirection: DESC
             ) {
                 items {
@@ -477,7 +477,7 @@ extension GraphQLRequest
             favsByDate(
                 type: "Fav",
                 filter: {userID: {eq: $userid}},
-                limit: 5,
+                limit: 30,
                 sortDirection: DESC
                 nextToken: $nextToken
             ) {
@@ -593,10 +593,8 @@ extension GraphQLRequest
     static func getRecipeForDetail(id: String)-> GraphQLRequest<Recipe>
     {
         let document = """
-        query getRecipe($id: ID!) {
-            getRecipe(
-                id: $id
-            ) {
+        query MyQuery($id: ID!) {
+            getRecipe(id: $id) {
                 id
                 user
                 type
@@ -607,8 +605,9 @@ extension GraphQLRequest
                 carbo
                 state
                 materials
-                reviews(limit: 3){
+                reviews {
                     items {
+                        user
                         content
                         createdAt
                         id

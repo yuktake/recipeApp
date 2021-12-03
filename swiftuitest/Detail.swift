@@ -25,9 +25,13 @@ struct Detail: View {
     
     @State var procedures:[Procedure] = []
     @State var reviews:[Review] = []
+    @State var reviewImages:[String:Data] = [:]
+    @State var showReview: Bool = false
+    @State var showList: Bool = false
+    @State var selectedReview: Review?
     @State var deleted: Bool = false
     @State var procedureNum: Int = -1
-    @State var reviewable: Bool = false
+    @State var reviewable: Bool = true
     @State var edited: Bool = false
     @State var favorite:Bool = false
     @State var tmpRecipe: RecipeData = RecipeData(
@@ -48,6 +52,11 @@ struct Detail: View {
         delFlg: 0
     )
     @State var changing = true
+    @State var showModal = false
+    
+    func sheetChange(_ tag: Bool){
+        self.load(updated: false)
+    }
     
     func getFav(recipeId: String) {
         print("get fav")
@@ -93,8 +102,10 @@ struct Detail: View {
                     print("Successfully created fav: \(fav)")
                     self.changing = false
                     self.favorite = true
-                    self.user.favImageDatum[selectedItem.id] = header
-                    self.user.favRecipes.insert(FavData(id:selectedItem.id), at: 0)
+                    DispatchQueue.main.async {
+                        self.user.favImageDatum[selectedItem.id] = header
+                        self.user.favRecipes.insert(FavData(id:selectedItem.id), at: 0)
+                    }
                 case .failure(let error):
                     print("Got failed result with \(error.errorDescription)")
                 }
@@ -153,6 +164,7 @@ struct Detail: View {
         // get recipe
         tmpRecipe = selectedItem
         self.procedures = []
+        self.reviews = []
         Amplify.API.query(request: .getRecipeForDetail(id: selectedItem.id)) { event in
             switch event {
             case .success(let result):
@@ -186,12 +198,20 @@ struct Detail: View {
 
                     recipe.reviews?.forEach{ review in
                         print("reviewwwww")
-                        DispatchQueue.main.async {
-                            if review.user == user.sub {
-                                self.reviewable = true
+                        Amplify.Storage.downloadData(key: review.image) { result in
+                            switch result {
+                            case .success(let imageData):
+                                DispatchQueue.main.async{
+                                    self.reviewImages[review.id] = imageData
+                                    if review.user == user.sub {
+                                        self.reviewable = false
+                                    }
+                                    self.reviews.append(review)
+                                }
+                            case .failure(let error):
+                                print("Failed to download image data - \(error)")
                             }
-                            self.reviews.append(review)
-                        }                        
+                        }
                     }
                     self.edited = false
                 case .failure(let error):
@@ -205,190 +225,306 @@ struct Detail: View {
     
     var body: some View {
         //　parallex
-        ScrollView(showsIndicators: false, content: {
-            GeometryReader { reader in
-                if let image = UIImage(data:header) {
-                    Image(uiImage: image)
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                        .offset(y: -reader.frame(in: .global).minY)
-                        .frame(
-                            width: UIScreen.main.bounds.width,
-                            height: reader.frame(in: .global).minY + (UIScreen.main.bounds.height * 0.7)
-                        )
+        ZStack {
+            ScrollView(showsIndicators: false, content: {
+                GeometryReader { reader in
+                    if let image = UIImage(data:header) {
+                        Image(uiImage: image)
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .offset(y: -reader.frame(in: .global).minY)
+                            .frame(
+                                width: UIScreen.main.bounds.width,
+                                height: reader.frame(in: .global).minY + (UIScreen.main.bounds.height * 0.7)
+                            )
+                    }
                 }
-            }
-            .frame(height: screen.height * 0.7)
-            
-            VStack(alignment:.leading ,spacing: 15) {
-                VStack {
-                    HStack {
-                        Text(selectedItem.title)
-                            .font(.system(size:35,weight: .bold))
-                            .foregroundColor(.white)
-                        Spacer()
-                        VStack {
-                            if user.isLogged {
-                                Button(
-                                    action:{
-                                        self.changing = true
-                                        if self.user.favRecipes.contains(where: {$0.id == selectedItem.id}) {
-                                            self.deleteFav(recipeId: selectedItem.id)
-                                        } else {
-                                            self.addFav(recipeId: selectedItem.id)
+                .frame(height: screen.height * 0.7)
+                
+                VStack(alignment:.leading ,spacing: 15) {
+                    VStack {
+                        HStack {
+                            Text(selectedItem.title)
+                                .font(.system(size:35,weight: .bold))
+                                .foregroundColor(.white)
+                            Spacer()
+                            VStack {
+                                if user.isLogged {
+                                    Button(
+                                        action:{
+                                            self.changing = true
+                                            if self.user.favRecipes.contains(where: {$0.id == selectedItem.id}) {
+                                                self.deleteFav(recipeId: selectedItem.id)
+                                            } else {
+                                                self.addFav(recipeId: selectedItem.id)
+                                            }
+                                        }, label: {
+                                            Image(systemName: favorite ? "heart.fill":"heart")
+                                                .resizable()
+                                                .frame(width: 16, height: 16)
                                         }
-                                    }, label: {
-                                        Image(systemName: favorite ? "heart.fill":"heart")
-                                            .resizable()
-                                            .frame(width: 16, height: 16)
-                                    }
+                                    )
+                                    .disabled(changing)
+                                }
+                                Text("\(selectedItem.calorie)kcal")
+                                    .font(.caption)
+                                    .foregroundColor(.white)
+                            }
+                        }
+                        HStack {
+                            Text(state[tmpRecipe.state] ?? "")
+                                .font(.system(size:10))
+                                .padding(.horizontal, 14)
+                                .background(
+                                    Capsule()
+                                        .fill(Color.white)
                                 )
-                                .disabled(changing)
+                                .foregroundColor(.black)
+                            Spacer()
+                        }
+                        
+                        Spacer()
+                        
+                        HStack(spacing: 15) {
+                            VStack {
+                                HStack {
+                                    Text(selectedItem.protein)
+                                        .font(.system(size:20,weight: .bold))
+                                        .foregroundColor(.white)
+                                    Text("g")
+                                        .font(.caption)
+                                        .foregroundColor(.white)
+                                        .padding(.top,5)
+                                }
+                                Text("protein")
+                                    .font(.caption)
+                                    .foregroundColor(.white)
                             }
-                            Text("\(selectedItem.calorie)kcal")
-                                .font(.caption)
-                                .foregroundColor(.white)
+                            
+                            Spacer()
+                            VStack {
+                                HStack {
+                                    Text(selectedItem.fat)
+                                        .font(.system(size:20,weight: .bold))
+                                        .foregroundColor(.white)
+                                    Text("g")
+                                        .font(.caption)
+                                        .foregroundColor(.white)
+                                        .padding(.top,5)
+                                }
+                                Text("fat")
+                                    .font(.caption)
+                                    .foregroundColor(.white)
+                            }
+                            
+                            Spacer()
+                            
+                            VStack {
+                                HStack {
+                                    Text(selectedItem.carbo)
+                                        .font(.system(size:20,weight: .bold))
+                                        .foregroundColor(.white)
+                                    Text("g")
+                                        .font(.caption)
+                                        .foregroundColor(.white)
+                                        .padding(.top,5)
+                                }
+                                Text("carbo")
+                                    .font(.caption)
+                                    .foregroundColor(.white)
+                            }
                         }
                     }
-                    HStack {
-                        Text(state[tmpRecipe.state] ?? "")
-                            .font(.system(size:10))
-                            .padding(.horizontal, 14)
+                    .frame(height: screen.height * 0.2)
+                    
+                    
+                    Text("材料")
+                        .font(.system(size:20,weight: .bold))
+                        .foregroundColor(.white)
+                    
+                    Text(selectedItem.materials)
+                        .padding(.top, 10)
+                        .foregroundColor(.white)
+                        .padding(.top,5)
+                    
+                    ForEach(0..<procedures.count, id: \.self) { index in
+                        HStack {
+                            Text("手順\(index+1)")
+                                .font(.system(size: 20,weight: .bold))
+                                .foregroundColor(.white)
+                                .padding(.leading)
+                            Spacer()
+                        }
+                        HStack(spacing:8) {
+                            VStack {
+                                Text(procedures[index].content)
+                                    .padding(8)
+                                    .frame(width: screen.width*0.8, alignment: .topLeading)
+                            }
                             .background(
-                                Capsule()
-                                    .fill(Color.white)
+                                BlurView(style: .systemMaterial)
                             )
-                            .foregroundColor(.black)
-                        Spacer()
+                            .clipShape(
+                                RoundedRectangle(
+                                    cornerRadius: 30,
+                                    style: .continuous
+                                )
+                            )
+                            .shadow(
+                                color: .black.opacity(0.15),
+                                radius: 20, x:0, y:20
+                            )
+                        }
+                        .padding(.horizontal)
                     }
                     
-                    Spacer()
-                    
-                    HStack(spacing: 15) {
-                        VStack {
-                            HStack {
-                                Text(selectedItem.protein)
-                                    .font(.system(size:20,weight: .bold))
-                                    .foregroundColor(.white)
-                                Text("g")
-                                    .font(.caption)
-                                    .foregroundColor(.white)
-                                    .padding(.top,5)
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 12) {
+                            if user.isLogged {
+                                if reviews.filter{$0.user == user.sub}.count == 0 {
+                                    Button {
+                                        self.showModal.toggle()
+                                    } label: {
+                                        if let imageData = user.image {
+                                            let uiimage = UIImage(data: imageData)
+                                            Image(uiImage: uiimage!)
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fit)
+                                                .frame(width:50, height: 50)
+                                                .clipShape(Circle())
+                                                .overlay(
+                                                    Image(systemName: "plus")
+                                                        .padding(7)
+                                                        .background(.blue, in: Circle())
+                                                        .foregroundColor(.white)
+                                                        .padding(2)
+                                                        .background(.black, in: Circle())
+                                                        .offset(x: 10, y: 10)
+                                                )
+                                                .padding(.trailing, 10)
+                                        }
+                                    }
+                                }
+                                ForEach(0..<self.reviews.count,id: \.self) { i in
+                                    if let uiimage = UIImage(data: reviewImages[reviews[i].id] ?? Data()) {
+                                        Image(uiImage: uiimage)
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fill)
+                                            .frame(width: 50, height: 50)
+                                            .clipShape(Circle())
+                                            .padding(2)
+                                            .onTapGesture {
+                                                selectedReview = reviews[i]
+                                                withAnimation {
+                                                    showReview = true
+                                                }
+                                            }
+                                    }
+                                }
+                                if self.reviews.count >= 1 {
+                                    Image(systemName: "ellipsis")
+                                        .frame(width: 50, height: 50)
+                                        .onTapGesture {
+                                            self.showList = true
+                                        }
+                                }
                             }
-                            Text("protein")
-                                .font(.caption)
-                                .foregroundColor(.white)
-                        }
-                        
-                        Spacer()
-                        VStack {
-                            HStack {
-                                Text(selectedItem.fat)
-                                    .font(.system(size:20,weight: .bold))
-                                    .foregroundColor(.white)
-                                Text("g")
-                                    .font(.caption)
-                                    .foregroundColor(.white)
-                                    .padding(.top,5)
-                            }
-                            Text("fat")
-                                .font(.caption)
-                                .foregroundColor(.white)
-                        }
-                        
-                        Spacer()
-                        
-                        VStack {
-                            HStack {
-                                Text(selectedItem.carbo)
-                                    .font(.system(size:20,weight: .bold))
-                                    .foregroundColor(.white)
-                                Text("g")
-                                    .font(.caption)
-                                    .foregroundColor(.white)
-                                    .padding(.top,5)
-                            }
-                            Text("carbo")
-                                .font(.caption)
-                                .foregroundColor(.white)
                         }
                     }
                 }
-                .frame(height: screen.height * 0.2)
-                
-                
-                Text("材料")
-                    .font(.system(size:20,weight: .bold))
-                    .foregroundColor(.white)
-                
-                Text(selectedItem.materials)
-                    .padding(.top, 10)
-                    .foregroundColor(.white)
-                    .padding(.top,5)
-                
-                ForEach(0..<procedures.count, id: \.self) { index in
-                    HStack {
-                        Text("手順\(index+1)")
-                            .font(.system(size: 20,weight: .bold))
-                            .foregroundColor(.white)
-                            .padding(.leading)
-                        Spacer()
+                .padding(.vertical,25)
+                .padding(.horizontal)
+                .background(.black)
+                .cornerRadius(20)
+                .offset(y: -35)
+            })
+            .navigationBarHidden(true)
+            .edgesIgnoringSafeArea(.all)
+            .background(Color.black.edgesIgnoringSafeArea(.all))
+            .overlay(
+                Button(action: {
+                    withAnimation(.spring()){
+                        show = false
                     }
-                    HStack(spacing:8) {
-                        VStack {
-                            Text(procedures[index].content)
-                                .padding(8)
-                                .frame(width: screen.width*0.8, alignment: .topLeading)
-                        }
-                        .background(
-                            BlurView(style: .systemMaterial)
-                        )
-                        .clipShape(
-                            RoundedRectangle(
-                                cornerRadius: 30,
-                                style: .continuous
-                            )
-                        )
-                        .shadow(
-                            color: .black.opacity(0.15),
-                            radius: 20, x:0, y:20
-                        )
-                    }
-                    .padding(.horizontal)
+                }) {
+                    Image(systemName: "chevron.left")
+                        .font(.title)
+                        .foregroundColor(.white)
+                        .padding(.leading,25)
+                        .padding(.top,25)
+                }
+                ,alignment: .topLeading
+            )
+            .onAppear{
+                if user.isLogged {
+                    self.getFav(recipeId: selectedItem.id)
+                }
+                
+                if (self.procedures.count == 0) {
+                    load(updated: false)
                 }
             }
-            .padding(.vertical,25)
-            .padding(.horizontal)
-            .background(.black)
-            .cornerRadius(20)
-            .offset(y: -35)
-        })
-        .edgesIgnoringSafeArea(.all)
-        .background(Color.black.edgesIgnoringSafeArea(.all))
-        .overlay(
-            Button(action: {
-                // closing
-                withAnimation(.spring()){
-                    show = false
+            .opacity(showReview ? 0 : 1)
+            
+            if (showReview) {
+                if let review = selectedReview {
+                    StoryView(showReview: $showReview, reviewImage: self.reviewImages[review.id] ?? Data(), reviewData: review)
+                        .ignoresSafeArea(.all)
+                        .transition(.move(edge:.bottom))
                 }
-            }) {
-                Image(systemName: "chevron.left")
-                    .font(.title)
-                    .foregroundColor(.white)
-                    .padding(.leading,25)
-                    .padding(.top,25)
-            }
-            ,alignment: .topLeading
-        )
-        .onAppear{
-//            self.favorite = self.user.favRecipes.contains(where: {$0.id == selectedItem.id}) ? true : false
-            if user.isLogged {
-                self.getFav(recipeId: selectedItem.id)
             }
             
-            if (self.procedures.count == 0) {
-                load(updated: false)
+            if (showList) {
+                ReviewList(
+                    showList: $showList,
+                    recipeId: selectedItem.id
+                )
             }
         }
+    }
+}
+
+struct StoryView: View {
+    @Binding var showReview:Bool
+    var reviewImage: Data
+    var reviewData: Review
+    
+    var body: some View {
+        ZStack {
+            VStack {
+                if let uiimage = UIImage(data:reviewImage) {
+                    Image(uiImage: uiimage)
+                        .resizable()
+                        .aspectRatio(contentMode:.fit)
+                }
+                HStack {
+                    Text(reviewData.content)
+                        .font(.headline)
+                        .foregroundColor(.white)
+                    Spacer()
+                }
+                .padding()
+                Spacer()
+            }
+        }
+        .statusBar(hidden: true)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(.black)
+        .overlay(
+            Button(action: {
+                withAnimation(.spring()){
+                    showReview = false
+                }
+            }, label: {
+                Image(systemName: "xmark")
+                    .font(.title2)
+                    .foregroundColor(.black)
+                    .padding(8)
+                    .background(.white, in: Circle())
+            })
+            .padding()
+            .padding(.top)
+            ,alignment: .topTrailing
+        )
     }
 }

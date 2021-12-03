@@ -24,7 +24,7 @@ struct AvatarView: View {
                     } else {
                         ZStack {
                             Circle()
-                                .foregroundColor(Color("pink-gradient-1"))
+//                                .foregroundColor(Color("pink-gradient-1"))
                                 .frame(width: 66, height: 66, alignment: .center)
                             Image(systemName: "person.fill")
                                 .foregroundColor(.white)
@@ -42,7 +42,7 @@ struct AvatarView: View {
                         .foregroundColor(.primary)
                         .font(.system(size: 16, weight: .medium))
                         .frame(width: 36, height: 36)
-                        .background(Color("background3"))
+//                        .background(Color("background3"))
                         .clipShape(Circle())
                         .shadow(color: Color.black.opacity(0.1), radius: 1, x: 0, y: 1)
                         .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)

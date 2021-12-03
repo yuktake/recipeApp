@@ -39,7 +39,7 @@ type Review @model
   user: String!
   recipeID: ID!
   content: String!
-  image: String
+  image: String!
   recipe: Recipe @connection(fields: ["recipeID"])
 }
 

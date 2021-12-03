@@ -34,7 +34,7 @@ type Review {
   user: String!
   recipeID: ID!
   content: String!
-  image: String
+  image: String!
   recipe: Recipe
   createdAt: AWSDateTime!
   updatedAt: AWSDateTime!
@@ -359,7 +359,7 @@ input CreateReviewInput {
   user: String!
   recipeID: ID!
   content: String!
-  image: String
+  image: String!
 }
 
 input UpdateReviewInput {

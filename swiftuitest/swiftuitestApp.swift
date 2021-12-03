@@ -11,9 +11,14 @@ import AWSAPIPlugin
 import AWSDataStorePlugin
 import AWSCognitoAuthPlugin
 import AWSS3StoragePlugin
+import GoogleMobileAds
 
 @main
 struct swiftuitestApp: App {
+    init() {
+        GADMobileAds.sharedInstance().start(completionHandler: nil)
+        GADMobileAds.sharedInstance().requestConfiguration.testDeviceIdentifiers = [ "0a8a44aa92a0d7b936290d2b42a2ec14" ]
+    }
     let persistenceController = PersistenceController.shared
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     var body: some Scene {

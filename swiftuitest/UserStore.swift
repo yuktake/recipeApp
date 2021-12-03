@@ -48,19 +48,10 @@ class UserStore: ObservableObject {
     }
     // fav
     @Published var fav = [String:RecipeData]()
-//    @Published var fav = [RecipeData]()
-    
     @Published var favRecipes:[FavData] = []
     @Published var favImageDatum = [String:Data]()
     @Published var localFavs:[String:String] = [:]
     @Published var favArray:[String] = []
-    
-//    (UserDefaults.standard.dictionary(forKey: "favs") ?? [:]) as! [String:String]{
-//        didSet {
-//            UserDefaults.standard.set(localFavs, forKey: "favs")
-//            self.getInitFavs()
-//        }
-//    }
     @Published var token: String = ""
     @Published var favToken: String = ""
     
@@ -68,7 +59,6 @@ class UserStore: ObservableObject {
     
     init(){
         if (isLogged) {
-//            self.getFavs()
             self.getMyRecipes()
             self.getFavsFromServer()
         }
@@ -82,14 +72,6 @@ class UserStore: ObservableObject {
     
     func getFavsFromServer() {
         let group = DispatchGroup()
-//        self.favImageDatum = (UserDefaults.standard.dictionary(forKey: "favImageDatum") ?? [:]) as! [String:Data]
-//        print("favImageDatum")
-//        print(self.favImageDatum)
-        
-//        let fav = Fav.keys
-//        let predicate = fav.userID == UserDefaults.standard.string(forKey: "sub")
-//        Amplify.API.query(request: .list(Fav.self, where: predicate)) { event in
-        
         Amplify.API.query(request: .getFavsByDate(userId: self.sub!)) { event in
             switch event {
             case .success(let result):
@@ -153,17 +135,14 @@ class UserStore: ObservableObject {
                         group.enter()
                         self.asyncProcess() { () -> Void in
                             DispatchQueue.main.async{
-    //                                self.favArray.append(fav.recipeID)
                                 if !self.favRecipes.contains(where: {$0.id == fav.recipeID}) {
                                     self.favRecipes.append(FavData(id: fav.recipeID))
                                 }
                             }
-//                            self.getRecipeDetail(fav: fav, group: group)
                             Amplify.Storage.downloadData(key: "recipes/\(fav.recipeID).jpg") { result in
                                 switch result {
                                 case .success(let imageData):
                                     DispatchQueue.main.async{
-        //                                self.localFavs[recipe.id] = recipe.id
                                         self.favImageDatum[fav.recipeID] = imageData
                                     }
                                     group.leave()
@@ -175,9 +154,6 @@ class UserStore: ObservableObject {
                         }
                     }
                     group.notify(queue: .main) {
-//                        self.fav = self.fav.sorted(by: { lRecipe, rRecipe -> Bool in
-//                            return lRecipe.create_at > rRecipe.create_at
-//                        })
                         print("next doneeeeeeeeeeeeeee")
                     }
                 case .failure(let error):
@@ -208,7 +184,9 @@ class UserStore: ObservableObject {
     func getMyRecipes() {
         print("getMyRecipes")
         // main threadで！！！
-        self.myRecipes = []
+        DispatchQueue.main.async {
+            self.myRecipes = []
+        }
         Amplify.API.query(request:.getMyRecipesByDate(userid: self.sub!)
         ) { event in
             switch event {
@@ -272,12 +250,11 @@ class UserStore: ObservableObject {
             case .success(let result):
                 switch result {
                 case .success(let query):
-//                    print(query.getNextToken())
                     let recipes = query.getItems()
-                    self.token = query.getNextToken()
+                    DispatchQueue.main.async {
+                        self.token = query.getNextToken()
+                    }
                     print("Successfully retrieved next list of recipes:")
-//                    print(recipes)
-                    
                     recipes.forEach { item in
                         print("next recipeeeee")
                         print(item.title)

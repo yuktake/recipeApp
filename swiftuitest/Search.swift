@@ -77,19 +77,16 @@ struct Search: View {
                             HStack {
                                 VStack{
                                     Text("P")
-                                        .font(
-                                            .custom("BlackOpsOne-Regular",size: 60)
-                                        )
-                                        .frame(width:100, alignment: .center)
-                                            .foregroundColor(Color(#colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)))
+                                        .font(.custom("BlackOpsOne-Regular",size: 60))
+                                        .foregroundColor(Color(#colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)))
                                     HStack{
                                         TextField("", value: $protein, formatter: NumberFormatter())
                                             .keyboardType(.numberPad)
                                             .font(.subheadline)
                                             .background(Color.white)
                                             .foregroundColor(.black)
-                                            .padding(.vertical)
-                                            .padding(.leading)
+                                            .padding(.bottom, 8)
+                                            .padding(.leading, 8)
                                             .cornerRadius(/*@START_MENU_TOKEN@*/3.0/*@END_MENU_TOKEN@*/)
                                             .onTapGesture {
                                                 self.isFocused = true
@@ -102,17 +99,12 @@ struct Search: View {
                                 .background(Color(#colorLiteral(red: 0.6549019608, green: 0.7137254902, blue: 0.862745098, alpha: 1)))
                                 .clipShape(RoundedRectangle(cornerRadius: 16,style: .continuous))
                                 .shadow(color:Color.black.opacity(0.15),radius: 5, x:0, y: 5)
-                                .frame(height: 100)
-                                .frame(maxWidth: .infinity)
-                                .frame(alignment:.top)
                                     
                                 Spacer()
+                                
                                 VStack{
                                     Text("F")
-                                        .font(
-                                            .custom("BlackOpsOne-Regular",size: 60)
-                                        )
-                                        .frame(width:100, alignment: .center)
+                                        .font(.custom("BlackOpsOne-Regular",size: 60))
                                         .foregroundColor(Color(#colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)))
                                         .background(Color(#colorLiteral(red: 0.6549019608, green: 0.7137254902, blue: 0.862745098, alpha: 1)))
                                     HStack {
@@ -121,8 +113,8 @@ struct Search: View {
                                             .font(.subheadline)
                                             .background(Color.white)
                                             .foregroundColor(.black)
-                                            .padding(.vertical)
-                                            .padding(.leading)
+                                            .padding(.bottom, 8)
+                                            .padding(.leading, 8)
                                             .cornerRadius(/*@START_MENU_TOKEN@*/3.0/*@END_MENU_TOKEN@*/)
                                             .onTapGesture {
                                                 self.isFocused = true
@@ -135,17 +127,12 @@ struct Search: View {
                                 .background(Color(#colorLiteral(red: 0.6549019608, green: 0.7137254902, blue: 0.862745098, alpha: 1)))
                                 .clipShape(RoundedRectangle(cornerRadius: 16,style: .continuous))
                                 .shadow(color:Color.black.opacity(0.15),radius: 5, x:0, y: 5)
-                                .frame(height: 136)
-                                .frame(maxWidth: .infinity)
                                 
                                 Spacer()
                                 
                                 VStack{
                                     Text("C")
-                                        .font(
-                                            .custom("BlackOpsOne-Regular",size: 60)
-                                        )
-                                        .frame(width:100, alignment: .center)
+                                        .font(.custom("BlackOpsOne-Regular",size: 60))
                                         .foregroundColor(Color(#colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)))
                                     HStack {
                                         TextField("",value: $carbo, formatter: NumberFormatter())
@@ -153,8 +140,8 @@ struct Search: View {
                                             .font(.subheadline)
                                             .background(Color.white)
                                             .foregroundColor(.black)
-                                            .padding(.vertical)
-                                            .padding(.leading)
+                                            .padding(.bottom, 8)
+                                            .padding(.leading, 8)
                                             .cornerRadius(/*@START_MENU_TOKEN@*/3.0/*@END_MENU_TOKEN@*/)
                                             .onTapGesture {
                                                 self.isFocused = true
@@ -168,10 +155,7 @@ struct Search: View {
                                 .background(Color(#colorLiteral(red: 0.6549019608, green: 0.7137254902, blue: 0.862745098, alpha: 1)))
                                 .clipShape(RoundedRectangle(cornerRadius: 16,style: .continuous))
                                 .shadow(color:Color.black.opacity(0.15),radius: 5, x:0, y: 5)
-                                .frame(height: 136)
-                                .frame(maxWidth: .infinity)
                             }
-                            
                             
                             Picker(selection: $state, label: Text("状態")) {
                                 Text("減量中").tag(1)
@@ -179,7 +163,6 @@ struct Search: View {
                                 Text("増量中").tag(3)
                             }
                             .pickerStyle(SegmentedPickerStyle())
-                            .padding(.top)
                             
                             LazyVStack {
                                 if (viewModel.recipes.count != 0) {
@@ -198,33 +181,37 @@ struct Search: View {
                                     }
                                 }
                                 
-                                ForEach(0..<viewModel.recipes.count, id: \.self) { i in
-                                    ZStack {
-                                        if let recipe = viewModel.recipes[i] {
-                                            favRowView(
-                                                fav: recipe,
-                                                image:viewModel.imageDatum[recipe.id] ?? Data(),
-                                                animation:animation
-                                            )
-                                            .onAppear {
-                                                // 最低３つないといけない
-                                                if i == viewModel.recipes.count && self.viewModel.next {
-                                                    // viewmodel側でソートによって呼び出す関数を分岐させる
-                                                    viewModel.getNext(sort:sort_state)
+                                if (viewModel.searched && viewModel.recipes.count <= 1) {
+                                    Image(systemName:"xmark")
+                                        .padding(.top)
+                                } else {
+                                    ForEach(0..<viewModel.recipes.count, id: \.self) { i in
+                                        ZStack {
+                                            if let recipe = viewModel.recipes[i] {
+                                                favRowView(
+                                                    fav: recipe,
+                                                    image:viewModel.imageDatum[recipe.id] ?? Data(),
+                                                    animation:animation
+                                                )
+                                                .onAppear {
+                                                    // 最低３つないといけない
+                                                    if i == viewModel.recipes.count && self.viewModel.next {
+                                                        // viewmodel側でソートによって呼び出す関数を分岐させる
+                                                        viewModel.getNext(sort:sort_state)
+                                                    }
                                                 }
-                                            }
-                                            .onTapGesture {
-                                                withAnimation(.spring()){
-                                                    show = true
-                                                    index = i
-                                                    selectedImage = viewModel.imageDatum[recipe.id] ?? Data()
+                                                .onTapGesture {
+                                                    withAnimation(.spring()){
+                                                        show = true
+                                                        index = i
+                                                        selectedImage = viewModel.imageDatum[recipe.id] ?? Data()
+                                                    }
                                                 }
                                             }
                                         }
                                     }
                                 }
                             }
-                            .padding(.top)
                         }
                         .padding()
                 })

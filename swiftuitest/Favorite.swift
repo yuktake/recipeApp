@@ -19,9 +19,9 @@ struct Favorite: View {
     var body: some View {
         ZStack {
             NavigationView{
-                ScrollView {
-                    if self.store.isLogged {
-                        if (store.favRecipes.count >= 1) {
+                if self.store.isLogged {
+                    if (store.favRecipes.count >= 1) {
+                        ScrollView {
                             LazyVGrid(columns: Array(repeating: GridItem(), count: 3)) { // カラム数の指定
                                 ForEach(0...store.favRecipes.count-1,id: \.self) { i in
                                     ZStack {
@@ -50,9 +50,19 @@ struct Favorite: View {
                                 }
                             }
                         }
+                        .navigationBarTitle(Text("Favorite"))
+                    } else {
+                        VStack {
+                            Image(systemName: "heart")
+                                .navigationBarTitle(Text("Favorite"))
+                        }
+                    }
+                } else {
+                    VStack {
+                        Text("need to login")
+                            .navigationBarTitle(Text("Favorite"))
                     }
                 }
-                .navigationBarTitle(Text("Favorite"))
             }
             .opacity(show ? 0 : 1)
             .onAppear {

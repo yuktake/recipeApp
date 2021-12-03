@@ -6,7 +6,7 @@ public struct Review: Model {
   public let id: String
   public var user: String
   public var content: String
-  public var image: String?
+  public var image: String
   public var recipe: Recipe?
   public var createdAt: Temporal.DateTime?
   public var updatedAt: Temporal.DateTime?
@@ -14,7 +14,7 @@ public struct Review: Model {
   public init(id: String = UUID().uuidString,
       user: String,
       content: String,
-      image: String? = nil,
+      image: String,
       recipe: Recipe? = nil) {
     self.init(id: id,
       user: user,
@@ -27,7 +27,7 @@ public struct Review: Model {
   internal init(id: String = UUID().uuidString,
       user: String,
       content: String,
-      image: String? = nil,
+      image: String,
       recipe: Recipe? = nil,
       createdAt: Temporal.DateTime? = nil,
       updatedAt: Temporal.DateTime? = nil) {

@@ -271,9 +271,9 @@ struct RecipeEdit: View {
         ZStack {
             Color.black.edgesIgnoringSafeArea(.all)
             ZStack(alignment: .top) {
-                Color("background2")
-                    .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-                    .edgesIgnoringSafeArea(.bottom)
+//                Color("background2")
+//                    .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+//                    .edgesIgnoringSafeArea(.bottom)
                 NavigationView{
                     ScrollView {
                         HStack{

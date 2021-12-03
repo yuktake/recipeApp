@@ -53,46 +53,6 @@ struct RecipeDetail: View {
     @State var showAlert :Bool = false
     @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
-    func deleteRecipe() {
-        let amplifyRecipe = Recipe(
-            id: self.recipe.id,
-            user: self.recipe.userId,
-            type: "Recipe",
-            title: self.recipe.title,
-            calorie: Int(self.recipe.calorie) ?? 0,
-            protein: Double(self.recipe.protein) ?? 0.0,
-            fat: Double(self.recipe.fat) ?? 0.0,
-            carbo: Double(self.recipe.carbo) ?? 0.0,
-            state: self.recipe.state,
-            materials: self.recipe.materials,
-            image: self.recipe.image,
-            favNum: self.recipe.favNum,
-            createdAt: recipe.create_at,
-            updatedAt: recipe.update_at,
-            delFlg: 1
-        )
-        Amplify.API.mutate(request: .update(amplifyRecipe)) { event in
-            switch event {
-            case .success(let result):
-                switch result {
-                case .success(let a):
-                    print("Successfully delete recipe: \(a)")
-                    DispatchQueue.main.async {
-                        self.presentationMode.wrappedValue.dismiss()
-                    }
-                    user.getMyRecipes()
-                    print("All Process Done!")
-                case .failure(let error):
-                    print("Got failed update result with \(error.errorDescription)")
-                    break
-                }
-            case .failure(let error):
-                print("Got failed update event with error \(error)")
-                break
-            }
-        }
-    }
-    
     func load(updated: Bool){
         // get recipe
         tmpRecipe = recipe
@@ -158,7 +118,7 @@ struct RecipeDetail: View {
                             }
                             self.reviews.append(review)
                         }
-                        Amplify.Storage.downloadData(key: review.image!) { result in
+                        Amplify.Storage.downloadData(key: review.image) { result in
                             switch result {
                             case .success(let imageData):
                                 DispatchQueue.main.async{
@@ -376,57 +336,7 @@ struct RecipeDetail: View {
                 }
             }
             .padding(.horizontal)
-//            .navigationTitle(recipe.title)
             .navigationTitle(tmpRecipe.title)
-            .toolbar {
-                
-                ToolbarItem(placement: .navigationBarTrailing){
-                    if self.editable && procedureNum == procedureImages.count {
-//                        NavigationLink(
-//                            destination:RecipeEdit(
-////                                detail_recipe: recipe,
-//                                detail_recipe: tmpRecipe,
-//                                detail_image: image,
-////                                detail_procedures: procedures,
-////                                detail_procedures_images: procedureImages,
-////                                edited: $edited
-////                                ,isFirstViewActive: $isFirstViewActive
-//                            )
-//                            ,isActive: $isActive
-//                        ){
-////                            Text("Edit")
-//                            
-//                            Button(action: {
-//                                self.isActive = true
-//                            }, label: {
-//                                Text("Edit")
-//                            })
-//                            
-//                        }
-//                        .isDetailLink(false)
-                        
-                        
-//                        Menu {
-//                            Button(action: {
-//                                print("edit")
-//                                self.showEditModal.toggle()
-//                            }) {
-//                                Text("Edit")
-//                                Image(systemName: "pencil")
-//                            }
-//
-//                            Button(action: {
-//                                self.showAlert.toggle()
-//                            }) {
-//                                Text("Delete")
-//                                Image(systemName: "trash")
-//                            }
-//                        } label: {
-//                            Image(systemName: "ellipsis")
-//                        }
-                    }
-                }
-            }
             .onAppear{
 //                self.favorite = self.user.fav.keys.contains(recipe.id) ? true : false
                 screen = UIScreen.main.bounds.size
@@ -441,34 +351,8 @@ struct RecipeDetail: View {
                     load(updated: true)
                 }
             }
-            .sheet(isPresented: $showModal){
-                ReviewView(recipeID:recipe.id)
-            }
-//            .sheet(isPresented: $showEditModal){
-//                RecipeEdit(
-//                    detail_recipe: tmpRecipe,
-//                    detail_image: image,
-//                    detail_procedures: procedures,
-//                    detail_procedures_images: procedureImages,
-//                    edited: $edited
-//                )
-//            }
-            .alert(isPresented: $showAlert){
-                Alert(
-                    title: Text("Warning"),
-                    message: Text("このレシピを削除しますか？"),
-                    primaryButton: .cancel(Text("キャンセル")),
-                    secondaryButton: .destructive(Text("削除"),action: {
-                        print("delete")
-                        deleteRecipe()
-                    })
-                )
-            }
         } else {
             Text("Deleted")
-                .onAppear{
-                    user.localFavs.removeValue(forKey: recipe.id)
-                }
         }
     }
 }

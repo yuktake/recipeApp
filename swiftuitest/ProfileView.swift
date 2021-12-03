@@ -79,26 +79,8 @@ struct ProfileView: View {
         
     }
     
-//    func actionChange(_ tag: Int){
-//        switch tag {
-//        case 1:
-//            self.showModal.toggle()
-//            break
-//        case 2:
-//            self.showAlert.toggle()
-//            break
-//        default:
-//            break
-//        }
-//    }
-    
     var body: some View {
         ZStack {
-//            Image("background-2")
-//                .resizable()
-//                .aspectRatio(contentMode: .fill)
-//                .edgesIgnoringSafeArea(.all)
-            
             NavigationView {
                 ScrollView {
                     GeometryReader{ reader -> AnyView in
@@ -153,7 +135,7 @@ struct ProfileView: View {
                                         } else {
                                             ZStack {
                                                 Circle()
-                                                    .foregroundColor(Color("pink-gradient-1"))
+//                                                    .foregroundColor(Color("pink-gradient-1"))
                                                     .frame(width: 66, height: 66, alignment: .center)
                                                 Image(systemName: "person.fill")
                                                     .foregroundColor(.white)
@@ -201,10 +183,10 @@ struct ProfileView: View {
                                         .foregroundColor(.white.opacity(0.1))
                                     
                                     HStack(spacing: 16){
-                                        Image("Twitter")
-                                            .resizable()
-                                            .foregroundColor(.white).opacity(0.7)
-                                            .frame(width: 24, height: 24, alignment: .center)
+//                                        Image("Twitter")
+//                                            .resizable()
+//                                            .foregroundColor(.white).opacity(0.7)
+//                                            .frame(width: 24, height: 24, alignment: .center)
                                         Image(systemName: "link")
                                             .foregroundColor(.white)
                                             .opacity(0.7)
@@ -244,9 +226,9 @@ struct ProfileView: View {
                             .background(
                                 RoundedRectangle(cornerRadius: 30)
                                     .stroke(Color.white.opacity(0.2))
-                                    .background(Color("secondaryBackground").opacity(0.5))
+//                                    .background(Color("secondaryBackground").opacity(0.5))
                                     .background(VisualEffectBlur(blurStyle: .dark))
-                                    .shadow(color: Color("shadowColor").opacity(0.5), radius: 60, x: 0, y: 30)
+//                                    .shadow(color: Color("shadowColor").opacity(0.5), radius: 60, x: 0, y: 30)
                             )
                             .cornerRadius(30)
                             .padding()
@@ -276,7 +258,7 @@ struct ProfileView: View {
                                                 .foregroundColor(.primary)
                                                 .font(.system(size: 16, weight: .medium))
                                                 .frame(width: 36, height: 36)
-                                                .background(Color("background3"))
+//                                                .background(Color("background3"))
                                                 .clipShape(Circle())
                                                 .shadow(color: Color.black.opacity(0.1), radius: 1, x: 0, y: 1)
                                                 .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)

@@ -15,6 +15,7 @@ class RecipesViewModel: ObservableObject {
     @Published var imageDatum = [String:Data]()
     @Published var token: String = ""
     @Published var next = true
+    @Published var searched = false
     
     var currentPage: List<Recipe>?
     var protein:Double = 0.0
@@ -32,7 +33,7 @@ class RecipesViewModel: ObservableObject {
         predicate = predicate.and(r.state == state)
         predicate = predicate.and(r.delFlg == 0)
         self.state = state
-        
+        let group = DispatchGroup()
         
         if (protein != 0.0) {
             print("protein")
@@ -58,13 +59,20 @@ class RecipesViewModel: ObservableObject {
 //        Amplify.API.query(request: .)
         switch sort {
         case 0:
+            group.enter()
             getRecentOrdered(
                 protein: protein,
                 fat: fat,
                 carbo: carbo,
                 state: state,
-                keyword: keyword
+                keyword: keyword,
+                group: group
             )
+            group.notify(queue: .main) {
+                DispatchQueue.main.async {
+                    self.searched = true
+                }
+            }
             break
         case 1:
             getProteinOrdered(
@@ -310,7 +318,8 @@ class RecipesViewModel: ObservableObject {
         fat:Double,
         carbo:Double,
         state:Int,
-        keyword:String
+        keyword:String,
+        group: DispatchGroup
     ) {
         Amplify.API.query(request: .getRecipesByDate(protein: protein, fat: fat, carbo: carbo, state: state, keyword: keyword)) { event in
             switch event {
@@ -362,6 +371,7 @@ class RecipesViewModel: ObservableObject {
                         }
 
                     }
+                    group.leave()
                 case .failure(let error):
                     print("Got failed result with \(error.errorDescription)")
                     print(error.recoverySuggestion)

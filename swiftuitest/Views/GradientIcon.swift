@@ -12,8 +12,8 @@ struct GradientIcon: View {
     var body: some View {
         LinearGradient(
             gradient: .init(colors: [
-                Color("pink-gradient-1"),
-                Color("pink-gradient-2"),
+//                Color("pink-gradient-1"),
+//                Color("pink-gradient-2"),
             ]),
             startPoint: .topLeading,
             endPoint: .bottomTrailing

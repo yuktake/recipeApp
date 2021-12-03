@@ -185,10 +185,10 @@ struct SettingsView: View {
                         .foregroundColor(.white.opacity(0.1))
                     
                     HStack(spacing: 16){
-                        Image("Twitter")
-                            .resizable()
-                            .foregroundColor(.white).opacity(0.7)
-                            .frame(width: 24, height: 24, alignment: .center)
+//                        Image("Twitter")
+//                            .resizable()
+//                            .foregroundColor(.white).opacity(0.7)
+//                            .frame(width: 24, height: 24, alignment: .center)
                         Image(systemName: "link")
                             .foregroundColor(.white)
                             .opacity(0.7)
@@ -207,9 +207,9 @@ struct SettingsView: View {
             .background(
                 RoundedRectangle(cornerRadius: 30)
                     .stroke(Color.white.opacity(0.2))
-                    .background(Color("secondaryBackground").opacity(0.5))
+//                    .background(Color("secondaryBackground").opacity(0.5))
                     .background(VisualEffectBlur(blurStyle: .dark))
-                    .shadow(color: Color("shadowColor").opacity(0.5), radius: 60, x: 0, y: 30)
+//                    .shadow(color: Color("shadowColor").opacity(0.5), radius: 60, x: 0, y: 30)
             )
             .cornerRadius(30)
             .padding()

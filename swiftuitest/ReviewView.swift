@@ -11,6 +11,7 @@ import Amplify
 struct ReviewView: View {
     @State var shouldShowHeaderImagePicker = false
     @State var shouldShowHeaderCropper = false
+    @State var showLottie: Bool = false
     @State var header: UIImage?
     @State var screen: CGSize! = UIScreen.main.bounds.size
     @State var showModal = false
@@ -20,6 +21,7 @@ struct ReviewView: View {
     @State var recipe:Recipe? = nil
     
     var recipeID: String
+    @Binding var showSheet: Bool
     
     @EnvironmentObject var user: UserStore
     @Environment(\.presentationMode) var presentationMode
@@ -35,7 +37,7 @@ struct ReviewView: View {
                         return
                     }
                     self.recipe = recipe
-                    print("Successfully retrieved todo: \(recipe)")
+                    print("Successfully retrieved recipe for review: \(recipe)")
                 case .failure(let error):
                     print("Got failed result with \(error.errorDescription)")
                 }
@@ -61,7 +63,7 @@ struct ReviewView: View {
     
     func post(){
         let group = DispatchGroup()
-        
+        showLottie.toggle()
         group.enter()
         asyncProcess() { () -> Void in
             upload(image: header, group: group)
@@ -82,12 +84,19 @@ struct ReviewView: View {
                     case .success(let review):
                         print("Successfully created review: \(review)")
                         print("All Process Done!")
-                        dismiss()
+                        DispatchQueue.main.async {
+                            DispatchQueue.main.asyncAfter(deadline: .now()+2){
+                                showLottie.toggle()
+                                showSheet=false
+                            }
+                        }
                     case .failure(let error):
                         print("Got failed result with \(error.errorDescription)")
+                        showLottie.toggle()
                     }
                 case .failure(let error):
                     print("Got failed event with error \(error)")
+                    showLottie.toggle()
                 }
             }
         }
@@ -117,99 +126,98 @@ struct ReviewView: View {
     var body: some View {
         ZStack {
             Color.black.edgesIgnoringSafeArea(.all)
-            ZStack(alignment: .top) {
-                Color("background2")
-                    .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-                    .edgesIgnoringSafeArea(.bottom)
-                VStack {
-                    HStack {
-                        Spacer()
-                        Button(action:{
-                            self.post()
-                        }, label: {
-                            Text("Post")
-                        })
-                    }
-                    .padding(.horizontal, 32)
-                    HStack {
-                        Button(action:{
-                            showModal.toggle()
-    //                        pickerImageIndex = -1
-                        }, label: {
-                            if let image = header {
-                                Image(uiImage: image)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .padding(.top)
-                            } else {
-                                Image(systemName: "camera")
-                                    .font(.largeTitle)
-                                    .padding()
-                                    .background(Color.purple)
-                                    .foregroundColor(.white)
-                                    .clipShape(Circle())
-                                    .frame (width: screen.width ,height: screen.height * 0.4)
-                                    .background(Color.gray)
-                            }
-                        })
-                        .sheet(isPresented: $shouldShowHeaderImagePicker, content: {
-                            ImagePicker(
-                                sourceType: .photoLibrary,
-                                selectedImage: $header,
-                                showModal: $showModal,
-                                cropperShown: $shouldShowHeaderCropper
-                            )
-                        })
-                        .sheet(isPresented: $shouldShowHeaderCropper){
-                            ImageCroppingView(
-                                shown: $shouldShowHeaderCropper,
-                                image: header!,
-                                croppedImage: $header
-                            )
+            VStack {
+                HStack {
+                    Button(action:{
+                        showModal.toggle()
+                    }, label: {
+                        if let image = header {
+                            Image(uiImage: image)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .padding(.top)
+                        } else {
+                            Image(systemName: "camera")
+                                .font(.largeTitle)
+                                .padding()
+                                .background(Color.purple)
+                                .foregroundColor(.white)
+                                .clipShape(Circle())
+                                .frame (width: screen.width ,height: screen.height * 0.4)
+                                .background(Color.gray)
                         }
-                        .padding()
-                    }
-                    HStack {
-                        Text("料理の感想")
-                            .font(.system(size: 20,weight: .bold))
-                            .foregroundColor(.white)
-                            .padding(.leading, 16)
-                        Spacer()
+                    })
+                    .sheet(isPresented: $shouldShowHeaderImagePicker, content: {
+                        ImagePicker(
+                            sourceType: .photoLibrary,
+                            selectedImage: $header,
+                            showModal: $showModal,
+                            cropperShown: $shouldShowHeaderCropper
+                        )
+                    })
+                    .sheet(isPresented: $shouldShowHeaderCropper){
+                        ImageCroppingView(
+                            shown: $shouldShowHeaderCropper,
+                            image: header!,
+                            croppedImage: $header
+                        )
                     }
                     .padding()
-                    
-                    HStack {
-                        TextEditor(text: $contents)
-                            .keyboardType(.default)
-                            .font(.subheadline)
-                            .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-                            .onTapGesture {
-                                self.isFocused = true
-                            }
-                    }
-                    .frame(width: screen.width - 32, height: screen.height * 0.3)
-                    .background(
-                        BlurView(style: .systemMaterial)
-                    )
-                    .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-                    .shadow(color: .black.opacity(0.15), radius: 20, x:0, y:20)
                 }
-                .sheet(isPresented: $shouldShowHeaderImagePicker, content: {
-                    ImagePicker(
-                        sourceType: .photoLibrary,
-                        selectedImage: $header,
-                        showModal: $showModal,
-                        cropperShown: $shouldShowHeaderCropper
-                    )
-                })
-                .sheet(isPresented: $shouldShowHeaderCropper){
-                    ImageCroppingView(
-                        shown: $shouldShowHeaderCropper,
-                        image: header!,
-                        croppedImage: $header
-                    )
+                HStack {
+                    Text("料理の感想")
+                        .font(.system(size: 20,weight: .bold))
+                        .foregroundColor(.white)
+                        .padding(.leading, 16)
+                    Spacer()
                 }
+                .padding()
+                
+                HStack {
+                    TextEditor(text: $contents)
+                        .keyboardType(.default)
+                        .font(.subheadline)
+                        .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+                        .onTapGesture {
+                            self.isFocused = true
+                        }
+                }
+                .frame(width: screen.width - 32, height: screen.height * 0.3)
+                .background(
+                    BlurView(style: .systemMaterial)
+                )
+                .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+                .shadow(color: .black.opacity(0.15), radius: 20, x:0, y:20)
             }
+            .sheet(isPresented: $shouldShowHeaderImagePicker, content: {
+                ImagePicker(
+                    sourceType: .photoLibrary,
+                    selectedImage: $header,
+                    showModal: $showModal,
+                    cropperShown: $shouldShowHeaderCropper
+                )
+            })
+            .sheet(isPresented: $shouldShowHeaderCropper){
+                ImageCroppingView(
+                    shown: $shouldShowHeaderCropper,
+                    image: header!,
+                    croppedImage: $header
+                )
+            }
+            .overlay(
+                Button(action: {
+                    // closing
+                    self.post()
+                }) {
+                    Text("Post")
+                        .font(.title)
+                        .foregroundColor(.white)
+                        .padding(.trailing,25)
+                        .padding(.top,25)
+                }
+                ,alignment: .topTrailing
+            )
+            
             .actionSheet(isPresented: $showModal, content: {
                 ActionSheet(title: Text("Select Photo"),message: Text("Choose"),buttons: [
                     .default(Text("Photo Library")) {
@@ -225,10 +233,14 @@ struct ReviewView: View {
                     }
                 ])
             })
-            .offset(y:isFocused ? -300 : 0)
+            .offset(y:isFocused ? -150 : 0)
             .onTapGesture {
                 hideKeyboard()
                 self.isFocused = false
+            }
+            
+            if showLottie {
+                LottieView(filename: "review")
             }
         }
         .onTapGesture {
@@ -241,8 +253,8 @@ struct ReviewView: View {
     }
 }
 
-struct ReviewView_Previews: PreviewProvider {
-    static var previews: some View {
-        ReviewView(recipeID: "")
-    }
-}
+//struct ReviewView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        ReviewView(recipeID: "")
+//    }
+//}

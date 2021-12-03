@@ -41,10 +41,10 @@ struct GradientButton: View {
                         .font(.headline)
                         .frame(maxWidth: geometry.size.width - 15)
                         .frame(height: 50)
-                        .background(
-                            Color("tertiaryBackground")
-                                .opacity(0.9)
-                        )
+//                        .background(
+//                            Color("tertiaryBackground")
+//                                .opacity(0.9)
+//                        )
                         .overlay(
                             RoundedRectangle(cornerRadius: 16.0)
                                 .stroke(Color.white, lineWidth: 1.0)
