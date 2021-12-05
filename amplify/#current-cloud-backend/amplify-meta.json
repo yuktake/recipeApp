@@ -35,8 +35,8 @@
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-swiftuitest-dev-102838-deployment/amplify-cfn-templates/api/cloudformation-template.json",
         "logicalId": "apiswiftuitest"
       },
-      "lastPushTimeStamp": "2021-11-30T12:26:42.651Z",
-      "lastPushDirHash": "W5hv2mbptzTFzqX/nG6ftWUJzSc="
+      "lastPushTimeStamp": "2021-12-04T02:13:11.961Z",
+      "lastPushDirHash": "le9HsPam2BeMlEuYsXytexaaMlE="
     }
   },
   "auth": {
@@ -70,7 +70,7 @@
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-swiftuitest-dev-102838-deployment/amplify-cfn-templates/auth/swiftuitestef80af86-cloudformation-template.yml",
         "logicalId": "authswiftuitestef80af86"
       },
-      "lastPushTimeStamp": "2021-11-30T12:26:40.745Z",
+      "lastPushTimeStamp": "2021-12-04T02:02:33.165Z",
       "output": {
         "UserPoolId": "ap-northeast-1_snZZ5ZfZ1",
         "AppClientIDWeb": "6f419udce0ge72fjakbn0piovf",
@@ -92,7 +92,7 @@
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-swiftuitest-dev-102838-deployment/amplify-cfn-templates/storage/s3-cloudformation-template.json",
         "logicalId": "storages3af17192e"
       },
-      "lastPushTimeStamp": "2021-11-30T12:26:40.746Z",
+      "lastPushTimeStamp": "2021-12-04T02:02:33.167Z",
       "output": {
         "BucketName": "swiftuitestba08fb19acc64e4ca91fb089a97a7d8d102838-dev",
         "Region": "ap-northeast-1"
@@ -126,7 +126,7 @@
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-swiftuitest-dev-102838-deployment/amplify-cfn-templates/function/swiftuitest5b036111-cloudformation-template.json",
         "logicalId": "functionswiftuitest5b036111"
       },
-      "lastPushTimeStamp": "2021-11-30T12:26:40.748Z",
+      "lastPushTimeStamp": "2021-12-04T02:02:33.168Z",
       "output": {
         "Region": "ap-northeast-1",
         "Arn": "arn:aws:lambda:ap-northeast-1:159192932442:function:swiftuitest5b036111-dev",

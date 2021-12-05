@@ -55,7 +55,8 @@ struct TextfieldIcon: View {
                             .frame(width: 28, height: 28)
                             .cornerRadius(8)
                     } else {
-                        GradientIcon(iconName: iconName)
+                        Image(systemName: iconName)
+                            .foregroundColor(.white)
                     }
                 }
             )

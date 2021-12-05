@@ -31,6 +31,10 @@ struct MakeRecipeView: View {
     var disableForm: Bool {
         viewModel.recipe.title.isEmpty ||
         viewModel.recipe.materials.isEmpty ||
+        viewModel.recipe.protein.isEmpty ||
+        viewModel.recipe.fat.isEmpty ||
+        viewModel.recipe.carbo.isEmpty ||
+        viewModel.recipe.calorie.isEmpty ||
         header == nil ||
         viewModel.recipe.contents.filter {$0.content.isEmpty}.count != 0
     }
@@ -63,20 +67,6 @@ struct MakeRecipeView: View {
         }
         let uuid = UUID().uuidString
         self.isLoading = true
-        
-//        viewModel.upload(group: group, dispatchQueue: dispatchQueue, imageData: imageData)
-//        print("# End header")
-//        viewModel.createRecipeTest(group: group, dispatchQueue: dispatchQueue, recipe: viewModel.recipe)
-//        print("# End Recipe")
-//        group.notify(queue: .main) {
-//            DispatchQueue.main.asyncAfter(deadline: .now()+1){
-//                print("All Process Done!")
-//                self.isLoading = false
-//                self.user.myRecipes.insert(viewModel.recipe, at: 0)
-//                self.user.imageDatum[viewModel.recipe.id] = imageData
-//                dismiss()
-//            }
-//        }
         
         group.enter()
         asyncProcess { () -> Void in
@@ -117,10 +107,6 @@ struct MakeRecipeView: View {
         ZStack {
             Color.black.edgesIgnoringSafeArea(.all)
             ZStack(alignment: .top) {
-//                Color("background2")
-//                    .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-//                    .edgesIgnoringSafeArea(.bottom)
-                
                 ScrollView(showsIndicators: false) {
                     HStack {
                         Button(action:{
@@ -169,7 +155,7 @@ struct MakeRecipeView: View {
                         }
                         HStack {
                             FormView(
-                                iconImage: "pencil",
+                                iconImage: "plus.circle.fill",
                                 placeholder: "Calorie",
                                 numberPad: true,
                                 text: $viewModel.recipe.calorie
@@ -235,12 +221,19 @@ struct MakeRecipeView: View {
                                 )
                             }
                         }
+                        BannerAd(unitID: "ca-app-pub-5558779899182260/4197512760")
                         
                     }
                     .padding(.top)
                     
+                }
+                .padding(.bottom)
+                .onTapGesture {
+                    hideKeyboard()
+                }
+                .overlay(
                     HStack {
-                        Button(action: {
+                        Button(action:{
                             if (viewModel.recipe.contents.count >= 5) {
                                 self.showingAlert = true
                                 self.alertText = "手順は5つまでです。"
@@ -254,43 +247,50 @@ struct MakeRecipeView: View {
                                 )
                             )
                             procedureTmp.append(UUID().uuidString)
-                            print("add!!!")
-                            print(viewModel.recipe.contents.count)
                         }){
-                            Text("Add")
-                                .foregroundColor(.black)
+                            HStack(spacing: 10) {
+                                Image(systemName: "plus")
+                                    .renderingMode(.template)
+                                Text("Add")
+                                    .fontWeight(.semibold)
+                            }
+                            .foregroundColor(.yellow)
+                            .padding(.vertical, 10)
+                            .padding(.horizontal, 15)
+                            .background(.yellow.opacity(0.15))
+                            .clipShape(Capsule())
                         }
-                        .padding(12)
-                        .padding(.horizontal, 30)
-                        .background(Color(#colorLiteral(red: 0, green: 0.7529411765, blue: 1, alpha: 1)))
-                        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-                        .shadow(color:Color(#colorLiteral(red: 0, green: 0.7529411765, blue: 1, alpha: 1)).opacity(0.3),radius: 20, x:0, y:20)
                         .alert(isPresented: $showingAlert) {
                             Alert(title: Text(alertText))
                         }
                         
-                        Spacer()
+                        Spacer(minLength: 0)
                         
-                        Button(action: {
+                        Button(action:{
                             self.post()
-                            print("push!!!")
                         }){
-                            Text("Post")
-                                .foregroundColor(.black)
+                            HStack(spacing: 10) {
+                                Image(systemName: "paperplane.circle")
+                                    .renderingMode(.template)
+                                Text("Post")
+                                    .fontWeight(.semibold)
+                            }
+                            .foregroundColor(.yellow)
+                            .padding(.vertical, 10)
+                            .padding(.horizontal, 15)
+                            .background(disableForm ? .gray.opacity(0.15) : .yellow.opacity(0.15))
+                            .clipShape(Capsule())
                         }
-                        .padding(12)
-                        .padding(.horizontal, 30)
-                        .background(Color(#colorLiteral(red: 0, green: 0.7529411765, blue: 1, alpha: 1)))
-                        .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-                        .shadow(color:Color(#colorLiteral(red: 0, green: 0.7529411765, blue: 1, alpha: 1)).opacity(0.3),radius: 20, x:0, y:20)
                         .disabled(disableForm)
                     }
-                    .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
-                    .padding()
-                }
-                .onTapGesture {
-                    hideKeyboard()
-                }
+                    .padding(.top)
+                    .padding(.horizontal, 22)
+                    .padding(.bottom, UIApplication.shared.windows.first?.safeAreaInsets.bottom == 0 ? 15 : UIApplication.shared.windows.first?.safeAreaInsets.bottom)
+                    .background(Color.white)
+                    .clipShape(CustomCorner(corners: [.topLeft, .topRight], size: 55))
+                    .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: -5)
+                    ,alignment: .bottom
+                )
             }
             .actionSheet(isPresented: $showModal, content: {
                 ActionSheet(title: Text("Select Photo"),message: Text("Choose"),buttons: [
@@ -344,7 +344,7 @@ struct FormView: View {
         .background(BlurView(style: .systemMaterial))
         .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
         .shadow(color: .black.opacity(0.15), radius: 20, x:0, y:20)
-        .padding(.horizontal,8)
+        .padding(.horizontal,4)
     }
 }
 
@@ -429,5 +429,19 @@ struct MyDropDelegate : DropDelegate {
 struct MakeRecipe_Previews: PreviewProvider {
     static var previews: some View {
         MakeRecipeView()
+    }
+}
+
+struct CustomCorner: Shape {
+    var corners: UIRectCorner
+    var size: CGFloat
+    func path(in rect: CGRect) -> Path {
+        let path = UIBezierPath(
+            roundedRect: rect,
+            byRoundingCorners: corners,
+            cornerRadii: CGSize(width: size, height: size)
+        )
+        
+        return Path(path.cgPath)
     }
 }

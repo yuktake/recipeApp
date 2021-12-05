@@ -13,10 +13,10 @@ class CreateRecipeViewModel: ObservableObject {
     @Published var recipe = RecipeData(
         userId: UserDefaults.standard.string(forKey: "sub") ?? "",
         title: "",
-        calorie: String(0),
-        protein: String(0.0),
-        fat: String(0.0),
-        carbo: String(0.0),
+        calorie: "",
+        protein: "",
+        fat: "",
+        carbo: "",
         state: 2,
         materials: "",
         contents: [

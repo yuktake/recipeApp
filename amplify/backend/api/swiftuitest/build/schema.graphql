@@ -11,7 +11,7 @@ type Recipe {
   materials: String!
   contents(order: ModelIntKeyConditionInput, filter: ModelProcedureFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelProcedureConnection
   image: String!
-  reviews(filter: ModelReviewFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelReviewConnection
+  reviews(createdAt: ModelStringKeyConditionInput, filter: ModelReviewFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelReviewConnection
   favNum: Int!
   createdAt: String
   updatedAt: String
@@ -36,8 +36,8 @@ type Review {
   content: String!
   image: String!
   recipe: Recipe
-  createdAt: AWSDateTime!
-  updatedAt: AWSDateTime!
+  createdAt: String
+  updatedAt: String
 }
 
 type User {
@@ -192,7 +192,7 @@ type Query {
   recipesByCarbo(type: String, carbo: ModelFloatKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelRecipeFilterInput, limit: Int, nextToken: String): ModelRecipeConnection
   recipesByDate(type: String, createdAt: ModelStringKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelRecipeFilterInput, limit: Int, nextToken: String): ModelRecipeConnection
   byProcedure(recipeID: ID, order: ModelIntKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelProcedureFilterInput, limit: Int, nextToken: String): ModelProcedureConnection
-  byReview(recipeID: ID, sortDirection: ModelSortDirection, filter: ModelReviewFilterInput, limit: Int, nextToken: String): ModelReviewConnection
+  byReview(recipeID: ID, createdAt: ModelStringKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelReviewFilterInput, limit: Int, nextToken: String): ModelReviewConnection
   favsByDate(type: String, createdAt: ModelStringKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelFavFilterInput, limit: Int, nextToken: String): ModelFavConnection
 }
 
@@ -349,6 +349,8 @@ input ModelReviewFilterInput {
   recipeID: ModelIDInput
   content: ModelStringInput
   image: ModelStringInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
   and: [ModelReviewFilterInput]
   or: [ModelReviewFilterInput]
   not: ModelReviewFilterInput
@@ -360,6 +362,8 @@ input CreateReviewInput {
   recipeID: ID!
   content: String!
   image: String!
+  createdAt: String
+  updatedAt: String
 }
 
 input UpdateReviewInput {
@@ -368,6 +372,8 @@ input UpdateReviewInput {
   recipeID: ID
   content: String
   image: String
+  createdAt: String
+  updatedAt: String
 }
 
 input DeleteReviewInput {
@@ -379,6 +385,8 @@ input ModelReviewConditionInput {
   recipeID: ModelIDInput
   content: ModelStringInput
   image: ModelStringInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
   and: [ModelReviewConditionInput]
   or: [ModelReviewConditionInput]
   not: ModelReviewConditionInput

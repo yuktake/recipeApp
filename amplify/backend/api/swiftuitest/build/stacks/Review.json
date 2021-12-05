@@ -133,6 +133,10 @@
                     {
                         "AttributeName": "recipeID",
                         "AttributeType": "S"
+                    },
+                    {
+                        "AttributeName": "createdAt",
+                        "AttributeType": "S"
                     }
                 ],
                 "StreamSpecification": {
@@ -190,6 +194,10 @@
                             {
                                 "AttributeName": "recipeID",
                                 "KeyType": "HASH"
+                            },
+                            {
+                                "AttributeName": "createdAt",
+                                "KeyType": "RANGE"
                             }
                         ],
                         "Projection": {

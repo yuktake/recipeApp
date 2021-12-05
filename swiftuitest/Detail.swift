@@ -465,6 +465,12 @@ struct Detail: View {
                 }
             }
             .opacity(showReview ? 0 : 1)
+            .sheet(isPresented: $showModal){
+                ReviewView(
+                    recipeID:selectedItem.id,
+                    showSheet: $showModal
+                )
+            }
             
             if (showReview) {
                 if let review = selectedReview {

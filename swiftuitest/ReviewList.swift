@@ -70,6 +70,7 @@ struct ReviewList: View {
                         BannerAd(unitID: "ca-app-pub-5558779899182260/4197512760")
                     }
                 }
+                .padding(.top, 32)
             }
             .opacity(showReview ? 0 : 1)
             .onAppear {

@@ -70,6 +70,7 @@ struct Search: View {
                                     .padding(.horizontal)
                                     .frame(height:44)
                                     .background(Color.white)
+                                    .foregroundColor(.black)
                                     .onTapGesture {
                                         self.isFocused = true
                                     }
@@ -181,7 +182,7 @@ struct Search: View {
                                     }
                                 }
                                 
-                                if (viewModel.searched && viewModel.recipes.count <= 1) {
+                                if (viewModel.searched && viewModel.recipes.count == 0) {
                                     Image(systemName:"xmark")
                                         .padding(.top)
                                 } else {
@@ -220,6 +221,7 @@ struct Search: View {
                 .overlay(
                     Button(action: {
                         hideKeyboard()
+                        self.isFocused = false
                         viewModel.fetchData(
                             protein: protein ?? 0.0,
                             fat: fat ?? 0.0,

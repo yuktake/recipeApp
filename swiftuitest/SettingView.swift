@@ -100,123 +100,77 @@ struct SettingsView: View {
     var body: some View {
         VStack {
             VStack {
-                VStack(alignment: .leading,spacing: 16) {
-                    HStack(spacing: 16) {
-                        ZStack {
-                            if let imageData = profile {
-                                Image(uiImage: imageData)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width:66)
-                                    .clipShape(Circle())
-                            } else if let image = user.image {
-                                if let uiimage = UIImage(data: image) {
-                                    Image(uiImage: uiimage)
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .frame(width:66)
-                                        .clipShape(Circle())
-                                }
-                            } else {
-                                Image(systemName: "person.fill")
-                                    .foregroundColor(.white)
-                                    .font(.system(size: 24, weight: .medium, design: .rounded))
-                            }
+                ZStack {
+                    if let imageData = profile {
+                        Image(uiImage: imageData)
+                            .resizable()
+                            .aspectRatio(contentMode: .fit)
+                            .frame(width: UIScreen.main.bounds.width / 3)
+                            .clipShape(Circle())
+                    } else if let image = user.image {
+                        if let uiimage = UIImage(data: image) {
+                            Image(uiImage: uiimage)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: UIScreen.main.bounds.width / 3)
+                                .clipShape(Circle())
                         }
-                        .frame(width: 66, height: 66, alignment: .center)
-                        .onTapGesture {
-                            showSheet.toggle()
-                        }
-                        
-                        VStack(alignment: .leading) {
-                            HStack {
-                                TextField("Username", text: $name)
-                                    .keyboardType(.default)
-                                    .font(.subheadline)
-                                    .padding(.leading,4)
-                                    .frame(height:44)
-                            }
-                            .frame(height:40)
-                            .frame(maxWidth: .infinity)
-                            .background(BlurView(style: .systemMaterial))
-                            .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-                            .shadow(color: .black.opacity(0.15), radius: 20, x:0, y:20)
-                            .padding(.horizontal,8)
-                            
-                            Text("view profile")
-                                .foregroundColor(.white.opacity(0.7))
-                                .font(.footnote)
-                                .padding(.leading,12)
-                        }
-                        Spacer()
-                    }
-                    
-                    Rectangle()
-                        .frame(height:1)
-                        .foregroundColor(.white.opacity(0.1))
-                    
-                    HStack {
-                        Text("自己紹介")
-                            .font(.system(size: 20,weight: .bold))
-                            .foregroundColor(.black)
-                            .padding(.leading)
-                        Spacer()
-                    }
-                    HStack {
-                        TextEditor(text: $description)
-                            .keyboardType(.default)
-                            .font(.subheadline)
-                            .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-                    }
-                    .frame(height:110)
-                    .frame(maxWidth: .infinity)
-                    .background(BlurView(style: .systemMaterial))
-                    .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-                    .shadow(color: .black.opacity(0.15), radius: 20, x:0, y:20)
-                    .padding(.horizontal,8)
-                    
-                    
-                    Label("a", systemImage: "calendar")
-                        .foregroundColor(.white.opacity(0.7))
-                        .font(.footnote)
-                    
-                    Rectangle()
-                        .frame(height:1)
-                        .foregroundColor(.white.opacity(0.1))
-                    
-                    HStack(spacing: 16){
-//                        Image("Twitter")
-//                            .resizable()
-//                            .foregroundColor(.white).opacity(0.7)
-//                            .frame(width: 24, height: 24, alignment: .center)
-                        Image(systemName: "link")
+                    } else {
+                        Image(systemName: "person.fill")
                             .foregroundColor(.white)
-                            .opacity(0.7)
-                            .font(.system(size: 17, weight: .semibold, design:.rounded))
-                        Text("designcode.io")
-                            .foregroundColor(.white.opacity(0.7))
-                            .font(.footnote)
-                        
+                            .font(.system(size: 24, weight: .medium, design: .rounded))
+                            .frame(width: UIScreen.main.bounds.width / 3)
+                            .clipShape(Circle())
                     }
                 }
-                .padding(16)
+                .frame(width: UIScreen.main.bounds.width / 3)
+                .padding(.top)
                 .onTapGesture {
-                    hideKeyboard()
+                    showSheet.toggle()
                 }
+                
+                HStack {
+                    TextField("Username", text: $name)
+                        .keyboardType(.default)
+                        .font(.subheadline)
+                        .padding(.leading,4)
+                        .frame(height:44)
+                }
+                .frame(
+                    width: UIScreen.main.bounds.width / 3,
+                    height:40
+                )
+                .background(BlurView(style: .systemMaterial))
+                .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+                .shadow(color: .black.opacity(0.15), radius: 20, x:0, y:20)
+                .padding(.horizontal,8)
             }
-            .background(
-                RoundedRectangle(cornerRadius: 30)
-                    .stroke(Color.white.opacity(0.2))
-//                    .background(Color("secondaryBackground").opacity(0.5))
-                    .background(VisualEffectBlur(blurStyle: .dark))
-//                    .shadow(color: Color("shadowColor").opacity(0.5), radius: 60, x: 0, y: 30)
-            )
-            .cornerRadius(30)
-            .padding()
-            .onTapGesture {
-                hideKeyboard()
-            }
+            
+            Rectangle()
+                .frame(height:1)
+                .foregroundColor(.white.opacity(0.1))
 
+            HStack {
+                Text("自己紹介")
+                    .font(.system(size: 20,weight: .bold))
+                    .foregroundColor(.black)
+                    .padding(.leading)
+                Spacer()
+            }
+            HStack {
+                TextEditor(text: $description)
+                    .keyboardType(.default)
+                    .font(.subheadline)
+                    .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+            }
+            .frame(height:110)
+            .frame(maxWidth: .infinity)
+            .background(BlurView(style: .systemMaterial))
+            .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+            .shadow(color: .black.opacity(0.15), radius: 20, x:0, y:20)
+            .padding(.horizontal,8)
+            
+            Spacer()
         }
         .actionSheet(isPresented: $showSheet, content: {
             ActionSheet(title: Text("Select Photo"),message: Text("Choose"),buttons: [
@@ -239,23 +193,28 @@ struct SettingsView: View {
         .sheet(isPresented: $cropperShown){
             ImageCroppingView(shown: $cropperShown, image: profile!, croppedImage: $profile)
         }
-        .toolbar {
-            ToolbarItem(placement: .navigationBarLeading){
+        .overlay(
+            HStack {
                 Button (action: {
                     dismiss()
                 }, label: {
                     Text("Cancel")
                 })
-            }
-            ToolbarItem(placement: .navigationBarTrailing){
+                Spacer()
                 Button (action: {
                     save()
                 }, label: {
                     Text("Save")
                 })
-                    .disabled(profile == nil)
+                .disabled(
+                    profile == nil &&
+                    name == UserDefaults.standard.string(forKey: "username") &&
+                    description == UserDefaults.standard.string(forKey: "description")
+                )
             }
-        }
+            .padding()
+            ,alignment: .top
+        )
     }
 }
 

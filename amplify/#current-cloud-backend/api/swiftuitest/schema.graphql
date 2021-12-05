@@ -34,13 +34,16 @@ type Procedure @model
 }
 
 type Review @model
-  @key(name: "byReview", fields: ["recipeID"], queryField: "byReview") {
+  @key(name: "byReview", fields: ["recipeID", "createdAt"], queryField: "byReview") 
+{
   id: ID!
   user: String!
   recipeID: ID!
   content: String!
   image: String!
   recipe: Recipe @connection(fields: ["recipeID"])
+  createdAt: String
+  updatedAt: String
 }
 
 type User @model{
