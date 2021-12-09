@@ -23,6 +23,7 @@ struct Detail: View {
     
     @EnvironmentObject var user:UserStore
     
+    @State var profileImage: Data?
     @State var procedures:[Procedure] = []
     @State var reviews:[Review] = []
     @State var reviewImages:[String:Data] = [:]
@@ -189,6 +190,17 @@ struct Detail: View {
                     }
                     procedureNum = recipe.contents?.count ?? -1
                     
+                    Amplify.Storage.downloadData(key: "users/\(recipe.user).jpg") { result in
+                        switch result {
+                        case .success(let imageData):
+                            DispatchQueue.main.async{
+                                self.profileImage = imageData
+                            }
+                        case .failure(let error):
+                            print("Failed to download image data - \(error)")
+                        }
+                    }
+                    
                     recipe.contents?.forEach{ procedure in
                         print("contentttttt")
                         DispatchQueue.main.async {
@@ -245,9 +257,34 @@ struct Detail: View {
                     VStack {
                         HStack {
                             Text(selectedItem.title)
-                                .font(.system(size:35,weight: .bold))
+                                .font(.system(size:25,weight: .bold))
                                 .foregroundColor(.white)
+                                .lineLimit(nil)
+                                .fixedSize(horizontal: false, vertical: true)
                             Spacer()
+                        }
+                        .padding(.top)
+                        
+                        HStack {
+                            VStack {
+                                Text(state[tmpRecipe.state] ?? "")
+                                    .font(.system(size:10))
+                                    .padding(.horizontal, 14)
+                                    .background(
+                                        Capsule()
+                                            .fill(Color.white)
+                                    )
+                                    .foregroundColor(.black)
+                                Spacer()
+                            }
+                            Spacer()
+                            if let uiimage = UIImage(data: self.profileImage ?? Data()) {
+                                Image(uiImage: uiimage)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: screen.width * 0.1)
+                                    .clipShape(Circle())
+                            }
                             VStack {
                                 if user.isLogged {
                                     Button(
@@ -270,17 +307,6 @@ struct Detail: View {
                                     .font(.caption)
                                     .foregroundColor(.white)
                             }
-                        }
-                        HStack {
-                            Text(state[tmpRecipe.state] ?? "")
-                                .font(.system(size:10))
-                                .padding(.horizontal, 14)
-                                .background(
-                                    Capsule()
-                                        .fill(Color.white)
-                                )
-                                .foregroundColor(.black)
-                            Spacer()
                         }
                         
                         Spacer()
@@ -335,7 +361,7 @@ struct Detail: View {
                             }
                         }
                     }
-                    .frame(height: screen.height * 0.2)
+//                    .frame(height: screen.height * 0.2)
                     
                     
                     Text("材料")
@@ -347,36 +373,29 @@ struct Detail: View {
                         .foregroundColor(.white)
                         .padding(.top,5)
                     
+                    Text("つくりかた")
+                        .font(.system(size: 20,weight: .bold))
+                        .foregroundColor(.white)
+                        .padding(.leading)
+                    
                     ForEach(0..<procedures.count, id: \.self) { index in
-                        HStack {
-                            Text("手順\(index+1)")
-                                .font(.system(size: 20,weight: .bold))
-                                .foregroundColor(.white)
-                                .padding(.leading)
-                            Spacer()
-                        }
-                        HStack(spacing:8) {
-                            VStack {
-                                Text(procedures[index].content)
-                                    .padding(8)
-                                    .frame(width: screen.width*0.8, alignment: .topLeading)
-                            }
-                            .background(
-                                BlurView(style: .systemMaterial)
-                            )
-                            .clipShape(
-                                RoundedRectangle(
-                                    cornerRadius: 30,
-                                    style: .continuous
-                                )
-                            )
-                            .shadow(
-                                color: .black.opacity(0.15),
-                                radius: 20, x:0, y:20
-                            )
-                        }
+                        VStack(alignment: .leading, spacing: 10, content:{
+                            Text("\(index+1)")
+                                .font(.title2)
+                                .fontWeight(.bold)
+                            Text(procedures[index].content)
+                                .font(.caption)
+                        })
                         .padding(.horizontal)
+                        Divider()
+                            .padding(.top)
+                            .foregroundColor(.white)
                     }
+                    
+                    Text("みんなの感想")
+                        .font(.system(size: 20,weight: .bold))
+                        .foregroundColor(.white)
+                        .padding(.leading)
                     
                     ScrollView(.horizontal, showsIndicators: false) {
                         HStack(spacing: 12) {

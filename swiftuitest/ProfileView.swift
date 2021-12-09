@@ -438,10 +438,6 @@ struct PostView: View {
                     .resizable()
                     .aspectRatio(contentMode: .fill)
             }
-            HStack {
-                Text(recipe.create_at).font(.subheadline)
-                Spacer()
-            }
         }
         .padding(.bottom, -8)
         Divider()

@@ -36,7 +36,8 @@ struct MakeRecipeView: View {
         viewModel.recipe.carbo.isEmpty ||
         viewModel.recipe.calorie.isEmpty ||
         header == nil ||
-        viewModel.recipe.contents.filter {$0.content.isEmpty}.count != 0
+        viewModel.recipe.contents.filter {$0.content.isEmpty}.count != 0 ||
+        viewModel.title.count > 30
     }
     
     init() {
@@ -147,7 +148,15 @@ struct MakeRecipeView: View {
                     
                     VStack(spacing:16) {
                         
-                        FormView(iconImage: "pencil", placeholder: "TITLE", numberPad: false, text: $viewModel.recipe.title)
+                        FormView(iconImage: "pencil", placeholder: "TITLE", numberPad: false, text: $viewModel.title)
+                        HStack {
+                            if viewModel.error {
+                                Text("制限文字数を30文字までです。")
+                                    .foregroundColor(.red)
+                                    .padding(.top)
+                            }
+                            Spacer()
+                        }
                         HStack {
                             FormView(iconImage: "p.circle.fill", placeholder: "ROTEIN", numberPad: true, text: $viewModel.recipe.protein)
                             FormView(iconImage: "f.circle.fill", placeholder: "AT", numberPad: true, text: $viewModel.recipe.fat)
@@ -179,9 +188,6 @@ struct MakeRecipeView: View {
                                 .font(.system(size: 20,weight: .bold))
                                 .foregroundColor(.white)
                                 .padding(.leading, 16)
-                                .onTapGesture {
-                                    
-                                }
                             Spacer()
                         }
                         
@@ -198,12 +204,13 @@ struct MakeRecipeView: View {
                                         index: index,
                                         height: screen.height
                                     )
+                                    .padding(.leading, 16)
                                     
-                                    HStack(spacing: 8) {
+                                    HStack {
                                         TextAreaView(
                                             contents: $viewModel.recipe.contents[index].content
                                         )
-                                        .frame(width:screen.width*0.6)
+                                        .frame(width:screen.width*0.8)
                                     }
                                     .frame(height:screen.height*0.2)
                                 }

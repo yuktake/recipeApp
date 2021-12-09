@@ -28,6 +28,7 @@ struct FavoriteDetail: View {
     
     @EnvironmentObject var user:UserStore
     
+    @State var profileImage: Data?
     @State var procedures:[Procedure] = []
     @State var reviews:[Review] = []
     @State var deleted: Bool = false
@@ -182,6 +183,17 @@ struct FavoriteDetail: View {
                     }
                     procedureNum = recipe.contents?.count ?? -1
                     
+                    Amplify.Storage.downloadData(key: "users/\(recipe.user).jpg") { result in
+                        switch result {
+                        case .success(let imageData):
+                            DispatchQueue.main.async{
+                                self.profileImage = imageData
+                            }
+                        case .failure(let error):
+                            print("Failed to download image data - \(error)")
+                        }
+                    }
+                    
                     recipe.contents?.forEach{ procedure in
                         print("contentttttt")
                         DispatchQueue.main.async {
@@ -221,22 +233,6 @@ struct FavoriteDetail: View {
         Color.black
             .opacity(0.5)
         
-//        VStack {
-//            HStack {
-//                Button(action: {
-//                    // closing
-//                    withAnimation(.spring()){
-//                        show.toggle()
-//                    }
-//                }) {
-//                    Image(systemName: "chevron.left")
-//                        .font(.title)
-//                        .foregroundColor(.white)
-//                        .padding(.leading,25)
-//                        .padding(.top,25)
-//                }
-//                Spacer()
-//            }
             OffsetableScrollView { point in
                 verticalOffset = point.y
             } content: {
@@ -246,6 +242,13 @@ struct FavoriteDetail: View {
                             .font(.system(size:35,weight: .bold))
                             .foregroundColor(.white)
                         Spacer()
+                        if let uiimage = UIImage(data: self.profileImage ?? Data()) {
+                            Image(uiImage: uiimage)
+                                .resizable()
+                                .aspectRatio(contentMode: .fit)
+                                .frame(width: screen.width * 0.1)
+                                .clipShape(Circle())
+                        }
                         VStack {
                             if user.isLogged {
                                 Button(
@@ -335,6 +338,8 @@ struct FavoriteDetail: View {
                     
                     HStack {
                         Text("材料")
+                            .font(.system(size: 20,weight: .bold))
+                            .foregroundColor(.white)
                         Spacer()
                     }
                     .padding(.top, 16)
@@ -343,19 +348,24 @@ struct FavoriteDetail: View {
                         Text(tmpRecipe.materials)
                         Spacer()
                     }
-                    .padding(.top)
 
+                    HStack {
+                        Text("つくりかた")
+                            .font(.system(size: 20,weight: .bold))
+                            .foregroundColor(.white)
+                        Spacer()
+                    }
+                    
                     VStack(alignment: .leading, spacing: 16) {
                         ForEach(0..<procedures.count, id:\.self){ i in
                             HStack {
-                                Text("手順\(i+1)")
-                                Spacer()
-                            }
-                            HStack {
-                                Text(procedures[i].content)
+                                Text("\(i+1). \(procedures[i].content)")
                                     .frame(width: screen.width * 0.7, alignment: .topLeading)
                                 Spacer()
                             }
+                            Divider()
+                                .padding(.top)
+                                .foregroundColor(.white)
                         }
                     }
                     .padding(.top)
@@ -439,9 +449,3 @@ struct OffsetableScrollView<T: View>: View {
         .onPreferenceChange(OffsetPreferenceKey.self, perform: offsetChanged)
     }
 }
-
-//struct FavoriteDetail_Previews: PreviewProvider {
-//    static var previews: some View {
-//        FavoriteDetail()
-//    }
-//}

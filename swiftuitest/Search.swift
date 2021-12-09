@@ -212,6 +212,7 @@ struct Search: View {
                                         }
                                     }
                                 }
+                                BannerAd(unitID: "ca-app-pub-5558779899182260/4197512760")
                             }
                         }
                         .padding()
@@ -276,7 +277,6 @@ struct favRowView: View {
                 Image(uiImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fit)
-//                    .matchedGeometryEffect(id: "image\(fav.id)", in: animation)
                     .frame(width: 80, height: 80)
                     .background(Color.black)
                     .cornerRadius(20)
@@ -291,7 +291,6 @@ struct favRowView: View {
             VStack(alignment: .leading, spacing: 8.0){
                 Text(fav.title)
                     .font(.system(size: 20,weight: .bold))
-//                    .matchedGeometryEffect(id: "title\(fav.id)", in: animation)
                 HStack {
                     Image(systemName: "p.circle.fill")
                         .foregroundColor(Color(#colorLiteral(red: 0.6549019608, green: 0.7137254902, blue: 0.862745098, alpha: 1)))
@@ -327,10 +326,6 @@ struct favRowView: View {
                         .foregroundColor(Color(#colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)))
                     Spacer()
                 }
-                Text(fav.create_at)
-                    .font(.caption)
-                    .fontWeight(.bold)
-                    .foregroundColor(.secondary)
             }
             Spacer()
         }

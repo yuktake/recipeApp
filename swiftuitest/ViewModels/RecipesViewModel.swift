@@ -129,8 +129,6 @@ class RecipesViewModel: ObservableObject {
                         self.token = query.getNextToken()
                     }
                     recipes.forEach { item in
-                        print("recipeeeee")
-                        print(item)
                         
                         DispatchQueue.main.async {
                             self.recipes.append(RecipeData(

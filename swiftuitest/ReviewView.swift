@@ -15,11 +15,10 @@ struct ReviewView: View {
     @State var header: UIImage?
     @State var screen: CGSize! = UIScreen.main.bounds.size
     @State var showModal = false
-//    @State var contents = ""
     @State var isFocused = false
     @State var headerKey = ""
     @State var recipe:Recipe? = nil
-    @StateObject var manager = TFManager()
+    @StateObject var manager = ReviewManager()
     
     var recipeID: String
     @Binding var showSheet: Bool
@@ -278,7 +277,7 @@ struct ReviewView: View {
 //    }
 //}
 
-class TFManager: ObservableObject {
+class ReviewManager: ObservableObject {
     @Published var error = false
     @Published var text = "" {
         didSet {

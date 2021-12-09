@@ -123,8 +123,6 @@ struct ReviewList: View {
                 }
             }
             .frame(height: 250)
-            Text(review.content)
-                .font(.callout)
         }
         .padding()
     }

@@ -184,9 +184,9 @@ class UserStore: ObservableObject {
     func getMyRecipes() {
         print("getMyRecipes")
         // main threadで！！！
-        DispatchQueue.main.async {
-            self.myRecipes = []
-        }
+//        DispatchQueue.main.async {
+//            self.myRecipes = []
+//        }
         Amplify.API.query(request:.getMyRecipesByDate(userid: self.sub!)
         ) { event in
             switch event {
@@ -194,7 +194,6 @@ class UserStore: ObservableObject {
                 switch result {
                 case .success(let query):
                     print("Successfully retrieved my list of recipes:")
-//                    print(query.getNextToken())
                     let recipes = query.getItems()
                     self.token = query.getNextToken()
                     recipes.forEach { item in

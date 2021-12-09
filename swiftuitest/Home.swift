@@ -9,7 +9,6 @@ import SwiftUI
 import Amplify
 
 struct Home: View {
-//    @Binding var tabSelection: Int
     @State var isLogin = false
     @State var showModal = false
     @State var showDetail = false
@@ -19,6 +18,7 @@ struct Home: View {
     @Namespace var animation
     @EnvironmentObject var user:UserStore
     @EnvironmentObject var network:Network
+    @Environment(\.colorScheme) var scheme
     
     let itemHeight:CGFloat = 500
     let imageHeight:CGFloat = 400
@@ -51,11 +51,13 @@ struct Home: View {
     
     var body: some View {
         ZStack {
+            Color("background")
             ScrollView(showsIndicators: false) {
                 VStack {
                     HStack {
                         Text("Today's Receipt")
                             .font(.system(size: 28,weight: .bold))
+                            .foregroundColor(.black)
                         Spacer()
                         AvatarView(showModal: $showModal)
                     }
@@ -69,13 +71,13 @@ struct Home: View {
                                 ForEach(0..<user.myRecipes.count, id: \.self) { i in
                                     if let recipe = user.myRecipes[i] {
                                         RecipeCard(card: recipe)
-                                            .onTapGesture {
-                                                withAnimation(.spring()){
-                                                    showDetail = true
-                                                    index = i
-                                                    selectedImage = user.imageDatum[recipe.id] ?? Data()
-                                                }
+                                        .onTapGesture {
+                                            withAnimation(.spring()){
+                                                showDetail = true
+                                                index = i
+                                                selectedImage = user.imageDatum[recipe.id] ?? Data()
                                             }
+                                        }
                                     }
                                 }
                             }
@@ -85,7 +87,6 @@ struct Home: View {
                     Spacer()
                     BannerAd(unitID: "ca-app-pub-5558779899182260/4197512760")
                 }
-                .padding()
                 .frame(
                     maxWidth: .infinity,
                     maxHeight: .infinity,
@@ -153,44 +154,19 @@ struct RecipeCard: View {
                         .clipShape(Circle())
                 }
             }
+            Spacer()
             Text(card.title)
-                .font(.title)
+                .font(.caption)
                 .foregroundColor(.black)
-            
-            HStack(spacing: 12) {
-                Label(title: {
-                    Text("recipe.rating")
-                        .font(.caption)
-                        .foregroundColor(.gray)
-                }) {
-                    Image(systemName: "star.fill")
-                        .font(.caption)
-                        .foregroundColor(Color("orange"))
-                }
-                .padding(.vertical, 5)
-                .padding(.horizontal, 10)
-                .background(.blue.opacity(0.4))
-                .cornerRadius(5)
-                
-                Text("recipe.type")
-                    .font(.caption)
-                    .foregroundColor(.gray)
-                    .padding(.vertical, 5)
-                    .padding(.horizontal, 10)
-                    .background(.blue.opacity(0.4))
-                    .cornerRadius(5)
-            }
-            
-            Text("recipe.detail")
-                .foregroundColor(.gray)
-            
+                .frame(width: UIScreen.main.bounds.width / 2, alignment: .center)
+            Spacer()
         }
         .padding(.horizontal)
-        .frame(maxWidth: UIScreen.main.bounds.width / 2)
+        .frame(width: UIScreen.main.bounds.width / 2)
         .background(
-            Color.blue
-                .opacity(0.2)
-                .cornerRadius(25)
+            Color(#colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1))
+                .cornerRadius(30)
+                .shadow(color: Color(#colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1)).opacity(0.3), radius: 20, x: 0, y: 20)
                 .padding(.top, 55)
         )
         
