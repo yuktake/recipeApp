@@ -31,28 +31,28 @@ struct BannerAd: UIViewRepresentable {
     
     class Coordinator: NSObject, GADBannerViewDelegate {
         func bannerViewDidReceiveAd(_ bannerView: GADBannerView) {
-            print("bannerViewDidReceiveAd")
+//            print("bannerViewDidReceiveAd")
         }
         
         func bannerView(_ bannerView: GADBannerView, didFailToReceiveAdWithError error: Error) {
-            print(error.isOperationCancelledError)
-            print(error.localizedDescription)
+//            print(error.isOperationCancelledError)
+//            print(error.localizedDescription)
         }
         
         func bannerViewDidRecordImpression(_ bannerView: GADBannerView) {
-            print("bannerViewDidRecordImpression")
+//            print("bannerViewDidRecordImpression")
         }
         
         func bannerViewWillPresentScreen(_ bannerView: GADBannerView) {
-            print("bannerViewWillPresentScreen")
+//            print("bannerViewWillPresentScreen")
         }
         
         func bannerViewWillDismissScreen(_ bannerView: GADBannerView) {
-            print("bannerViewWillDismissScreen")
+//            print("bannerViewWillDismissScreen")
         }
         
         func bannerViewDidDismissScreen(_ bannerView: GADBannerView) {
-            print("bannerViewDidDismissScreen")
+//            print("bannerViewDidDismissScreen")
         }
     }
 }

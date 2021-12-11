@@ -9,8 +9,26 @@ import SwiftUI
 import Amplify
 
 struct SettingsView: View {
-    @State var name:String = UserDefaults.standard.string(forKey: "username") ?? ""
-    @State var description:String = UserDefaults.standard.string(forKey: "description") ?? ""
+    @State var nameError = false
+    @State var descriptionError = false
+    @State var name:String = UserDefaults.standard.string(forKey: "username") ?? "" {
+        didSet {
+            if name.count > 15 && oldValue.count <= 15 {
+                nameError = true
+            } else {
+                nameError = false
+            }
+        }
+    }
+    @State var description:String = UserDefaults.standard.string(forKey: "description") ?? "" {
+        didSet {
+            if description.count > 100 && oldValue.count <= 100 {
+                descriptionError = true
+            } else {
+                descriptionError = false
+            }
+        }
+    }
     @State var profile: UIImage?
     
     @State var showSheet:Bool = false
@@ -19,6 +37,30 @@ struct SettingsView: View {
     
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var user: UserStore
+    var screen = UIScreen.main.bounds.size
+    var disableForm : Bool {
+        (profile == nil &&
+        name == UserDefaults.standard.string(forKey: "username") &&
+        description == UserDefaults.standard.string(forKey: "description")) ||
+        nameError ||
+        descriptionError
+    }
+    
+    func nameChange(_ text: String) {
+        if (text.count > 15) {
+            self.nameError =  true
+        } else {
+            self.nameError = false
+        }
+    }
+    
+    func descriptionChange(_ text: String) {
+        if (text.count > 100) {
+            self.descriptionError =  true
+        } else {
+            self.descriptionError = false
+        }
+    }
     
     func save() {
         let group = DispatchGroup()
@@ -68,6 +110,7 @@ struct SettingsView: View {
                                     user.username = name
                                     user.description = description
                                 }
+                                dismiss()
                             case .failure(let error):
                                 print("Got failed result with \(error.errorDescription)")
                             }
@@ -105,45 +148,52 @@ struct SettingsView: View {
                         Image(uiImage: imageData)
                             .resizable()
                             .aspectRatio(contentMode: .fit)
-                            .frame(width: UIScreen.main.bounds.width / 3)
                             .clipShape(Circle())
                     } else if let image = user.image {
                         if let uiimage = UIImage(data: image) {
                             Image(uiImage: uiimage)
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
-                                .frame(width: UIScreen.main.bounds.width / 3)
                                 .clipShape(Circle())
                         }
                     } else {
                         Image(systemName: "person.fill")
                             .foregroundColor(.white)
                             .font(.system(size: 24, weight: .medium, design: .rounded))
-                            .frame(width: UIScreen.main.bounds.width / 3)
                             .clipShape(Circle())
                     }
                 }
-                .frame(width: UIScreen.main.bounds.width / 3)
                 .padding(.top)
                 .onTapGesture {
                     showSheet.toggle()
                 }
                 
                 HStack {
-                    TextField("Username", text: $name)
+                    TextField("Username", text: $name.onChange(nameChange))
                         .keyboardType(.default)
                         .font(.subheadline)
                         .padding(.leading,4)
                         .frame(height:44)
                 }
-                .frame(
-                    width: UIScreen.main.bounds.width / 3,
-                    height:40
-                )
+                .frame(height:40)
                 .background(BlurView(style: .systemMaterial))
                 .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
                 .shadow(color: .black.opacity(0.15), radius: 20, x:0, y:20)
-                .padding(.horizontal,8)
+                .padding(8)
+                
+                Spacer()
+            }
+            .frame(width: screen.width / 3, height: screen.height / 3)
+            .onTapGesture {
+                self.hideKeyboard()
+            }
+            
+            HStack {
+                if self.nameError {
+                    Text("制限文字数を15文字までです。")
+                        .foregroundColor(.red)
+                        .padding(.top,8)
+                }
             }
             
             Rectangle()
@@ -153,12 +203,23 @@ struct SettingsView: View {
             HStack {
                 Text("自己紹介")
                     .font(.system(size: 20,weight: .bold))
-                    .foregroundColor(.black)
+                    .foregroundColor(.white)
                     .padding(.leading)
                 Spacer()
             }
+            
             HStack {
-                TextEditor(text: $description)
+                if self.descriptionError {
+                    Text("制限文字数を100文字までです。")
+                        .foregroundColor(.red)
+                        .padding(.top, 8)
+                        .padding(.leading)
+                    Spacer()
+                }
+            }
+            
+            HStack {
+                TextEditor(text: $description.onChange(descriptionChange))
                     .keyboardType(.default)
                     .font(.subheadline)
                     .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
@@ -168,7 +229,7 @@ struct SettingsView: View {
             .background(BlurView(style: .systemMaterial))
             .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
             .shadow(color: .black.opacity(0.15), radius: 20, x:0, y:20)
-            .padding(.horizontal,8)
+            .padding(8)
             
             Spacer()
         }
@@ -206,15 +267,15 @@ struct SettingsView: View {
                 }, label: {
                     Text("Save")
                 })
-                .disabled(
-                    profile == nil &&
-                    name == UserDefaults.standard.string(forKey: "username") &&
-                    description == UserDefaults.standard.string(forKey: "description")
-                )
+                .disabled(disableForm)
             }
             .padding()
             ,alignment: .top
         )
+        .background(.black)
+        .onTapGesture {
+            self.hideKeyboard()
+        }
     }
 }
 

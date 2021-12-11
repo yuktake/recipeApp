@@ -82,7 +82,7 @@ struct ProfileView: View {
     
     var body: some View {
         ZStack {
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 GeometryReader{ reader -> AnyView in
                     DispatchQueue.main.async {
                         if refresh.startOffset == 0 {
@@ -124,7 +124,7 @@ struct ProfileView: View {
                         // profileCard
                         VStack {
                             VStack(alignment: .leading,spacing: 16) {
-                                HStack(spacing: 16) {
+                                HStack {
                                     if let imageData = user.image {
                                         let uiimage = UIImage(data: imageData)
                                         Image(uiImage: uiimage!)
@@ -135,7 +135,6 @@ struct ProfileView: View {
                                     } else {
                                         ZStack {
                                             Circle()
-//                                                    .foregroundColor(Color("pink-gradient-1"))
                                                 .frame(width: 66, height: 66, alignment: .center)
                                             Image(systemName: "person.fill")
                                                 .foregroundColor(.white)
@@ -144,12 +143,15 @@ struct ProfileView: View {
                                         .frame(width: 66, height: 66, alignment: .center)
                                     }
                                     
-                                    VStack(alignment: .leading) {
+                                    VStack {
                                         Text(((user.sub == nil ? "Who Are You?": user.username) ?? ""))
                                             .foregroundColor(.white)
-                                            .font(.title2)
+                                            .font(.title3)
                                             .bold()
+                                            .frame(maxWidth: .infinity)
                                     }
+                                    .frame(maxWidth: .infinity)
+                                    
                                     Spacer()
                                     
                                     if user.sub != nil {
@@ -170,26 +172,7 @@ struct ProfileView: View {
                                 
                                 Text(user.description ?? "")
                                     .foregroundColor(.white)
-                                    .font(.title2.bold())
-                                
-                                Label("a", systemImage: "calendar")
-                                    .foregroundColor(.white.opacity(0.7))
-                                    .font(.footnote)
-                                
-                                Rectangle()
-                                    .frame(height:1)
-                                    .foregroundColor(.white.opacity(0.1))
-                                
-                                HStack(spacing: 16){
-                                    Image(systemName: "link")
-                                        .foregroundColor(.white)
-                                        .opacity(0.7)
-                                        .font(.system(size: 17, weight: .semibold, design:.rounded))
-                                    Text("company")
-                                        .foregroundColor(.white.opacity(0.7))
-                                        .font(.footnote)
-                                    
-                                }
+                                    .font(.caption)
                             }
                             .padding(16)
                             
@@ -203,8 +186,6 @@ struct ProfileView: View {
                                             self.user.sub = ""
                                             user.resetAllPublished()
                                             UserDefaults.standard.removeAll()
-                                            print(user.localFavs)
-                                            print(user.sub)
                                         }
                                     case .failure(let error):
                                         print("Sign out failed with error \(error)")
@@ -236,7 +217,6 @@ struct ProfileView: View {
                                                 print("Successfully signed out")
                                                 user.resetAllPublished()
                                                 UserDefaults.standard.removeAll()
-                                                print(user.localFavs)
                                                 print(user.sub)
                                             }
                                         case .failure(let error):

@@ -21,12 +21,12 @@ struct Favorite: View {
             NavigationView{
                 if self.store.isLogged {
                     if (store.favRecipes.count >= 1) {
-                        ScrollView {
+                        ScrollView(showsIndicators: false) {
                             LazyVGrid(columns: Array(repeating: GridItem(), count: 3)) { // カラム数の指定
                                 ForEach(0...store.favRecipes.count-1,id: \.self) { i in
                                     ZStack {
                                         if let fav = store.favRecipes[i] {
-                                            favTmpView(
+                                            favCellView(
                                                 id: fav.id,
                                                 image: store.favImageDatum[fav.id] ?? Data(),
                                                 animation: animation
@@ -94,7 +94,7 @@ struct Favorite_Previews: PreviewProvider {
     }
 }
 
-struct favTmpView: View {
+struct favCellView: View {
     var id:String
     var image:Data
     var animation: Namespace.ID

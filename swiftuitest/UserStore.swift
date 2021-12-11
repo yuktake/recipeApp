@@ -25,12 +25,8 @@ class UserStore: ObservableObject {
             UserDefaults.standard.set(sub, forKey: "sub")
         }
     }
-    
     @Published var myRecipes:[RecipeData] = []
     @Published var imageDatum = [String:Data]()
-    // 使わない？
-    @Published var userDatum = [String:Data]()
-    
     @Published var username = UserDefaults.standard.string(forKey: "username"){
         didSet {
             UserDefaults.standard.set(username, forKey: "username")
@@ -46,12 +42,8 @@ class UserStore: ObservableObject {
             UserDefaults.standard.set(image, forKey: "profile")
         }
     }
-    // fav
-    @Published var fav = [String:RecipeData]()
     @Published var favRecipes:[FavData] = []
     @Published var favImageDatum = [String:Data]()
-    @Published var localFavs:[String:String] = [:]
-    @Published var favArray:[String] = []
     @Published var token: String = ""
     @Published var favToken: String = ""
     
@@ -101,7 +93,6 @@ class UserStore: ObservableObject {
                                     print("Failed to download image data - \(error)")
                                 }
                             }
-                            print("get recipe detail")
                         }
                     }
                     group.notify(queue: .main) {
@@ -169,16 +160,17 @@ class UserStore: ObservableObject {
     
     func resetAllPublished() {
         self.isLogged = false
+        self.showLogin = false
         self.sub = nil
         self.myRecipes = []
         self.imageDatum = [:]
         self.username = nil
         self.description = nil
         self.image = nil
-        self.fav = [:]
-//        self.fav = []
+        self.favRecipes = []
         self.favImageDatum = [:]
-        self.localFavs = [:]
+        self.token = ""
+        self.favToken = ""
     }
     
     func getMyRecipes() {

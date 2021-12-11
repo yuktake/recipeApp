@@ -239,9 +239,28 @@ struct FavoriteDetail: View {
                 VStack {
                     HStack {
                         Text(tmpRecipe.title)
-                            .font(.system(size:35,weight: .bold))
+                            .font(.system(size:25,weight: .bold))
                             .foregroundColor(.white)
+                            .lineLimit(nil)
+                            .fixedSize(horizontal: false, vertical: true)
                         Spacer()
+                    }
+                    .padding(.top)
+                    
+                    HStack {
+                        VStack {
+                            Text(state[tmpRecipe.state] ?? "")
+                                .font(.system(size:10))
+                                .padding(.horizontal, 14)
+                                .background(
+                                    Capsule()
+                                        .fill(Color.white)
+                                )
+                                .foregroundColor(.black)
+                            Spacer()
+                        }
+                        Spacer()
+                        
                         if let uiimage = UIImage(data: self.profileImage ?? Data()) {
                             Image(uiImage: uiimage)
                                 .resizable()
@@ -271,17 +290,6 @@ struct FavoriteDetail: View {
                                 .font(.caption)
                                 .foregroundColor(.white)
                         }
-                    }
-                    HStack {
-                        Text(state[tmpRecipe.state] ?? "")
-                            .font(.system(size:10))
-                            .padding(.horizontal, 14)
-                            .background(
-                                Capsule()
-                                    .fill(Color.white)
-                            )
-                            .foregroundColor(.black)
-                        Spacer()
                     }
                     
                     Spacer()
@@ -345,9 +353,12 @@ struct FavoriteDetail: View {
                     .padding(.top, 16)
 
                     HStack {
+                        Spacer()
                         Text(tmpRecipe.materials)
+                            .padding(.top,5)
                         Spacer()
                     }
+                    .padding(.bottom)
 
                     HStack {
                         Text("つくりかた")

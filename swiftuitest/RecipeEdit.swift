@@ -39,7 +39,6 @@ struct RecipeEdit: View {
     @State var title = "" {
         didSet {
             if title.count > 30 && oldValue.count <= 30 {
-                title = oldValue
                 error = true
             } else {
                 error = false
@@ -73,7 +72,15 @@ struct RecipeEdit: View {
         recipe.materials.isEmpty ||
         // edited判定したい
         recipe.contents.filter {$0.content.isEmpty}.count != 0 ||
-        title.count > 30
+        error
+    }
+    
+    func textChange(_ text: String) {
+        if (text.count > 30) {
+            self.error =  true
+        } else {
+            self.error = false
+        }
     }
     
     func load() {
@@ -288,7 +295,7 @@ struct RecipeEdit: View {
     var body: some View {
         ZStack(alignment: .top) {
             Color.black.edgesIgnoringSafeArea(.all)
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 HStack{
                     Button(action:{
                         showModal.toggle()
@@ -331,7 +338,7 @@ struct RecipeEdit: View {
                     .padding(.top)
                 }
                 VStack(spacing:16) {
-                    FormView(iconImage: "pencil", placeholder: "TITLE", numberPad: false, text: $title)
+                    FormView(iconImage: "pencil", placeholder: "TITLE", numberPad: false, text: $title.onChange(textChange))
                     HStack {
                         if self.error {
                             Text("制限文字数を30文字までです。")

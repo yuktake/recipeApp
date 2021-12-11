@@ -361,28 +361,38 @@ struct Detail: View {
                             }
                         }
                     }
-//                    .frame(height: screen.height * 0.2)
-                    
                     
                     Text("材料")
                         .font(.system(size:20,weight: .bold))
                         .foregroundColor(.white)
                     
-                    Text(selectedItem.materials)
-                        .padding(.top, 10)
-                        .foregroundColor(.white)
-                        .padding(.top,5)
+                    HStack {
+                        Spacer()
+                        Text(selectedItem.materials)
+                            .foregroundColor(.white)
+                            .padding(.top,5)
+                        Spacer()
+                    }
+                    .padding(.bottom)
                     
                     Text("つくりかた")
                         .font(.system(size: 20,weight: .bold))
                         .foregroundColor(.white)
-                        .padding(.leading)
+                    
+                    Divider()
+                        .padding(.top)
+                        .foregroundColor(.white)
                     
                     ForEach(0..<procedures.count, id: \.self) { index in
                         VStack(alignment: .leading, spacing: 10, content:{
                             Text("\(index+1)")
                                 .font(.title2)
                                 .fontWeight(.bold)
+                                .frame(width: 24)
+                                .background(
+                                    Color(#colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1))
+                                )
+                                .clipShape(Circle())
                             Text(procedures[index].content)
                                 .font(.caption)
                         })

@@ -65,27 +65,52 @@ struct Home: View {
                     .padding(.top, 30)
                     
                     // 本当はログインしていなくても表示
-                    if user.isLogged && user.myRecipes.count >= 1 {
-                        ScrollView(.horizontal, showsIndicators: false) {
-                            HStack(spacing: 15) {
-                                ForEach(0..<user.myRecipes.count, id: \.self) { i in
-                                    if let recipe = user.myRecipes[i] {
-                                        RecipeCard(card: recipe)
-                                        .onTapGesture {
-                                            withAnimation(.spring()){
-                                                showDetail = true
-                                                index = i
-                                                selectedImage = user.imageDatum[recipe.id] ?? Data()
-                                            }
+//                    if user.isLogged && user.myRecipes.count >= 1 {
+//                        ScrollView(.horizontal, showsIndicators: false) {
+//                            HStack(spacing: 15) {
+//                                ForEach(0..<user.myRecipes.count, id: \.self) { i in
+//                                    if let recipe = user.myRecipes[i] {
+//                                        RecipeCard(card: recipe)
+//                                        .onTapGesture {
+//                                            withAnimation(.spring()){
+//                                                showDetail = true
+//                                                index = i
+//                                                selectedImage = user.imageDatum[recipe.id] ?? Data()
+//                                            }
+//                                        }
+//                                    }
+//                                }
+//                            }
+//                            .padding()
+//                        }
+//                    }
+                    
+                    if user.isLogged {
+                        ForEach(0...user.myRecipes.count-1,id: \.self) { i in
+                            let adPlacement: Int = 3
+                            if let recipe = user.myRecipes[i] {
+                                if let image = UIImage(data:user.imageDatum[recipe.id] ?? Data()) {
+                                    Card(
+                                        i:i,
+                                        recipe:recipe,
+                                        image:image
+                                    )
+                                    .onTapGesture {
+                                        withAnimation(.spring()){
+                                            showDetail = true
+                                            index = i
+                                            selectedImage = user.imageDatum[recipe.id] ?? Data()
                                         }
+                                    }
+                                    if i % adPlacement == 0 {
+                                        BannerAd(unitID: "ca-app-pub-5558779899182260/4197512760")
                                     }
                                 }
                             }
-                            .padding()
                         }
                     }
+                    
                     Spacer()
-                    BannerAd(unitID: "ca-app-pub-5558779899182260/4197512760")
                 }
                 .frame(
                     maxWidth: .infinity,
@@ -138,6 +163,48 @@ struct Home_Previews: PreviewProvider {
     }
 }
 
+struct Card: View {
+    var i: Int
+    var recipe: RecipeData
+    var image: UIImage
+    var body: some View {
+        ZStack  {
+            HStack {
+                if i % 2 ==  1 {
+                    Spacer()
+                }
+                Image(uiImage:image)
+                    .resizable()
+                    .scaledToFill()
+//                    .frame(width: (UIScreen.main.bounds.width * 0.7), height: (UIScreen.main.bounds.height / 2))
+                    .frame(width: (UIScreen.main.bounds.width * 0.5), height: UIScreen.main.bounds.height / 3)
+                    .clipped()
+//                    .cornerRadius(15)
+                    .padding()
+                if i % 2 ==  0 {
+                    Spacer()
+                }
+            }
+            
+            if i % 2 ==  1 {
+                HStack {
+                    SectionView(i:i,recipe:recipe)
+                        .padding()
+//                        .opacity(0.9)
+                    Spacer()
+                }
+            } else {
+                HStack {
+                    Spacer()
+                    SectionView(i:i,recipe:recipe)
+                        .padding()
+//                        .opacity(0.9)
+                }
+            }
+        }
+    }
+}
+
 struct RecipeCard: View {
     @EnvironmentObject var user:UserStore
     var card: RecipeData
@@ -169,6 +236,74 @@ struct RecipeCard: View {
                 .shadow(color: Color(#colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1)).opacity(0.3), radius: 20, x: 0, y: 20)
                 .padding(.top, 55)
         )
+        
+    }
+}
+
+struct SectionView: View {
+    var i: Int
+    var recipe: RecipeData
+    var body: some View {
+        VStack {
+            Text(recipe.title)
+                .font(.title3).fontWeight(.bold)
+                .foregroundColor(.black)
+            HStack {
+                Text("\(recipe.calorie)kcal")
+                    .font(.subheadline)
+                    .foregroundColor(Color(#colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)))
+                Spacer()
+            }
+            .padding(.vertical,5)
+            HStack {
+                VStack {
+                    Image(systemName: "p.circle.fill")
+                        .foregroundColor(Color(#colorLiteral(red: 0.6549019608, green: 0.7137254902, blue: 0.862745098, alpha: 1)))
+                        .frame(width:22, height: 22)
+                        .background(Color.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 16, style:.continuous))
+                        .shadow(color:Color.black.opacity(0.15),radius: 5, x:0, y:5)
+                    Text("\(recipe.protein)")
+                        .font(.subheadline)
+                        .foregroundColor(Color(#colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)))
+                }
+                Spacer()
+                VStack {
+                    Image(systemName: "f.circle.fill")
+                        .foregroundColor(Color(#colorLiteral(red: 0.6549019608, green: 0.7137254902, blue: 0.862745098, alpha: 1)))
+                        .frame(width:22, height: 22)
+                        .background(Color.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 16, style:.continuous))
+                        .shadow(color:Color.black.opacity(0.15),radius: 5, x:0, y:5)
+                    Text("\(recipe.fat)")
+                        .font(.subheadline)
+                        .foregroundColor(Color(#colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)))
+                }
+                Spacer()
+                VStack {
+                    Image(systemName: "c.circle.fill")
+                        .foregroundColor(Color(#colorLiteral(red: 0.6549019608, green: 0.7137254902, blue: 0.862745098, alpha: 1)))
+                        .frame(width:22, height: 22)
+                        .background(Color.white)
+                        .clipShape(RoundedRectangle(cornerRadius: 16, style:.continuous))
+                        .shadow(color:Color.black.opacity(0.15),radius: 5, x:0, y:5)
+                    Text("\(recipe.carbo)")
+                        .font(.subheadline)
+                        .foregroundColor(Color(#colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)))
+                }
+            }
+        }
+        .padding(.horizontal)
+        .frame(width: UIScreen.main.bounds.width * 0.5, height: UIScreen.main.bounds.height / 4)
+        .background(
+            Image("paper")
+        )
+//        .clipShape(RounddRectangle(cornerRadius: 16, style: .continuous))
+        .clipShape(Rectangle())
+        .shadow(
+            color: Color(#colorLiteral(red: 0.760805108, green: 0.8164883852, blue: 0.9259157777, alpha: 1)), radius: 20, x: i%2==0 ?20:-20, y: 20
+        )
+        .shadow(color: Color(.white), radius: 20, x: i%2==0 ? 20 : -20, y: -20)
         
     }
 }

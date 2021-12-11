@@ -23,6 +23,8 @@ struct MakeRecipeView: View {
     @State var draggedItem: String?
     @State var procedureTmp: [String] = ["1"]
     
+    @State var error = false
+    
     @ObservedObject var viewModel = CreateRecipeViewModel()
     @EnvironmentObject var user: UserStore
     
@@ -37,7 +39,15 @@ struct MakeRecipeView: View {
         viewModel.recipe.calorie.isEmpty ||
         header == nil ||
         viewModel.recipe.contents.filter {$0.content.isEmpty}.count != 0 ||
-        viewModel.title.count > 30
+        error
+    }
+    
+    func textChange(_ text: String) {
+        if (text.count > 30) {
+            self.error =  true
+        } else {
+            self.error = false
+        }
     }
     
     init() {
@@ -62,7 +72,6 @@ struct MakeRecipeView: View {
     // asyncとgroupは非同期直列ではなく、非同期複数が完了した時のnotify
     func post(){
         let group = DispatchGroup()
-//        let dispatchQueue = DispatchQueue(label: "queue")
         guard let imageData = header?.jpegData(compressionQuality: 0.5) else {
             return
         }
@@ -148,15 +157,22 @@ struct MakeRecipeView: View {
                     
                     VStack(spacing:16) {
                         
-                        FormView(iconImage: "pencil", placeholder: "TITLE", numberPad: false, text: $viewModel.title)
-                        HStack {
-                            if viewModel.error {
+                        FormView(
+                            iconImage: "pencil",
+                            placeholder: "TITLE",
+                            numberPad: false,
+                            text: $viewModel.recipe.title.onChange(textChange)
+                        )
+                        if error {
+                            HStack {
                                 Text("制限文字数を30文字までです。")
                                     .foregroundColor(.red)
                                     .padding(.top)
+                                    .padding(.leading)
+                                Spacer()
                             }
-                            Spacer()
                         }
+                        
                         HStack {
                             FormView(iconImage: "p.circle.fill", placeholder: "ROTEIN", numberPad: true, text: $viewModel.recipe.protein)
                             FormView(iconImage: "f.circle.fill", placeholder: "AT", numberPad: true, text: $viewModel.recipe.fat)

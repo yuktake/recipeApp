@@ -9,17 +9,6 @@ import SwiftUI
 import Amplify
 
 class CreateRecipeViewModel: ObservableObject {
-    @Published var error = false
-    @Published var title = "" {
-        didSet {
-            if title.count > 30 && oldValue.count <= 30 {
-                title = oldValue
-                error = true
-            } else {
-                error = false
-            }
-        }
-    }
     
     @Published var recipe = RecipeData(
         userId: UserDefaults.standard.string(forKey: "sub") ?? "",
@@ -50,7 +39,7 @@ class CreateRecipeViewModel: ObservableObject {
             id: id,
             user: recipe.userId,
             type: "Recipe",
-            title: title,
+            title: recipe.title,
             calorie: Int(recipe.calorie) ?? 0,
             protein: Double(recipe.protein) ?? 0.0,
             fat: Double(recipe.fat) ?? 0.0,
