@@ -374,6 +374,7 @@
 		CAF35CBA26B3EA7A001DD9A5 /* LottieView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAF35CB926B3EA7A001DD9A5 /* LottieView.swift */; };
 		CAF35CBC26B3ED57001DD9A5 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAF35CBB26B3ED57001DD9A5 /* LoadingView.swift */; };
 		CAF35CBE26B3EFC5001DD9A5 /* SuccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAF35CBD26B3EFC5001DD9A5 /* SuccessView.swift */; };
+		CAF368682764F0DF004C7437 /* 851MkPOP.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CAF368672764F0DF004C7437 /* 851MkPOP.ttf */; };
 		CAF966F70DA35D71649C8186 /* Review+Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E2BAECBBDB63AA4ED8A211 /* Review+Schema.swift */; };
 		CD9DECB709455CA6FA76E64D /* AmplifyModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B057FA80AB56D1D0D5E1A0EF /* AmplifyModels.swift */; };
 		CDA496154802880855B3D007 /* Recipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19ABFDEF0EE4AD1C851EFBC /* Recipe.swift */; };
@@ -523,6 +524,7 @@
 		CAF35CB926B3EA7A001DD9A5 /* LottieView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LottieView.swift; sourceTree = "<group>"; };
 		CAF35CBB26B3ED57001DD9A5 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		CAF35CBD26B3EFC5001DD9A5 /* SuccessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuccessView.swift; sourceTree = "<group>"; };
+		CAF368672764F0DF004C7437 /* 851MkPOP.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = 851MkPOP.ttf; sourceTree = "<group>"; };
 		CEEF54180D1C0149D5E78CFF /* Review.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; name = Review.swift; path = amplify/generated/models/Review.swift; sourceTree = "<group>"; };
 		EC8191343891526B7CB661AA /* Fav+Schema.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; name = "Fav+Schema.swift"; path = "amplify/generated/models/Fav+Schema.swift"; sourceTree = "<group>"; };
 		FC01BC93F706F583A17C37BF /* Pods-swiftuitest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-swiftuitest.release.xcconfig"; path = "Target Support Files/Pods-swiftuitest/Pods-swiftuitest.release.xcconfig"; sourceTree = "<group>"; };
@@ -595,6 +597,7 @@
 		CA0CD3F826AC239700600723 /* Fonts */ = {
 			isa = PBXGroup;
 			children = (
+				CAF368672764F0DF004C7437 /* 851MkPOP.ttf */,
 				CA0CD3F626AC235F00600723 /* BlackOpsOne-Regular.ttf */,
 			);
 			path = Fonts;
@@ -835,6 +838,7 @@
 				C73CDB596FF261CAE1C092EF /* amplifyconfiguration.json in Resources */,
 				C171E27820ECF41DEED2A1C2 /* awsconfiguration.json in Resources */,
 				0F501E1426366D2A9B28674F /* amplifyconfiguration.json in Resources */,
+				CAF368682764F0DF004C7437 /* 851MkPOP.ttf in Resources */,
 				38A5E3EED190CD9A21F8C137 /* awsconfiguration.json in Resources */,
 				7C68F1DEBA1E5471EF43BB59 /* amplifyconfiguration.json in Resources */,
 				931529F3B44AAEB6A3F388E4 /* awsconfiguration.json in Resources */,

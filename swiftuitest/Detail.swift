@@ -56,6 +56,7 @@ struct Detail: View {
     @State var showModal = false
     
     func sheetChange(_ tag: Bool){
+        print("sheet change")
         self.load(updated: false)
     }
     
@@ -431,6 +432,23 @@ struct Detail: View {
                                                         .offset(x: 10, y: 10)
                                                 )
                                                 .padding(.trailing, 10)
+                                        } else {
+                                            Image(systemName: "person.fill")
+                                                .resizable()
+                                                .foregroundColor(.white)
+                                                .aspectRatio(contentMode: .fit)
+                                                .frame(width:50, height: 50)
+                                                .clipShape(Circle())
+                                                .overlay(
+                                                    Image(systemName: "plus")
+                                                        .padding(7)
+                                                        .background(.blue, in: Circle())
+                                                        .foregroundColor(.white)
+                                                        .padding(2)
+                                                        .background(.black, in: Circle())
+                                                        .offset(x: 10, y: 10)
+                                                )
+                                                .padding(.trailing, 10)
                                         }
                                     }
                                 }
@@ -494,7 +512,7 @@ struct Detail: View {
                 }
             }
             .opacity(showReview ? 0 : 1)
-            .sheet(isPresented: $showModal){
+            .sheet(isPresented: $showModal.onChange(sheetChange)){
                 ReviewView(
                     recipeID:selectedItem.id,
                     showSheet: $showModal
@@ -532,15 +550,18 @@ struct StoryView: View {
                         .resizable()
                         .aspectRatio(contentMode:.fit)
                 }
-                HStack {
-                    Text(reviewData.content)
-                        .font(.headline)
-                        .foregroundColor(.white)
+                ScrollView(showsIndicators: false) {
+                    HStack {
+                        Text(reviewData.content)
+                            .font(.headline)
+                            .foregroundColor(.white)
+                        Spacer()
+                    }
+                    .padding()
                     Spacer()
                 }
-                .padding()
-                Spacer()
             }
+            .padding(.bottom,32)
         }
         .statusBar(hidden: true)
         .frame(maxWidth: .infinity, maxHeight: .infinity)

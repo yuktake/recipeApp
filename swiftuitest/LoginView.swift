@@ -16,6 +16,7 @@ struct LoginView: View {
     @State var password = ""
     @State var isFocused = false
     @State var showAlert = false
+    @State var alertTitle = "Error"
     @State var alertMessage = "Something went wrong."
     @State var isLoading = false
     @State var isSuccessful = false
@@ -53,8 +54,10 @@ struct LoginView: View {
                 }
             case .failure(let error):
                 print("An error occurred while registering a user \(error)")
-                self.alertMessage = "error"
+                self.alertTitle = "Error"
+                self.alertMessage = error.errorDescription
                 self.showAlert = true
+                self.isLoading = false
             }
         }
     }
@@ -66,6 +69,10 @@ struct LoginView: View {
             case .success:
                 login(signup: true)
             case .failure(let error):
+                self.alertTitle = "Error"
+                self.showAlert = true
+                self.isLoading = false
+                self.alertMessage = error.errorDescription
                 print("An error occurred while confirming sign up \(error)")
             }
         }
@@ -73,11 +80,20 @@ struct LoginView: View {
     
     func resendVerification() {
 //        Amplify.Auth.resendSignUpCode(for: username, listener: { result in
+        print("resend verification")
         Amplify.Auth.resendSignUpCode(for: email, listener: { result in
             switch result {
             case .success(let result):
                 print("Resend code success \(result)")
+                self.alertTitle = "Success"
+                self.alertMessage = "Send Verification Mail!!"
+                self.showAlert = true
+                self.showConfirm = true
             case  .failure(let error):
+                self.alertTitle = "Error"
+                self.showAlert = true
+                self.isLoading = false
+                self.alertMessage = error.errorDescription
                 print("Resend Code failed with error \(error)")
             }
         })
@@ -95,6 +111,10 @@ struct LoginView: View {
                     print("Reset completed")
                 }
             } catch {
+                self.alertTitle = "Error"
+                self.showAlert = true
+                self.isLoading = false
+                self.alertMessage = "Got Error"
                 print("Reset password failed with error \(error)")
             }
         }
@@ -113,8 +133,15 @@ struct LoginView: View {
             switch result {
             case .success:
                 print("Password reset confirmed")
+                self.forgotButton.toggle()
+                buttonText = "Login"
+                formHeight = 136
                 self.passwordConfirm = false
             case .failure(let error):
+                self.alertTitle = "Error"
+                self.showAlert = true
+                self.isLoading = false
+                self.alertMessage = error.errorDescription
                 print("Reset password failed with error \(error)")
             }
         }
@@ -151,6 +178,10 @@ struct LoginView: View {
                 }
             case .failure(let error):
                 print("Sign in failed \(error)")
+                self.isLoading = false
+                self.alertMessage = error.errorDescription
+                self.showAlert = true
+                self.alertTitle = "Error"
             }
         }
     }
@@ -213,7 +244,7 @@ struct LoginView: View {
                             
                             Divider().padding(.leading, 80)
                             
-                            if !forgotButton {
+                            if !forgotButton || resendButton {
                                 HStack {
                                     Image(systemName: "lock.fill")
                                         .foregroundColor(Color(#colorLiteral(red: 0.6549019608, green: 0.7137254902, blue: 0.862745098, alpha: 1)))
@@ -259,7 +290,7 @@ struct LoginView: View {
                                     }
                                 }){
                                     Text(loginButton ? "Create Account?" : "LogIn")
-                                        .foregroundColor(.black)
+                                        .foregroundColor(.white)
                                 }
                             }
                         }
@@ -290,10 +321,12 @@ struct LoginView: View {
                                     self.forgotButton.toggle()
                                     if (forgotButton) {
                                         buttonText = "Send"
-                                        formHeight = 68
+                                        formHeight = 136
+                                        resendButton = true
                                     } else {
                                         buttonText = "Signup"
                                         formHeight = 136
+                                        resendButton = false
                                     }
                                 }){
                                     Text(self.forgotButton ? "Signup" : "Resend Verification?")
@@ -318,7 +351,7 @@ struct LoginView: View {
                                 }
                             }){
                                 Text(buttonText)
-                                    .foregroundColor(.black)
+                                    .foregroundColor(.white)
                             }
                             .padding(12)
                             .padding(.horizontal, 30)
@@ -326,7 +359,7 @@ struct LoginView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
                             .shadow(color:Color(#colorLiteral(red: 0, green: 0.7529411765, blue: 1, alpha: 1)).opacity(0.3),radius: 20, x:0, y:20)
                             .alert(isPresented: $showAlert){
-                                Alert(title: Text("Error"), message: Text(self.alertMessage), dismissButton: .default(Text("OK")))
+                                Alert(title: Text(self.alertTitle), message: Text(self.alertMessage), dismissButton: .default(Text("OK")))
                             }
                         }
                         .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .bottom)
@@ -339,10 +372,9 @@ struct LoginView: View {
                                 HStack(spacing: 16) {
                                     ZStack {
                                         Circle()
-//                                            .foregroundColor(Color("pink-gradient-1"))
                                             .frame(width: 66, height: 66, alignment: .center)
                                         Image(systemName: "person.fill")
-                                            .foregroundColor(.white)
+                                            .foregroundColor(.black)
                                             .font(.system(size: 24, weight: .medium, design: .rounded))
                                     }
                                     .frame(width: 66, height: 66, alignment: .center)
@@ -367,7 +399,7 @@ struct LoginView: View {
                                         .font(.subheadline)
                                         .padding(.leading)
                                         .frame(height:44)
-                                        .background(Color.white)
+                                        .foregroundColor(.black)
                                         .onTapGesture {
                                             self.isFocused = true
                                         }
@@ -377,7 +409,7 @@ struct LoginView: View {
                                         .font(.subheadline)
                                         .padding(.leading)
                                         .frame(height:44)
-                                        .background(Color.white)
+                                        .foregroundColor(.black)
                                         .onTapGesture {
                                             self.isFocused = true
                                         }
@@ -399,9 +431,7 @@ struct LoginView: View {
                         }
                         .background(RoundedRectangle(cornerRadius: 30)
                                         .stroke(Color.white.opacity(0.2))
-//                                        .background(Color("secondaryBackground").opacity(0.5))
                                         .background(VisualEffectBlur(blurStyle: .dark))
-//                                        .shadow(color: Color("shadowColor").opacity(0.5), radius: 60, x: 0, y: 30)
                         )
                         .cornerRadius(30)
                         .padding(.horizontal)
@@ -414,17 +444,16 @@ struct LoginView: View {
                                 HStack(spacing: 16) {
                                     ZStack {
                                         Circle()
-//                                            .foregroundColor(Color("pink-gradient-1"))
                                             .frame(width: 66, height: 66, alignment: .center)
                                         Image(systemName: "person.fill")
-                                            .foregroundColor(.white)
+                                            .foregroundColor(.black)
                                             .font(.system(size: 24, weight: .medium, design: .rounded))
                                     }
                                     .frame(width: 66, height: 66, alignment: .center)
                                     
                                     VStack(alignment: .leading) {
                                         Text("Email Verification")
-                                            .foregroundColor(.white)
+                                            .foregroundColor(.black)
                                             .font(.title2)
                                             .bold()
                                     }
@@ -443,6 +472,7 @@ struct LoginView: View {
                                         .padding(.leading)
                                         .frame(height:44)
                                         .background(Color.white)
+                                        .foregroundColor(.black)
                                         .onTapGesture {
                                             self.isFocused = true
                                         }
@@ -471,9 +501,7 @@ struct LoginView: View {
                         }
                         .background(RoundedRectangle(cornerRadius: 30)
                                         .stroke(Color.white.opacity(0.2))
-//                                        .background(Color("secondaryBackground").opacity(0.5))
                                         .background(VisualEffectBlur(blurStyle: .dark))
-//                                        .shadow(color: Color("shadowColor").opacity(0.5), radius: 60, x: 0, y: 30)
                         )
                         .cornerRadius(30)
                         .padding(.horizontal)

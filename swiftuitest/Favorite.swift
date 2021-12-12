@@ -59,7 +59,11 @@ struct Favorite: View {
                     }
                 } else {
                     VStack {
-                        Text("need to login")
+                        Image("pan")
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: UIScreen.main.bounds.width/4, height:UIScreen.main.bounds.height/4)
+                        Text("YouNeedToLogin!!")
                             .navigationBarTitle(Text("Favorite"))
                     }
                 }

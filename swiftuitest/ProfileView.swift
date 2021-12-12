@@ -137,7 +137,7 @@ struct ProfileView: View {
                                             Circle()
                                                 .frame(width: 66, height: 66, alignment: .center)
                                             Image(systemName: "person.fill")
-                                                .foregroundColor(.white)
+                                                .foregroundColor(.black)
                                                 .font(.system(size: 24, weight: .medium, design: .rounded))
                                         }
                                         .frame(width: 66, height: 66, alignment: .center)
@@ -176,27 +176,35 @@ struct ProfileView: View {
                             }
                             .padding(16)
                             
-                            Button(action:{
-                                Amplify.Auth.signOut() { result in
-                                    switch result {
-                                    case .success:
-                                        DispatchQueue.main.async {
-                                            print("Successfully signed out")
-                                            self.user.isLogged = false
-                                            self.user.sub = ""
-                                            user.resetAllPublished()
-                                            UserDefaults.standard.removeAll()
-                                        }
-                                    case .failure(let error):
-                                        print("Sign out failed with error \(error)")
+                            VStack {
+                                Button {
+                                    print("tap signout")
+                                    user.signOut()
+                                    self.tabSelection = 1
+                                } label: {
+                                    HStack(spacing: 12) {
+                                        Image(systemName: "person.crop.circle")
+                                            .foregroundColor(.primary)
+                                            .font(.system(size: 16, weight: .medium))
+                                            .frame(width: 36, height: 36)
+                                            .clipShape(Circle())
+                                            .shadow(color: Color.black.opacity(0.1), radius: 1, x: 0, y: 1)
+                                            .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                                        GradientText(text: "Sign Out")
+                                        Spacer()
                                     }
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 16, style: .circular)
+                                            .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                                    )
+                                    .background(
+                                        Color.init(red: 26/255, green: 20/255, blue: 51/255)
+                                            .cornerRadius(16)
+                                    )
                                 }
-                                self.tabSelection = 1
-                            }, label: {
-                                GradientText(text:"text")
-                                    .font(.footnote.bold())
-                            })
-                            .padding(.bottom)
+                            }
+                            .padding()
+                            
                         }
                         .background(
                             RoundedRectangle(cornerRadius: 30)
@@ -210,19 +218,7 @@ struct ProfileView: View {
                             VStack {
                                 Button {
                                     print("tap signout")
-                                    Amplify.Auth.signOut() { result in
-                                        switch result {
-                                        case .success:
-                                            DispatchQueue.main.async {
-                                                print("Successfully signed out")
-                                                user.resetAllPublished()
-                                                UserDefaults.standard.removeAll()
-                                                print(user.sub)
-                                            }
-                                        case .failure(let error):
-                                            print("Sign out failed with error \(error)")
-                                        }
-                                    }
+                                    user.signOut()
                                     self.tabSelection = 1
                                 } label: {
                                     HStack(spacing: 12) {

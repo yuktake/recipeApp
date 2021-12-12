@@ -147,19 +147,25 @@ struct SettingsView: View {
                     if let imageData = profile {
                         Image(uiImage: imageData)
                             .resizable()
-                            .aspectRatio(contentMode: .fit)
+                            .aspectRatio(contentMode: .fill)
+                            .frame(width: screen.width / 3)
                             .clipShape(Circle())
                     } else if let image = user.image {
                         if let uiimage = UIImage(data: image) {
                             Image(uiImage: uiimage)
                                 .resizable()
-                                .aspectRatio(contentMode: .fit)
+                                .aspectRatio(contentMode: .fill)
+                                .frame(width: screen.width / 3)
                                 .clipShape(Circle())
                         }
                     } else {
                         Image(systemName: "person.fill")
+                            .resizable()
+                            .aspectRatio(contentMode: .fill)
                             .foregroundColor(.white)
+                            .frame(width: screen.width / 3)
                             .font(.system(size: 24, weight: .medium, design: .rounded))
+                            .background(.yellow)
                             .clipShape(Circle())
                     }
                 }

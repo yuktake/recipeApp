@@ -29,7 +29,7 @@ struct ReviewView: View {
     var disableForm: Bool {
         header == nil ||
         manager.text == "" ||
-        manager.text.count > 10
+        manager.text.count > 100
     }
     
     func getRecipe(id: String) {
@@ -183,11 +183,11 @@ struct ReviewView: View {
                     
                     HStack {
                         if manager.error {
-                            Text("制限文字数を10文字までです。")
+                            Text("制限文字数を100文字までです。")
                                 .foregroundColor(.red)
                         }
                         Spacer()
-                        Text("\(manager.text.count)/10")
+                        Text("\(manager.text.count)/100")
                     }
                     .padding()
                 }
@@ -281,7 +281,7 @@ class ReviewManager: ObservableObject {
     @Published var error = false
     @Published var text = "" {
         didSet {
-            if text.count > 10 && oldValue.count <= 10 {
+            if text.count > 100 && oldValue.count <= 100 {
                 text = oldValue
                 error = true
             } else {

@@ -50,6 +50,7 @@ class UserStore: ObservableObject {
     var currentPage: List<Recipe>?
     
     init(){
+        self.fetchAuthSession()
         if (isLogged) {
             self.getMyRecipes()
             self.getFavsFromServer()
@@ -187,7 +188,9 @@ class UserStore: ObservableObject {
                 case .success(let query):
                     print("Successfully retrieved my list of recipes:")
                     let recipes = query.getItems()
-                    self.token = query.getNextToken()
+                    DispatchQueue.main.async {
+                        self.token = query.getNextToken()
+                    }
                     recipes.forEach { item in
                         DispatchQueue.main.async {
                             if !self.myRecipes.contains(where: {$0.id == item.id}) {
@@ -291,6 +294,43 @@ class UserStore: ObservableObject {
                 }
             case .failure(let error):
                 print("Got failed get next event with error \(error)")
+            }
+        }
+    }
+    
+    func fetchAuthSession() {
+        Amplify.Auth.fetchAuthSession { result in
+            do {
+                let session = try result.get()
+
+                // Get user sub or identity id
+                if let identityProvider = session as? AuthCognitoIdentityProvider {
+                    let usersub = try identityProvider.getUserSub().get()
+                    print("User sub - \(usersub)")
+                    if (!self.isLogged) {
+                        self.signOut()
+                    }
+                } else {
+                    print("no sub??")
+                }
+            } catch {
+                print("Fetch auth session failed with error - \(error)")
+            }
+        }
+    }
+    
+    func signOut() {
+        print("signout")
+        Amplify.Auth.signOut() { result in
+            switch result {
+            case .success:
+                DispatchQueue.main.async {
+                    print("Successfully signed out")
+                    self.resetAllPublished()
+                    UserDefaults.standard.removeAll()
+                }
+            case .failure(let error):
+                print("Sign out failed with error \(error)")
             }
         }
     }
