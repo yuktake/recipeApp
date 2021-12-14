@@ -6,6 +6,8 @@
 
 
 
+
+
 #set( $optionalNonNullableFields = ["user", "type", "title", "calorie", "protein", "fat", "carbo", "state", "materials", "image", "favNum", "delFlg"] )
 #foreach( $field in $optionalNonNullableFields )
   #if( $context.arguments.input.keySet().contains($field) && $util.isNull($context.args.input.get($field)) )

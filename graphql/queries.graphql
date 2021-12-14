@@ -390,6 +390,48 @@ query RecipesByCarbo(
     nextToken
   }
 }
+query RecipesByFav(
+  $type: String
+  $favNum: ModelIntKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelRecipeFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  recipesByFav(
+    type: $type
+    favNum: $favNum
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      user
+      type
+      title
+      calorie
+      protein
+      fat
+      carbo
+      state
+      materials
+      contents {
+        nextToken
+      }
+      image
+      reviews {
+        nextToken
+      }
+      favNum
+      createdAt
+      updatedAt
+      delFlg
+    }
+    nextToken
+  }
+}
 query RecipesByDate(
   $type: String
   $createdAt: ModelStringKeyConditionInput

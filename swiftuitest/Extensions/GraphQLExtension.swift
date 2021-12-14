@@ -15,8 +15,7 @@ extension GraphQLRequest
         fat: Double,
         carbo: Double,
         state: Int,
-        keyword: String = "",
-        nextToken: String = ""
+        keyword: String = ""
     ) -> GraphQLRequest<QueryRecipes>
     {
         let document = """
@@ -68,8 +67,7 @@ extension GraphQLRequest
         fat: Double,
         carbo: Double,
         state: Int,
-        keyword: String = "",
-        nextToken: String = ""
+        keyword: String = ""
     ) -> GraphQLRequest<QueryRecipes>
     {
         let document = """
@@ -121,8 +119,7 @@ extension GraphQLRequest
         fat: Double,
         carbo: Double,
         state: Int,
-        keyword: String = "",
-        nextToken: String = ""
+        keyword: String = ""
     ) -> GraphQLRequest<QueryRecipes>
     {
         let document = """
@@ -166,6 +163,44 @@ extension GraphQLRequest
             ],
             responseType: QueryRecipes.self,
             decodePath: "recipesByCarbo"
+        )
+    }
+    
+    static func getRecipesByFav() -> GraphQLRequest<QueryRecipes>
+    {
+        let document = """
+        query RecipesByFav {
+            recipesByFav(
+                type: "Recipe",
+                limit: 10,
+                sortDirection: DESC
+            ) {
+                items {
+                    id
+                    user
+                    type
+                    title
+                    calorie
+                    protein
+                    fat
+                    carbo
+                    state
+                    materials
+                    image
+                    favNum
+                    createdAt
+                    updatedAt
+                    delFlg
+                }
+                nextToken
+            }
+        }
+        """
+        return GraphQLRequest<QueryRecipes>(
+            document: document,
+            variables: [:],
+            responseType: QueryRecipes.self,
+            decodePath: "recipesByFav"
         )
     }
     

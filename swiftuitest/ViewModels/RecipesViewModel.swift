@@ -703,9 +703,6 @@ class QueryRecipes: Decodable {
 
     public func getItems() -> List<Recipe> { return items; }
     public func getNextToken() -> String {
-//        if (nextToken is NSNull) {
-//            return nil
-//        }
         return nextToken ?? ""
     }
 }
@@ -716,9 +713,6 @@ class QueryFavs: Decodable {
 
     public func getItems() -> List<Fav> { return items; }
     public func getNextToken() -> String {
-//        if (nextToken is NSNull) {
-//            return nil
-//        }
         return nextToken ?? ""
     }
 }

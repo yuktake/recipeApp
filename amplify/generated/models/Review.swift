@@ -8,29 +8,16 @@ public struct Review: Model {
   public var content: String
   public var image: String
   public var recipe: Recipe?
-  public var createdAt: Temporal.DateTime?
-  public var updatedAt: Temporal.DateTime?
+  public var createdAt: String?
+  public var updatedAt: String?
   
   public init(id: String = UUID().uuidString,
       user: String,
       content: String,
       image: String,
-      recipe: Recipe? = nil) {
-    self.init(id: id,
-      user: user,
-      content: content,
-      image: image,
-      recipe: recipe,
-      createdAt: nil,
-      updatedAt: nil)
-  }
-  internal init(id: String = UUID().uuidString,
-      user: String,
-      content: String,
-      image: String,
       recipe: Recipe? = nil,
-      createdAt: Temporal.DateTime? = nil,
-      updatedAt: Temporal.DateTime? = nil) {
+      createdAt: String? = nil,
+      updatedAt: String? = nil) {
       self.id = id
       self.user = user
       self.content = content

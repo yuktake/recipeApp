@@ -2463,6 +2463,68 @@ public enum ModelSortDirection: RawRepresentable, Equatable, JSONDecodable, JSON
   }
 }
 
+public struct ModelIntKeyConditionInput: GraphQLMapConvertible {
+  public var graphQLMap: GraphQLMap
+
+  public init(eq: Int? = nil, le: Int? = nil, lt: Int? = nil, ge: Int? = nil, gt: Int? = nil, between: [Int?]? = nil) {
+    graphQLMap = ["eq": eq, "le": le, "lt": lt, "ge": ge, "gt": gt, "between": between]
+  }
+
+  public var eq: Int? {
+    get {
+      return graphQLMap["eq"] as! Int?
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "eq")
+    }
+  }
+
+  public var le: Int? {
+    get {
+      return graphQLMap["le"] as! Int?
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "le")
+    }
+  }
+
+  public var lt: Int? {
+    get {
+      return graphQLMap["lt"] as! Int?
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "lt")
+    }
+  }
+
+  public var ge: Int? {
+    get {
+      return graphQLMap["ge"] as! Int?
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "ge")
+    }
+  }
+
+  public var gt: Int? {
+    get {
+      return graphQLMap["gt"] as! Int?
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "gt")
+    }
+  }
+
+  public var between: [Int?]? {
+    get {
+      return graphQLMap["between"] as! [Int?]?
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "between")
+    }
+  }
+}
+
 public struct ModelStringKeyConditionInput: GraphQLMapConvertible {
   public var graphQLMap: GraphQLMap
 
@@ -2530,68 +2592,6 @@ public struct ModelStringKeyConditionInput: GraphQLMapConvertible {
     }
     set {
       graphQLMap.updateValue(newValue, forKey: "beginsWith")
-    }
-  }
-}
-
-public struct ModelIntKeyConditionInput: GraphQLMapConvertible {
-  public var graphQLMap: GraphQLMap
-
-  public init(eq: Int? = nil, le: Int? = nil, lt: Int? = nil, ge: Int? = nil, gt: Int? = nil, between: [Int?]? = nil) {
-    graphQLMap = ["eq": eq, "le": le, "lt": lt, "ge": ge, "gt": gt, "between": between]
-  }
-
-  public var eq: Int? {
-    get {
-      return graphQLMap["eq"] as! Int?
-    }
-    set {
-      graphQLMap.updateValue(newValue, forKey: "eq")
-    }
-  }
-
-  public var le: Int? {
-    get {
-      return graphQLMap["le"] as! Int?
-    }
-    set {
-      graphQLMap.updateValue(newValue, forKey: "le")
-    }
-  }
-
-  public var lt: Int? {
-    get {
-      return graphQLMap["lt"] as! Int?
-    }
-    set {
-      graphQLMap.updateValue(newValue, forKey: "lt")
-    }
-  }
-
-  public var ge: Int? {
-    get {
-      return graphQLMap["ge"] as! Int?
-    }
-    set {
-      graphQLMap.updateValue(newValue, forKey: "ge")
-    }
-  }
-
-  public var gt: Int? {
-    get {
-      return graphQLMap["gt"] as! Int?
-    }
-    set {
-      graphQLMap.updateValue(newValue, forKey: "gt")
-    }
-  }
-
-  public var between: [Int?]? {
-    get {
-      return graphQLMap["between"] as! [Int?]?
-    }
-    set {
-      graphQLMap.updateValue(newValue, forKey: "between")
     }
   }
 }
@@ -11445,6 +11445,376 @@ public final class RecipesByCarboQuery: GraphQLQuery {
     }
 
     public struct RecipesByCarbo: GraphQLSelectionSet {
+      public static let possibleTypes = ["ModelRecipeConnection"]
+
+      public static let selections: [GraphQLSelection] = [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("items", type: .nonNull(.list(.nonNull(.object(Item.selections))))),
+        GraphQLField("nextToken", type: .scalar(String.self)),
+      ]
+
+      public var snapshot: Snapshot
+
+      public init(snapshot: Snapshot) {
+        self.snapshot = snapshot
+      }
+
+      public init(items: [Item], nextToken: String? = nil) {
+        self.init(snapshot: ["__typename": "ModelRecipeConnection", "items": items.map { $0.snapshot }, "nextToken": nextToken])
+      }
+
+      public var __typename: String {
+        get {
+          return snapshot["__typename"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      public var items: [Item] {
+        get {
+          return (snapshot["items"] as! [Snapshot]).map { Item(snapshot: $0) }
+        }
+        set {
+          snapshot.updateValue(newValue.map { $0.snapshot }, forKey: "items")
+        }
+      }
+
+      public var nextToken: String? {
+        get {
+          return snapshot["nextToken"] as? String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "nextToken")
+        }
+      }
+
+      public struct Item: GraphQLSelectionSet {
+        public static let possibleTypes = ["Recipe"]
+
+        public static let selections: [GraphQLSelection] = [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
+          GraphQLField("user", type: .nonNull(.scalar(String.self))),
+          GraphQLField("type", type: .nonNull(.scalar(String.self))),
+          GraphQLField("title", type: .nonNull(.scalar(String.self))),
+          GraphQLField("calorie", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("protein", type: .nonNull(.scalar(Double.self))),
+          GraphQLField("fat", type: .nonNull(.scalar(Double.self))),
+          GraphQLField("carbo", type: .nonNull(.scalar(Double.self))),
+          GraphQLField("state", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("materials", type: .nonNull(.scalar(String.self))),
+          GraphQLField("contents", type: .object(Content.selections)),
+          GraphQLField("image", type: .nonNull(.scalar(String.self))),
+          GraphQLField("reviews", type: .object(Review.selections)),
+          GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("createdAt", type: .scalar(String.self)),
+          GraphQLField("updatedAt", type: .scalar(String.self)),
+          GraphQLField("delFlg", type: .nonNull(.scalar(Int.self))),
+        ]
+
+        public var snapshot: Snapshot
+
+        public init(snapshot: Snapshot) {
+          self.snapshot = snapshot
+        }
+
+        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, image: String, reviews: Review? = nil, favNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
+          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "image": image, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
+        }
+
+        public var __typename: String {
+          get {
+            return snapshot["__typename"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        public var id: GraphQLID {
+          get {
+            return snapshot["id"]! as! GraphQLID
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "id")
+          }
+        }
+
+        public var user: String {
+          get {
+            return snapshot["user"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "user")
+          }
+        }
+
+        public var type: String {
+          get {
+            return snapshot["type"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "type")
+          }
+        }
+
+        public var title: String {
+          get {
+            return snapshot["title"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "title")
+          }
+        }
+
+        public var calorie: Int {
+          get {
+            return snapshot["calorie"]! as! Int
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "calorie")
+          }
+        }
+
+        public var protein: Double {
+          get {
+            return snapshot["protein"]! as! Double
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "protein")
+          }
+        }
+
+        public var fat: Double {
+          get {
+            return snapshot["fat"]! as! Double
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "fat")
+          }
+        }
+
+        public var carbo: Double {
+          get {
+            return snapshot["carbo"]! as! Double
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "carbo")
+          }
+        }
+
+        public var state: Int {
+          get {
+            return snapshot["state"]! as! Int
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "state")
+          }
+        }
+
+        public var materials: String {
+          get {
+            return snapshot["materials"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "materials")
+          }
+        }
+
+        public var contents: Content? {
+          get {
+            return (snapshot["contents"] as? Snapshot).flatMap { Content(snapshot: $0) }
+          }
+          set {
+            snapshot.updateValue(newValue?.snapshot, forKey: "contents")
+          }
+        }
+
+        public var image: String {
+          get {
+            return snapshot["image"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "image")
+          }
+        }
+
+        public var reviews: Review? {
+          get {
+            return (snapshot["reviews"] as? Snapshot).flatMap { Review(snapshot: $0) }
+          }
+          set {
+            snapshot.updateValue(newValue?.snapshot, forKey: "reviews")
+          }
+        }
+
+        public var favNum: Int {
+          get {
+            return snapshot["favNum"]! as! Int
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "favNum")
+          }
+        }
+
+        public var createdAt: String? {
+          get {
+            return snapshot["createdAt"] as? String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "createdAt")
+          }
+        }
+
+        public var updatedAt: String? {
+          get {
+            return snapshot["updatedAt"] as? String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "updatedAt")
+          }
+        }
+
+        public var delFlg: Int {
+          get {
+            return snapshot["delFlg"]! as! Int
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "delFlg")
+          }
+        }
+
+        public struct Content: GraphQLSelectionSet {
+          public static let possibleTypes = ["ModelProcedureConnection"]
+
+          public static let selections: [GraphQLSelection] = [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("nextToken", type: .scalar(String.self)),
+          ]
+
+          public var snapshot: Snapshot
+
+          public init(snapshot: Snapshot) {
+            self.snapshot = snapshot
+          }
+
+          public init(nextToken: String? = nil) {
+            self.init(snapshot: ["__typename": "ModelProcedureConnection", "nextToken": nextToken])
+          }
+
+          public var __typename: String {
+            get {
+              return snapshot["__typename"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          public var nextToken: String? {
+            get {
+              return snapshot["nextToken"] as? String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "nextToken")
+            }
+          }
+        }
+
+        public struct Review: GraphQLSelectionSet {
+          public static let possibleTypes = ["ModelReviewConnection"]
+
+          public static let selections: [GraphQLSelection] = [
+            GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+            GraphQLField("nextToken", type: .scalar(String.self)),
+          ]
+
+          public var snapshot: Snapshot
+
+          public init(snapshot: Snapshot) {
+            self.snapshot = snapshot
+          }
+
+          public init(nextToken: String? = nil) {
+            self.init(snapshot: ["__typename": "ModelReviewConnection", "nextToken": nextToken])
+          }
+
+          public var __typename: String {
+            get {
+              return snapshot["__typename"]! as! String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "__typename")
+            }
+          }
+
+          public var nextToken: String? {
+            get {
+              return snapshot["nextToken"] as? String
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "nextToken")
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+public final class RecipesByFavQuery: GraphQLQuery {
+  public static let operationString =
+    "query RecipesByFav($type: String, $favNum: ModelIntKeyConditionInput, $sortDirection: ModelSortDirection, $filter: ModelRecipeFilterInput, $limit: Int, $nextToken: String) {\n  recipesByFav(type: $type, favNum: $favNum, sortDirection: $sortDirection, filter: $filter, limit: $limit, nextToken: $nextToken) {\n    __typename\n    items {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      image\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    nextToken\n  }\n}"
+
+  public var type: String?
+  public var favNum: ModelIntKeyConditionInput?
+  public var sortDirection: ModelSortDirection?
+  public var filter: ModelRecipeFilterInput?
+  public var limit: Int?
+  public var nextToken: String?
+
+  public init(type: String? = nil, favNum: ModelIntKeyConditionInput? = nil, sortDirection: ModelSortDirection? = nil, filter: ModelRecipeFilterInput? = nil, limit: Int? = nil, nextToken: String? = nil) {
+    self.type = type
+    self.favNum = favNum
+    self.sortDirection = sortDirection
+    self.filter = filter
+    self.limit = limit
+    self.nextToken = nextToken
+  }
+
+  public var variables: GraphQLMap? {
+    return ["type": type, "favNum": favNum, "sortDirection": sortDirection, "filter": filter, "limit": limit, "nextToken": nextToken]
+  }
+
+  public struct Data: GraphQLSelectionSet {
+    public static let possibleTypes = ["Query"]
+
+    public static let selections: [GraphQLSelection] = [
+      GraphQLField("recipesByFav", arguments: ["type": GraphQLVariable("type"), "favNum": GraphQLVariable("favNum"), "sortDirection": GraphQLVariable("sortDirection"), "filter": GraphQLVariable("filter"), "limit": GraphQLVariable("limit"), "nextToken": GraphQLVariable("nextToken")], type: .object(RecipesByFav.selections)),
+    ]
+
+    public var snapshot: Snapshot
+
+    public init(snapshot: Snapshot) {
+      self.snapshot = snapshot
+    }
+
+    public init(recipesByFav: RecipesByFav? = nil) {
+      self.init(snapshot: ["__typename": "Query", "recipesByFav": recipesByFav.flatMap { $0.snapshot }])
+    }
+
+    public var recipesByFav: RecipesByFav? {
+      get {
+        return (snapshot["recipesByFav"] as? Snapshot).flatMap { RecipesByFav(snapshot: $0) }
+      }
+      set {
+        snapshot.updateValue(newValue?.snapshot, forKey: "recipesByFav")
+      }
+    }
+
+    public struct RecipesByFav: GraphQLSelectionSet {
       public static let possibleTypes = ["ModelRecipeConnection"]
 
       public static let selections: [GraphQLSelection] = [

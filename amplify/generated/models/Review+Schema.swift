@@ -23,7 +23,7 @@ extension Review {
     model.pluralName = "Reviews"
     
     model.attributes(
-      .index(fields: ["recipeID"], name: "byReview")
+      .index(fields: ["recipeID", "createdAt"], name: "byReview")
     )
     
     model.fields(
@@ -32,8 +32,8 @@ extension Review {
       .field(review.content, is: .required, ofType: .string),
       .field(review.image, is: .required, ofType: .string),
       .belongsTo(review.recipe, is: .optional, ofType: Recipe.self, targetName: "recipeID"),
-      .field(review.createdAt, is: .optional, isReadOnly: true, ofType: .dateTime),
-      .field(review.updatedAt, is: .optional, isReadOnly: true, ofType: .dateTime)
+      .field(review.createdAt, is: .optional, ofType: .string),
+      .field(review.updatedAt, is: .optional, ofType: .string)
     )
     }
 }

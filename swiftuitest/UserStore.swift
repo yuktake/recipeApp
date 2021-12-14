@@ -180,8 +180,7 @@ class UserStore: ObservableObject {
 //        DispatchQueue.main.async {
 //            self.myRecipes = []
 //        }
-        Amplify.API.query(request:.getMyRecipesByDate(userid: self.sub!)
-        ) { event in
+        Amplify.API.query(request:.getMyRecipesByDate(userid: self.sub!)) { event in
             switch event {
             case .success(let result):
                 switch result {

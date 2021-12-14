@@ -190,6 +190,7 @@ type Query {
   recipesByProtein(type: String, protein: ModelFloatKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelRecipeFilterInput, limit: Int, nextToken: String): ModelRecipeConnection
   recipesByFat(type: String, fat: ModelFloatKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelRecipeFilterInput, limit: Int, nextToken: String): ModelRecipeConnection
   recipesByCarbo(type: String, carbo: ModelFloatKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelRecipeFilterInput, limit: Int, nextToken: String): ModelRecipeConnection
+  recipesByFav(type: String, favNum: ModelIntKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelRecipeFilterInput, limit: Int, nextToken: String): ModelRecipeConnection
   recipesByDate(type: String, createdAt: ModelStringKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelRecipeFilterInput, limit: Int, nextToken: String): ModelRecipeConnection
   byProcedure(recipeID: ID, order: ModelIntKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelProcedureFilterInput, limit: Int, nextToken: String): ModelProcedureConnection
   byReview(recipeID: ID, createdAt: ModelStringKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelReviewFilterInput, limit: Int, nextToken: String): ModelReviewConnection
@@ -493,6 +494,15 @@ input ModelFloatKeyConditionInput {
   between: [Float]
 }
 
+input ModelIntKeyConditionInput {
+  eq: Int
+  le: Int
+  lt: Int
+  ge: Int
+  gt: Int
+  between: [Int]
+}
+
 input ModelStringKeyConditionInput {
   eq: String
   le: String
@@ -501,13 +511,4 @@ input ModelStringKeyConditionInput {
   gt: String
   between: [String]
   beginsWith: String
-}
-
-input ModelIntKeyConditionInput {
-  eq: Int
-  le: Int
-  lt: Int
-  ge: Int
-  gt: Int
-  between: [Int]
 }

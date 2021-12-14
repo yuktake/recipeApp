@@ -7,17 +7,73 @@
 
 import SwiftUI
 import Amplify
+import AWSPluginsCore
 
 struct Home: View {
     @State var isLogin = false
     @State var showModal = false
     @State var showDetail = false
+    @State var first = true
     
     @State var index: Int = 0
     @State var selectedImage = Data()
+    @State var poplularRecipes: [RecipeData] = []
+    @State var imageDatum = [String:Data]()
     @Namespace var animation
     @EnvironmentObject var user:UserStore
     @EnvironmentObject var network:Network
+    
+    func getRecipes() {
+        Amplify.API.query(request: .getRecipesByFav()) { event in
+            switch event {
+            case .success(let result):
+                switch result {
+                case .success(let query):
+                    print("Successfully retrieved popular recipes:")
+                    let recipes = query.getItems()
+                    recipes.forEach { item in
+                        DispatchQueue.main.async {
+                            self.poplularRecipes.append(
+                                RecipeData(
+                                    id:item.id,
+                                    userId:item.user,
+                                    title:item.title,
+                                    calorie: String(item.calorie),
+                                    protein:String(item.protein),
+                                    fat:String(item.fat),
+                                    carbo:String(item.carbo),
+                                    state:item.state,
+                                    materials:item.materials,
+                                    contents:[],
+                                    reviews: [],
+                                    image:item.image,
+                                    favNum: item.favNum,
+                                    create_at: item.createdAt!,
+                                    update_at: item.updatedAt!,
+                                    delFlg: item.delFlg
+                            ))
+                        }
+                        Amplify.Storage.downloadData(key: "recipes/\(item.id).jpg") { result in
+                            switch result {
+                            case .success(let imageData):
+                                DispatchQueue.main.async{
+                                    self.imageDatum[item.id] = imageData
+                                }
+                            case .failure(let error):
+                                print("Failed to download image data - \(error)")
+                            }
+                        }
+                    }
+                case .failure(let error):
+                    print("Got failed popular result with \(error.errorDescription)")
+                    print(error.recoverySuggestion)
+                    print(error.debugDescription)
+                }
+            case .failure(let error):
+                print("Got failed popular event with error \(error)")
+            }
+        }
+    }
     
     var body: some View {
         ZStack {
@@ -34,30 +90,30 @@ struct Home: View {
                     .padding(.horizontal)
                     .padding(.top, 30)
                     
-//                    if user.isLogged {
-//                        ForEach(0...user.myRecipes.count-1,id: \.self) { i in
-//                            let adPlacement: Int = 3
-//                            if let recipe = user.myRecipes[i] {
-//                                if let image = UIImage(data:user.imageDatum[recipe.id] ?? Data()) {
-//                                    Card(
-//                                        i:i,
-//                                        recipe:recipe,
-//                                        image:image
-//                                    )
-//                                    .onTapGesture {
-//                                        withAnimation(.spring()){
-//                                            showDetail = true
-//                                            index = i
-//                                            selectedImage = user.imageDatum[recipe.id] ?? Data()
-//                                        }
-//                                    }
-//                                    if i % adPlacement == 0 {
-//                                        BannerAd(unitID: "ca-app-pub-5558779899182260/4197512760")
-//                                    }
-//                                }
-//                            }
-//                        }
-//                    }
+                    if (poplularRecipes.count >= 1) {
+                        ForEach(0...poplularRecipes.count-1,id: \.self) { i in
+                            let adPlacement: Int = 3
+                            if let recipe = poplularRecipes[i] {
+                                if let image = UIImage(data: imageDatum[recipe.id] ?? Data()) {
+                                    Card(
+                                        i:i,
+                                        recipe:recipe,
+                                        image:image
+                                    )
+                                    .onTapGesture {
+                                        withAnimation(.spring()){
+                                            showDetail = true
+                                            index = i
+                                            selectedImage = user.imageDatum[recipe.id] ?? Data()
+                                        }
+                                    }
+                                    if i % adPlacement == 0 {
+                                        BannerAd(unitID: "ca-app-pub-5558779899182260/4197512760")
+                                    }
+                                }
+                            }
+                        }
+                    }
                     
                     Spacer()
                 }
@@ -70,6 +126,12 @@ struct Home: View {
             .navigationBarTitle("")
             .navigationBarHidden(true)
             .opacity(showDetail ? 0 : 1)
+            .onAppear{
+                if first {
+                    self.getRecipes()
+                    first = false
+                }
+            }
 
             if user.showLogin {
                 ZStack {
