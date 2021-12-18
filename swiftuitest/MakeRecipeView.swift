@@ -135,6 +135,8 @@ struct MakeRecipeView: View {
                                     .background(Color.purple)
                                     .foregroundColor(.white)
                                     .clipShape(Circle())
+                                    .frame (width: screen.width ,height: screen.height * 0.3)
+                                    .background(Color.gray)
                             }
                         })
                         .sheet(isPresented: $shouldShowHeaderImagePicker, content: {
@@ -257,6 +259,22 @@ struct MakeRecipeView: View {
                 .overlay(
                     HStack {
                         Button(action:{
+                            dismiss()
+                        }){
+                            HStack(spacing: 10) {
+                                Image(systemName: "xmark")
+                                    .renderingMode(.template)
+                                Text("Close")
+                                    .fontWeight(.semibold)
+                            }
+                            .foregroundColor(.yellow)
+                            .padding(.vertical, 10)
+                            .padding(.horizontal, 15)
+                            .background(.yellow.opacity(0.15))
+                            .clipShape(Capsule())
+                        }
+                        Spacer()
+                        Button(action:{
                             if (viewModel.recipe.contents.count >= 5) {
                                 self.showingAlert = true
                                 self.alertText = "手順は5つまでです。"
@@ -335,6 +353,12 @@ struct MakeRecipeView: View {
             }
             
             if (isLoading) {
+                VStack{}
+                .frame(width: screen.width, height: screen.height)
+                .background(.black)
+                .contentShape(Rectangle())
+                .opacity(0.5)
+                .onTapGesture {}
                 LoadingView()
             }
         }
@@ -443,7 +467,12 @@ struct MyDropDelegate : DropDelegate {
             let to = items.firstIndex(of: items[item])!
             withAnimation(.default) {
                 self.items.move(fromOffsets: IndexSet(integer: from), toOffset: to > from ? to + 1 : to)
-                self.contents.move(fromOffsets: IndexSet(integer: from), toOffset: to > from ? to + 1 : to)
+                let fromOffset = IndexSet(integer: from)
+                let toOffset = to > from ? to + 1 : to
+                self.contents[from].order = to
+                self.contents[to].order = from
+                self.contents.move(fromOffsets: fromOffset, toOffset: toOffset)
+                print(self.contents)
             }
         }
     }

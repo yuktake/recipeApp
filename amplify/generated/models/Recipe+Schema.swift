@@ -16,7 +16,6 @@ extension Recipe {
     case state
     case materials
     case contents
-    case image
     case reviews
     case favNum
     case createdAt
@@ -52,7 +51,6 @@ extension Recipe {
       .field(recipe.state, is: .required, ofType: .int),
       .field(recipe.materials, is: .required, ofType: .string),
       .hasMany(recipe.contents, is: .optional, ofType: Procedure.self, associatedWith: Procedure.keys.recipe),
-      .field(recipe.image, is: .required, ofType: .string),
       .hasMany(recipe.reviews, is: .optional, ofType: Review.self, associatedWith: Review.keys.recipe),
       .field(recipe.favNum, is: .required, ofType: .int),
       .field(recipe.createdAt, is: .optional, ofType: .string),

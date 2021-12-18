@@ -39,7 +39,7 @@ struct LaunchScreen: View {
                     .padding(.horizontal, 4)
             }
             .onAppear {
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                     withAnimation {
                         isLoading = false
                     }

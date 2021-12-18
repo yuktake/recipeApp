@@ -38,7 +38,6 @@ extension GraphQLRequest
                     carbo
                     state
                     materials
-                    image
                     favNum
                     createdAt
                     updatedAt
@@ -90,7 +89,6 @@ extension GraphQLRequest
                     carbo
                     state
                     materials
-                    image
                     favNum
                     createdAt
                     updatedAt
@@ -142,7 +140,6 @@ extension GraphQLRequest
                     carbo
                     state
                     materials
-                    image
                     favNum
                     createdAt
                     updatedAt
@@ -186,7 +183,6 @@ extension GraphQLRequest
                     carbo
                     state
                     materials
-                    image
                     favNum
                     createdAt
                     updatedAt
@@ -231,7 +227,6 @@ extension GraphQLRequest
                     carbo
                     state
                     materials
-                    image
                     favNum
                     createdAt
                     updatedAt
@@ -284,7 +279,6 @@ extension GraphQLRequest
                     carbo
                     state
                     materials
-                    image
                     favNum
                     createdAt
                     updatedAt
@@ -338,7 +332,6 @@ extension GraphQLRequest
                     carbo
                     state
                     materials
-                    image
                     favNum
                     createdAt
                     updatedAt
@@ -392,7 +385,6 @@ extension GraphQLRequest
                     carbo
                     state
                     materials
-                    image
                     favNum
                     createdAt
                     updatedAt
@@ -446,7 +438,6 @@ extension GraphQLRequest
                     carbo
                     state
                     materials
-                    image
                     favNum
                     createdAt
                     updatedAt
@@ -546,7 +537,7 @@ extension GraphQLRequest
             recipesByDate(
                 type: "Recipe",
                 filter: {user: {eq: $userid}, delFlg: {eq: $flg}},
-                limit: 20,
+                limit: 5,
                 sortDirection: DESC
             ) {
                 items {
@@ -560,7 +551,6 @@ extension GraphQLRequest
                     carbo
                     state
                     materials
-                    image
                     favNum
                     createdAt
                     updatedAt
@@ -588,7 +578,7 @@ extension GraphQLRequest
             recipesByDate(
                 type: "Recipe",
                 filter: {user: {eq: $userid}, delFlg: {eq: $flg}},
-                limit: 20,
+                limit: 5,
                 sortDirection: DESC
                 nextToken: $nextToken
             ) {
@@ -603,7 +593,6 @@ extension GraphQLRequest
                     carbo
                     state
                     materials
-                    image
                     favNum
                     createdAt
                     updatedAt
@@ -662,7 +651,6 @@ extension GraphQLRequest
                         updatedAt
                     }
                 }
-                image
                 favNum
                 createdAt
                 updatedAt

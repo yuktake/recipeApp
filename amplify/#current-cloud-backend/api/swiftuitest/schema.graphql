@@ -16,7 +16,6 @@ type Recipe @model
   state: Int!
   materials: String!
   contents: [Procedure!]! @connection(name: "RecipeProcedures",keyName: "byProcedure", fields: ["id"])
-  image: String!
   reviews: [Review] @connection(name: "RecipeReviews", keyName: "byReview", fields: ["id"])
   favNum: Int!
   createdAt: String

@@ -23,7 +23,6 @@ class CreateRecipeViewModel: ObservableObject {
             Procedure(order: 1, content: "", image: ""),
         ],
         reviews:[],
-        image: "",
         favNum: 0,
         create_at: "",
         update_at: "",
@@ -46,7 +45,6 @@ class CreateRecipeViewModel: ObservableObject {
             carbo: Double(recipe.carbo) ?? 0.0,
             state: recipe.state,
             materials: recipe.materials,
-            image: recipe.image,
             favNum: 0,
             delFlg: 0
         )

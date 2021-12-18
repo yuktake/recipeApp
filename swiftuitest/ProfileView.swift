@@ -51,7 +51,6 @@ struct ProfileView: View {
             carbo: Double(recipe.carbo) ?? 0.0,
             state: recipe.state,
             materials: recipe.materials,
-            image: recipe.image,
             favNum: recipe.favNum,
             createdAt: recipe.create_at,
             updatedAt: recipe.update_at,
@@ -176,34 +175,36 @@ struct ProfileView: View {
                             }
                             .padding(16)
                             
-                            VStack {
-                                Button {
-                                    print("tap signout")
-                                    user.signOut()
-                                    self.tabSelection = 1
-                                } label: {
-                                    HStack(spacing: 12) {
-                                        Image(systemName: "person.crop.circle")
-                                            .foregroundColor(.primary)
-                                            .font(.system(size: 16, weight: .medium))
-                                            .frame(width: 36, height: 36)
-                                            .clipShape(Circle())
-                                            .shadow(color: Color.black.opacity(0.1), radius: 1, x: 0, y: 1)
-                                            .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
-                                        GradientText(text: "Sign Out")
-                                        Spacer()
+                            if user.isLogged {
+                                VStack {
+                                    Button {
+                                        print("tap signout")
+                                        user.signOut()
+                                        self.tabSelection = 1
+                                    } label: {
+                                        HStack(spacing: 12) {
+                                            Image(systemName: "person.crop.circle")
+                                                .foregroundColor(.primary)
+                                                .font(.system(size: 16, weight: .medium))
+                                                .frame(width: 36, height: 36)
+                                                .clipShape(Circle())
+                                                .shadow(color: Color.black.opacity(0.1), radius: 1, x: 0, y: 1)
+                                                .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                                            GradientText(text: "Sign Out")
+                                            Spacer()
+                                        }
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 16, style: .circular)
+                                                .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                                        )
+                                        .background(
+                                            Color.init(red: 26/255, green: 20/255, blue: 51/255)
+                                                .cornerRadius(16)
+                                        )
                                     }
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 16, style: .circular)
-                                            .stroke(Color.white.opacity(0.1), lineWidth: 1)
-                                    )
-                                    .background(
-                                        Color.init(red: 26/255, green: 20/255, blue: 51/255)
-                                            .cornerRadius(16)
-                                    )
                                 }
+                                .padding()
                             }
-                            .padding()
                             
                         }
                         .background(
@@ -215,35 +216,6 @@ struct ProfileView: View {
                         .padding()
                         
                         if user.isLogged {
-                            VStack {
-                                Button {
-                                    print("tap signout")
-                                    user.signOut()
-                                    self.tabSelection = 1
-                                } label: {
-                                    HStack(spacing: 12) {
-                                        Image(systemName: "person.crop.circle")
-                                            .foregroundColor(.primary)
-                                            .font(.system(size: 16, weight: .medium))
-                                            .frame(width: 36, height: 36)
-                                            .clipShape(Circle())
-                                            .shadow(color: Color.black.opacity(0.1), radius: 1, x: 0, y: 1)
-                                            .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
-                                        GradientText(text: "Sign Out")
-                                        Spacer()
-                                    }
-                                    .overlay(
-                                        RoundedRectangle(cornerRadius: 16, style: .circular)
-                                            .stroke(Color.white.opacity(0.1), lineWidth: 1)
-                                    )
-                                    .background(
-                                        Color.init(red: 26/255, green: 20/255, blue: 51/255)
-                                            .cornerRadius(16)
-                                    )
-                                }
-                            }
-                            .padding(.horizontal)
-                            
                             if (user.myRecipes.count >= 1) {
                                 ForEach(0...user.myRecipes.count-1,id: \.self) { i in
                                     if let recipe = user.myRecipes[i] {
@@ -285,13 +257,13 @@ struct ProfileView: View {
                 .offset(y: refresh.released ? 40 : -20)
             }
             .navigationBarHidden(true)
-            .sheet(isPresented: $showModal){
-                RecipeEdit(
-                    detail_recipe: user.myRecipes[index],
-                    detail_image: $currentImage,
-                    showSheet: $showModal
-                )
-            }
+//            .fullScreenCover(isPresented: $showModal){
+//                RecipeEdit(
+//                    detail_recipe: user.myRecipes[index],
+//                    detail_image: $currentImage,
+//                    showSheet: $showModal
+//                )
+//            }
             .alert(isPresented: $showAlert) {
                 Alert(
                     title: Text("Warning"),
@@ -312,7 +284,9 @@ struct ProfileView: View {
                     selectedItem: $user.myRecipes[index],
                     show: $showDetail,
                     header: $currentImage,
-                    animation: animation
+                    animation: animation,
+                    overlay: true,
+                    toProfile: false
                 )
                 .ignoresSafeArea(.all)
             }
@@ -364,6 +338,8 @@ struct UserView: View {
                     role: .destructive,
                     action: {
                         showAlert = true
+                        currentImage = user.imageDatum[recipeId] ?? Data()
+                        index = i
                     }, label: {
                         Text("削除")
                     }
@@ -371,6 +347,8 @@ struct UserView: View {
                 .foregroundColor(Color.red)
                 Button(action: {
                     showModal = true
+                    currentImage = user.imageDatum[recipeId] ?? Data()
+                    index = i
                 }, label: {
                     Text("編集")
                 })
@@ -380,20 +358,21 @@ struct UserView: View {
                     icon: {
                         Image(systemName: "ellipsis")
                             .foregroundColor(.white)
+                            .frame(width: 48, height: 48)
                     }
                 )
-                .frame(width: 24, height: 24)
             }
             .padding(.trailing,24)
-            .onTapGesture {
-                withAnimation(.spring()){
-                    currentImage = user.imageDatum[recipeId] ?? Data()
-                    index = i
-                }
-            }
         }
         .padding(.leading, 16)
         .padding(.top, 16)
+        .fullScreenCover(isPresented: $showModal){
+            RecipeEdit(
+                detail_recipe: user.myRecipes[index],
+                detail_image: $currentImage,
+                showSheet: $showModal
+            )
+        }
     }
 }
 

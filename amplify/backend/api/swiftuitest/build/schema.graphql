@@ -10,7 +10,6 @@ type Recipe {
   state: Int!
   materials: String!
   contents(order: ModelIntKeyConditionInput, filter: ModelProcedureFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelProcedureConnection
-  image: String!
   reviews(createdAt: ModelStringKeyConditionInput, filter: ModelReviewFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelReviewConnection
   favNum: Int!
   createdAt: String
@@ -153,7 +152,6 @@ input ModelRecipeFilterInput {
   carbo: ModelFloatInput
   state: ModelIntInput
   materials: ModelStringInput
-  image: ModelStringInput
   favNum: ModelIntInput
   createdAt: ModelStringInput
   updatedAt: ModelStringInput
@@ -208,7 +206,6 @@ input CreateRecipeInput {
   carbo: Float!
   state: Int!
   materials: String!
-  image: String!
   favNum: Int!
   createdAt: String
   updatedAt: String
@@ -226,7 +223,6 @@ input UpdateRecipeInput {
   carbo: Float
   state: Int
   materials: String
-  image: String
   favNum: Int
   createdAt: String
   updatedAt: String
@@ -265,7 +261,6 @@ input ModelRecipeConditionInput {
   carbo: ModelFloatInput
   state: ModelIntInput
   materials: ModelStringInput
-  image: ModelStringInput
   favNum: ModelIntInput
   createdAt: ModelStringInput
   updatedAt: ModelStringInput

@@ -33,7 +33,7 @@ struct AvatarView: View {
                         .frame(width: 66, height: 66, alignment: .center)
                     }
                 }
-                .sheet(isPresented: $showModal){
+                .fullScreenCover(isPresented: $showModal){
                     MakeRecipeView()
                 }
             } else {

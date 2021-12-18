@@ -47,7 +47,6 @@ struct FavoriteDetail: View {
         materials: "",
         contents: [],
         reviews:[],
-        image: "",
         favNum: 0,
         create_at: "",
         update_at: "",
@@ -262,11 +261,13 @@ struct FavoriteDetail: View {
                         Spacer()
                         
                         if let uiimage = UIImage(data: self.profileImage ?? Data()) {
-                            Image(uiImage: uiimage)
-                                .resizable()
-                                .aspectRatio(contentMode: .fit)
-                                .frame(width: screen.width * 0.1)
-                                .clipShape(Circle())
+                            NavigationLink(destination: UserPage(userId: tmpRecipe.userId)) {
+                                Image(uiImage: uiimage)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fit)
+                                    .frame(width: screen.width * 0.1)
+                                    .clipShape(Circle())
+                            }
                         }
                         VStack {
                             if user.isLogged {

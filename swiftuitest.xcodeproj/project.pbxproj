@@ -362,7 +362,6 @@
 		CABDD2C8275589B200FD25C7 /* StoryBundle.swift in Sources */ = {isa = PBXBuildFile; fileRef = CABDD2C7275589B200FD25C7 /* StoryBundle.swift */; };
 		CACEEFB54D82E72E2F2D4095 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = C656504056135DC69794442C /* User.swift */; };
 		CAD6924727579C2E00829939 /* ReviewList.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAD6924627579C2E00829939 /* ReviewList.swift */; };
-		CAD692492757A5DB00829939 /* review.json in Resources */ = {isa = PBXBuildFile; fileRef = CAD692482757A5DB00829939 /* review.json */; };
 		CADC39A62743128900E96708 /* FavData.swift in Sources */ = {isa = PBXBuildFile; fileRef = CADC39A52743128900E96708 /* FavData.swift */; };
 		CAE1F977274B0D3100376A8B /* tutorial1.json in Resources */ = {isa = PBXBuildFile; fileRef = CAE1F975274B0D3000376A8B /* tutorial1.json */; };
 		CAE1F978274B0D3100376A8B /* tutorial2.json in Resources */ = {isa = PBXBuildFile; fileRef = CAE1F976274B0D3100376A8B /* tutorial2.json */; };
@@ -375,6 +374,7 @@
 		CAF35CBC26B3ED57001DD9A5 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAF35CBB26B3ED57001DD9A5 /* LoadingView.swift */; };
 		CAF35CBE26B3EFC5001DD9A5 /* SuccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAF35CBD26B3EFC5001DD9A5 /* SuccessView.swift */; };
 		CAF368682764F0DF004C7437 /* 851MkPOP.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CAF368672764F0DF004C7437 /* 851MkPOP.ttf */; };
+		CAF7E4152768D18300F6C7C1 /* UserPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAF7E4142768D18300F6C7C1 /* UserPage.swift */; };
 		CAF966F70DA35D71649C8186 /* Review+Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E2BAECBBDB63AA4ED8A211 /* Review+Schema.swift */; };
 		CD9DECB709455CA6FA76E64D /* AmplifyModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B057FA80AB56D1D0D5E1A0EF /* AmplifyModels.swift */; };
 		CDA496154802880855B3D007 /* Recipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = C19ABFDEF0EE4AD1C851EFBC /* Recipe.swift */; };
@@ -513,7 +513,6 @@
 		CAB6A43D26ABA1B400AF5C99 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		CABDD2C7275589B200FD25C7 /* StoryBundle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StoryBundle.swift; sourceTree = "<group>"; };
 		CAD6924627579C2E00829939 /* ReviewList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewList.swift; sourceTree = "<group>"; };
-		CAD692482757A5DB00829939 /* review.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = review.json; sourceTree = "<group>"; };
 		CADC39A52743128900E96708 /* FavData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FavData.swift; sourceTree = "<group>"; };
 		CAE1F975274B0D3000376A8B /* tutorial1.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = tutorial1.json; sourceTree = "<group>"; };
 		CAE1F976274B0D3100376A8B /* tutorial2.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = tutorial2.json; sourceTree = "<group>"; };
@@ -525,6 +524,7 @@
 		CAF35CBB26B3ED57001DD9A5 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		CAF35CBD26B3EFC5001DD9A5 /* SuccessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuccessView.swift; sourceTree = "<group>"; };
 		CAF368672764F0DF004C7437 /* 851MkPOP.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = 851MkPOP.ttf; sourceTree = "<group>"; };
+		CAF7E4142768D18300F6C7C1 /* UserPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPage.swift; sourceTree = "<group>"; };
 		CEEF54180D1C0149D5E78CFF /* Review.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; name = Review.swift; path = amplify/generated/models/Review.swift; sourceTree = "<group>"; };
 		EC8191343891526B7CB661AA /* Fav+Schema.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; name = "Fav+Schema.swift"; path = "amplify/generated/models/Fav+Schema.swift"; sourceTree = "<group>"; };
 		FC01BC93F706F583A17C37BF /* Pods-swiftuitest.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-swiftuitest.release.xcconfig"; path = "Target Support Files/Pods-swiftuitest/Pods-swiftuitest.release.xcconfig"; sourceTree = "<group>"; };
@@ -701,6 +701,7 @@
 				CA0CD3E726ABADAD00600723 /* Search.swift */,
 				CAB6A42F26ABA1B300AF5C99 /* swiftuitestApp.swift */,
 				CA0CD3E326ABA6DF00600723 /* TabBar.swift */,
+				CAF7E4142768D18300F6C7C1 /* UserPage.swift */,
 				CAA903A926B4271200803AAC /* UserStore.swift */,
 				CA50395C2748862900110F63 /* Extensions */,
 				CA50395B274885EF00110F63 /* Model */,
@@ -729,7 +730,6 @@
 		CAF35CB126B3E98F001DD9A5 /* Lottie */ = {
 			isa = PBXGroup;
 			children = (
-				CAD692482757A5DB00829939 /* review.json */,
 				CAE1F979274B107700376A8B /* tutorial3.json */,
 				CAE1F975274B0D3000376A8B /* tutorial1.json */,
 				CAE1F976274B0D3100376A8B /* tutorial2.json */,
@@ -821,7 +821,6 @@
 				CA401F8026BFB44C0061998B /* awsconfiguration.json in Resources */,
 				CA401F8126BFB44C0061998B /* amplifyconfiguration.json in Resources */,
 				CAE1F978274B0D3100376A8B /* tutorial2.json in Resources */,
-				CAD692492757A5DB00829939 /* review.json in Resources */,
 				CAB6A43726ABA1B400AF5C99 /* Preview Assets.xcassets in Resources */,
 				CAF35CB426B3E98F001DD9A5 /* loading.json in Resources */,
 				CA2900CF26EDED1400389EEE /* splash.json in Resources */,
@@ -900,7 +899,8 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\n";
+			shellScript = "
+";
 		};
 		F0A7353988332686D491E3CA /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1057,6 +1057,7 @@
 				E8F28DEFB649B02884F88D5C /* AmplifyModels.swift in Sources */,
 				4BACFD875AA6540BEC575230 /* Procedure+Schema.swift in Sources */,
 				AB5F130B0C4734D9013D721A /* Procedure.swift in Sources */,
+				CAF7E4152768D18300F6C7C1 /* UserPage.swift in Sources */,
 				EAF29AB7522FDA75895BF692 /* Recipe+Schema.swift in Sources */,
 				8C48A361B7215517B4DAF9E5 /* Recipe.swift in Sources */,
 				D87C8CB8992D97AB4BB385B5 /* Review+Schema.swift in Sources */,

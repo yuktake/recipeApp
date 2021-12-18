@@ -14,7 +14,6 @@ public struct Recipe: Model {
   public var state: Int
   public var materials: String
   public var contents: List<Procedure>?
-  public var image: String
   public var reviews: List<Review>?
   public var favNum: Int
   public var createdAt: String?
@@ -32,7 +31,6 @@ public struct Recipe: Model {
       state: Int,
       materials: String,
       contents: List<Procedure> = [],
-      image: String,
       reviews: List<Review>? = [],
       favNum: Int,
       createdAt: String? = nil,
@@ -49,7 +47,6 @@ public struct Recipe: Model {
       self.state = state
       self.materials = materials
       self.contents = contents
-      self.image = image
       self.reviews = reviews
       self.favNum = favNum
       self.createdAt = createdAt

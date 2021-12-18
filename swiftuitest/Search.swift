@@ -248,13 +248,17 @@ struct Search: View {
             .opacity(show ? 0 : 1)
             
             if show {
-                Detail(
-                    selectedItem: $viewModel.recipes[index],
-                    show: $show,
-                    header: $selectedImage,
-                    animation: animation
-                )
-                .ignoresSafeArea(.all)
+                NavigationView {
+                    Detail(
+                        selectedItem: $viewModel.recipes[index],
+                        show: $show,
+                        header: $selectedImage,
+                        animation: animation,
+                        overlay:true,
+                        toProfile:true
+                    )
+                    .ignoresSafeArea(.all)
+                }
             }
         }
     }

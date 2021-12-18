@@ -228,39 +228,60 @@ struct ReviewView: View {
                 hideKeyboard()
                 self.isFocused = false
             }
+            .overlay(
+                HStack {
+                    Button(action:{
+                        dismiss()
+                    }){
+                        HStack(spacing: 10) {
+                            Image(systemName: "xmark")
+                                .renderingMode(.template)
+                            Text("Close")
+                                .fontWeight(.semibold)
+                        }
+                        .foregroundColor(.yellow)
+                        .padding(.vertical, 10)
+                        .padding(.horizontal, 15)
+                        .background(.yellow.opacity(0.15))
+                        .clipShape(Capsule())
+                    }
+                    Spacer(minLength: 0)
+                    Button(action:{
+                        self.post()
+                    }){
+                        HStack(spacing: 10) {
+                            Image(systemName: "paperplane.circle")
+                                .renderingMode(.template)
+                            Text("Post")
+                                .fontWeight(.semibold)
+                        }
+                        .foregroundColor(.yellow)
+                        .padding(.vertical, 10)
+                        .padding(.horizontal, 15)
+                        .background(disableForm ? .gray.opacity(0.15) : .yellow.opacity(0.15))
+                        .clipShape(Capsule())
+                    }
+                    .disabled(disableForm)
+                }
+                .padding(.top)
+                .padding(.horizontal, 22)
+                .padding(.bottom, UIApplication.shared.windows.first?.safeAreaInsets.bottom == 0 ? 15 : UIApplication.shared.windows.first?.safeAreaInsets.bottom)
+                .background(Color.white)
+                .clipShape(CustomCorner(corners: [.topLeft, .topRight], size: 55))
+                .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: -5)
+                ,alignment: .bottom
+            )
             
-            if showLottie {
-                LottieView(filename: "review")
+            if (showLottie) {
+                VStack{}
+                .frame(width: screen.width, height: screen.height)
+                .background(.black)
+                .contentShape(Rectangle())
+                .opacity(0.5)
+                .onTapGesture {}
+                LoadingView()
             }
         }
-        .overlay(
-            HStack {
-                Spacer(minLength: 0)
-                Button(action:{
-                    self.post()
-                }){
-                    HStack(spacing: 10) {
-                        Image(systemName: "paperplane.circle")
-                            .renderingMode(.template)
-                        Text("Post")
-                            .fontWeight(.semibold)
-                    }
-                    .foregroundColor(.yellow)
-                    .padding(.vertical, 10)
-                    .padding(.horizontal, 15)
-                    .background(disableForm ? .gray.opacity(0.15) : .yellow.opacity(0.15))
-                    .clipShape(Capsule())
-                }
-                .disabled(disableForm)
-            }
-            .padding(.top)
-            .padding(.horizontal, 22)
-            .padding(.bottom, UIApplication.shared.windows.first?.safeAreaInsets.bottom == 0 ? 15 : UIApplication.shared.windows.first?.safeAreaInsets.bottom)
-            .background(Color.white)
-            .clipShape(CustomCorner(corners: [.topLeft, .topRight], size: 55))
-            .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: -5)
-            ,alignment: .bottom
-        )
         .onTapGesture {
             hideKeyboard()
             self.isFocused = false

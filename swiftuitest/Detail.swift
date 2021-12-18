@@ -14,6 +14,9 @@ struct Detail: View {
     @Binding var show: Bool
     @Binding var header:Data
     var animation: Namespace.ID
+    var overlay: Bool
+    var toProfile: Bool
+    
     var screen = UIScreen.main.bounds.size
     var state:[Int:String] = [
         1: "減量中",
@@ -22,6 +25,7 @@ struct Detail: View {
     ]
     
     @EnvironmentObject var user:UserStore
+    @Environment(\.presentationMode) var presentationMode: Binding<PresentationMode>
     
     @State var profileImage: Data?
     @State var procedures:[Procedure] = []
@@ -46,7 +50,6 @@ struct Detail: View {
         materials: "",
         contents: [],
         reviews:[],
-        image: "",
         favNum: 0,
         create_at: "",
         update_at: "",
@@ -280,11 +283,21 @@ struct Detail: View {
                             }
                             Spacer()
                             if let uiimage = UIImage(data: self.profileImage ?? Data()) {
-                                Image(uiImage: uiimage)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .frame(width: screen.width * 0.1)
-                                    .clipShape(Circle())
+                                if toProfile {
+                                    NavigationLink(destination: UserPage(userId: selectedItem.userId)) {
+                                        Image(uiImage: uiimage)
+                                            .resizable()
+                                            .aspectRatio(contentMode: .fit)
+                                            .frame(width: screen.width * 0.1)
+                                            .clipShape(Circle())
+                                    }
+                                } else {
+                                    Image(uiImage: uiimage)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width: screen.width * 0.1)
+                                        .clipShape(Circle())
+                                }
                             }
                             VStack {
                                 if user.isLogged {
@@ -488,20 +501,6 @@ struct Detail: View {
             .navigationBarHidden(true)
             .edgesIgnoringSafeArea(.all)
             .background(Color.black.edgesIgnoringSafeArea(.all))
-            .overlay(
-                Button(action: {
-                    withAnimation(.spring()){
-                        show = false
-                    }
-                }) {
-                    Image(systemName: "chevron.left")
-                        .font(.title)
-                        .foregroundColor(.white)
-                        .padding(.leading,25)
-                        .padding(.top,25)
-                }
-                ,alignment: .topLeading
-            )
             .onAppear{
                 if user.isLogged {
                     self.getFav(recipeId: selectedItem.id)
@@ -512,10 +511,36 @@ struct Detail: View {
                 }
             }
             .opacity(showReview ? 0 : 1)
-            .sheet(isPresented: $showModal.onChange(sheetChange)){
+            .fullScreenCover(isPresented: $showModal.onChange(sheetChange)){
                 ReviewView(
                     recipeID:selectedItem.id,
                     showSheet: $showModal
+                )
+            }
+            .if(overlay) {
+                $0.overlay(
+                    Button(action: {
+                        withAnimation(.spring()){
+                            show = false
+                        }
+                    }) {
+                        Image(systemName: "chevron.left")
+                            .font(.title)
+                            .foregroundColor(.white)
+                            .padding(.leading,25)
+                            .padding(.top,25)
+                    }
+                    ,alignment: .topLeading
+                )
+            }
+            .if(!overlay) {
+                $0.overlay(
+                    Button("戻る") {
+                        self.presentationMode.wrappedValue.dismiss()
+                    }
+                    .padding(.leading)
+                    .padding(.top,8)
+                    ,alignment: .topLeading
                 )
             }
             
@@ -534,6 +559,7 @@ struct Detail: View {
                 )
             }
         }
+        .navigationBarHidden(true)
     }
 }
 

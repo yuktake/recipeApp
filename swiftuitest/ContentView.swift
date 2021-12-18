@@ -8,16 +8,16 @@
 import SwiftUI
 import CoreData
 
-struct ContentView: View {
+//struct ContentView: View {
+//
+//    var body: some View {
+//        TabBar()
+//    }
+//}
 
-    var body: some View {
-        TabBar()
-    }
-}
-
-struct ContentView_Previews: PreviewProvider {
-    static var previews: some View {
-        TabBar()
-            .environmentObject(UserStore())
-    }
-}
+//struct ContentView_Previews: PreviewProvider {
+//    static var previews: some View {
+//        TabBar()
+//            .environmentObject(UserStore())
+//    }
+//}

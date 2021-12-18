@@ -23,7 +23,6 @@ query GetRecipe($id: ID!) {
       }
       nextToken
     }
-    image
     reviews {
       items {
         id
@@ -62,7 +61,6 @@ query ListRecipes(
       contents {
         nextToken
       }
-      image
       reviews {
         nextToken
       }
@@ -95,7 +93,6 @@ query GetProcedure($id: ID!) {
       contents {
         nextToken
       }
-      image
       reviews {
         nextToken
       }
@@ -131,7 +128,6 @@ query ListProcedures(
         carbo
         state
         materials
-        image
         favNum
         createdAt
         updatedAt
@@ -164,7 +160,6 @@ query GetReview($id: ID!) {
       contents {
         nextToken
       }
-      image
       reviews {
         nextToken
       }
@@ -200,7 +195,6 @@ query ListReviews(
         carbo
         state
         materials
-        image
         favNum
         createdAt
         updatedAt
@@ -294,7 +288,6 @@ query RecipesByProtein(
       contents {
         nextToken
       }
-      image
       reviews {
         nextToken
       }
@@ -336,7 +329,6 @@ query RecipesByFat(
       contents {
         nextToken
       }
-      image
       reviews {
         nextToken
       }
@@ -378,7 +370,6 @@ query RecipesByCarbo(
       contents {
         nextToken
       }
-      image
       reviews {
         nextToken
       }
@@ -420,7 +411,6 @@ query RecipesByFav(
       contents {
         nextToken
       }
-      image
       reviews {
         nextToken
       }
@@ -462,7 +452,6 @@ query RecipesByDate(
       contents {
         nextToken
       }
-      image
       reviews {
         nextToken
       }
@@ -507,7 +496,6 @@ query ByProcedure(
         carbo
         state
         materials
-        image
         favNum
         createdAt
         updatedAt
@@ -552,7 +540,6 @@ query ByReview(
         carbo
         state
         materials
-        image
         favNum
         createdAt
         updatedAt

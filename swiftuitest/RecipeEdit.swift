@@ -57,7 +57,6 @@ struct RecipeEdit: View {
         materials: "",
         contents: [],
         reviews:[],
-        image: "",
         favNum: 0,
         create_at: "",
         update_at: "",
@@ -81,6 +80,10 @@ struct RecipeEdit: View {
         } else {
             self.error = false
         }
+    }
+    
+    func dismiss() {
+        presentationMode.wrappedValue.dismiss()
     }
     
     func load() {
@@ -157,7 +160,6 @@ struct RecipeEdit: View {
             carbo: Double(self.recipe.carbo) ?? 0.0,
             state: self.recipe.state,
             materials: self.recipe.materials,
-            image: self.recipe.image,
             favNum: self.recipe.favNum,
             createdAt: recipe.create_at,
             updatedAt: recipe.update_at,
@@ -214,9 +216,11 @@ struct RecipeEdit: View {
         }
         
         group.notify(queue: .main) {
-            self.isLoading = false
-            self.showSheet.toggle()
-            print("All Process Done!")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                self.isLoading = false
+                self.showSheet.toggle()
+                print("All Process Done!")
+            }
         }
     }
     
@@ -293,7 +297,7 @@ struct RecipeEdit: View {
     }
     
     var body: some View {
-        ZStack(alignment: .top) {
+        ZStack {
             Color.black.edgesIgnoringSafeArea(.all)
             ScrollView(showsIndicators: false) {
                 HStack{
@@ -409,6 +413,22 @@ struct RecipeEdit: View {
             }
             .overlay(
                 HStack {
+                    Button(action:{
+                        dismiss()
+                    }){
+                        HStack(spacing: 10) {
+                            Image(systemName: "xmark")
+                                .renderingMode(.template)
+                            Text("Close")
+                                .fontWeight(.semibold)
+                        }
+                        .foregroundColor(.yellow)
+                        .padding(.vertical, 10)
+                        .padding(.horizontal, 15)
+                        .background(.yellow.opacity(0.15))
+                        .clipShape(Capsule())
+                    }
+                    Spacer()
                     Button(action: {
                         if (recipe.contents.count >= 5) {
                             self.showingAlert = true
@@ -472,6 +492,16 @@ struct RecipeEdit: View {
             .onTapGesture{
                 hideKeyboard()
             }
+            
+            if (isLoading) {
+                VStack{}
+                .frame(width: screen.width, height: screen.height)
+                .background(.black)
+                .contentShape(Rectangle())
+                .opacity(0.5)
+                .onTapGesture {}
+                LoadingView()
+            }
         }
         .actionSheet(isPresented: $showModal, content: {
             ActionSheet(title: Text("Select Photo"),message: Text("Choose"),buttons: [
@@ -491,10 +521,6 @@ struct RecipeEdit: View {
         .onAppear(){
             screen = UIScreen.main.bounds.size
             load()
-        }
-        
-        if (isLoading) {
-            LoadingView()
         }
     }
 }

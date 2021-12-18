@@ -17,11 +17,10 @@ struct Home: View {
     
     @State var index: Int = 0
     @State var selectedImage = Data()
-    @State var poplularRecipes: [RecipeData] = []
-    @State var imageDatum = [String:Data]()
     @Namespace var animation
     @EnvironmentObject var user:UserStore
-    @EnvironmentObject var network:Network
+    @State var poplularRecipes: [RecipeData] = []
+    @State var imageDatum = [String:Data]()
     
     func getRecipes() {
         Amplify.API.query(request: .getRecipesByFav()) { event in
@@ -32,31 +31,28 @@ struct Home: View {
                     print("Successfully retrieved popular recipes:")
                     let recipes = query.getItems()
                     recipes.forEach { item in
-                        DispatchQueue.main.async {
-                            self.poplularRecipes.append(
-                                RecipeData(
-                                    id:item.id,
-                                    userId:item.user,
-                                    title:item.title,
-                                    calorie: String(item.calorie),
-                                    protein:String(item.protein),
-                                    fat:String(item.fat),
-                                    carbo:String(item.carbo),
-                                    state:item.state,
-                                    materials:item.materials,
-                                    contents:[],
-                                    reviews: [],
-                                    image:item.image,
-                                    favNum: item.favNum,
-                                    create_at: item.createdAt!,
-                                    update_at: item.updatedAt!,
-                                    delFlg: item.delFlg
-                            ))
-                        }
                         Amplify.Storage.downloadData(key: "recipes/\(item.id).jpg") { result in
                             switch result {
                             case .success(let imageData):
                                 DispatchQueue.main.async{
+                                    self.poplularRecipes.append(
+                                        RecipeData(
+                                            id:item.id,
+                                            userId:item.user,
+                                            title:item.title,
+                                            calorie: String(item.calorie),
+                                            protein:String(item.protein),
+                                            fat:String(item.fat),
+                                            carbo:String(item.carbo),
+                                            state:item.state,
+                                            materials:item.materials,
+                                            contents:[],
+                                            reviews: [],
+                                            favNum: item.favNum,
+                                            create_at: item.createdAt!,
+                                            update_at: item.updatedAt!,
+                                            delFlg: item.delFlg
+                                    ))
                                     self.imageDatum[item.id] = imageData
                                 }
                             case .failure(let error):
@@ -78,34 +74,44 @@ struct Home: View {
     var body: some View {
         ZStack {
             Color("background")
-            ScrollView(showsIndicators: false) {
-                VStack {
-                    HStack {
-                        Text("Today's Receipt")
-                            .font(.system(size: 28,weight: .bold))
-                            .foregroundColor(.black)
-                        Spacer()
-                        AvatarView(showModal: $showModal)
-                    }
-                    .padding(.horizontal)
-                    .padding(.top, 30)
-                    
-                    if (poplularRecipes.count >= 1) {
-                        ForEach(0...poplularRecipes.count-1,id: \.self) { i in
-                            let adPlacement: Int = 3
-                            if let recipe = poplularRecipes[i] {
-                                if let image = UIImage(data: imageDatum[recipe.id] ?? Data()) {
-                                    Card(
-                                        i:i,
-                                        recipe:recipe,
-                                        image:image
-                                    )
-                                    .onTapGesture {
-                                        withAnimation(.spring()){
-                                            showDetail = true
-                                            index = i
-                                            selectedImage = user.imageDatum[recipe.id] ?? Data()
+            if imageDatum.count >= 3 {
+                ScrollView(showsIndicators: false) {
+                    LazyVStack {
+                        HStack {
+                            Text("Today's Receipt")
+                                .font(.system(size: 28,weight: .bold))
+                                .foregroundColor(.black)
+                            Spacer()
+                            AvatarView(showModal: $showModal)
+                        }
+                        .padding(.horizontal)
+                        .padding(.top, 30)
+                        
+                        if (self.poplularRecipes.count >= 1) {
+                            ForEach(0...self.poplularRecipes.count-1,id: \.self) { i in
+                                let adPlacement: Int = 3
+                                if let recipe = self.poplularRecipes[i] {
+                                    if let image = UIImage(data: self.imageDatum[recipe.id] ?? Data()) {
+                                        Card(
+                                            i:i,
+                                            recipe:recipe,
+                                            image:image
+                                        )
+                                        // これで範囲が固定された！！
+                                        .contentShape(Rectangle())
+                                        .onTapGesture {
+                                            withAnimation(.spring()){
+                                                showDetail = true
+                                                index = i
+                                                selectedImage = imageDatum[recipe.id] ?? Data()
+                                            }
                                         }
+                                    } else {
+                                        Image(systemName: "xmark")
+                                            .resizable()
+                                            .scaledToFill()
+                                            .frame(width: (UIScreen.main.bounds.width * 0.5), height: UIScreen.main.bounds.height / 3)
+                                            .clipped()
                                     }
                                     if i % adPlacement == 0 {
                                         BannerAd(unitID: "ca-app-pub-5558779899182260/4197512760")
@@ -113,66 +119,74 @@ struct Home: View {
                                 }
                             }
                         }
-                    }
-                    
-                    Spacer()
-                }
-                .frame(
-                    maxWidth: .infinity,
-                    maxHeight: .infinity,
-                    alignment: .top
-                )
-            }
-            .navigationBarTitle("")
-            .navigationBarHidden(true)
-            .opacity(showDetail ? 0 : 1)
-            .onAppear{
-                if first {
-                    self.getRecipes()
-                    first = false
-                }
-            }
-
-            if user.showLogin {
-                ZStack {
-                    LoginView()
-                    VStack{
-                        HStack{
-                            Spacer()
-                            Image(systemName: "xmark")
-                                .frame(width: 36, height: 36)
-                                .foregroundColor(.white)
-                                .background(Color.black)
-                                .clipShape(Circle())
-                        }
+                        
                         Spacer()
                     }
-                    .padding()
-                    .onTapGesture {
-                        self.user.showLogin = false
+                    .frame(
+                        maxWidth: .infinity,
+                        maxHeight: .infinity,
+                        alignment: .top
+                    )
+                }
+                .navigationBarTitle("")
+                .navigationBarHidden(true)
+                .opacity(showDetail ? 0 : 1)
+
+                if user.showLogin {
+                    ZStack {
+                        LoginView()
+                        VStack{
+                            HStack{
+                                Spacer()
+                                Image(systemName: "xmark")
+                                    .frame(width: 36, height: 36)
+                                    .foregroundColor(.white)
+                                    .background(Color.black)
+                                    .clipShape(Circle())
+                            }
+                            Spacer()
+                        }
+                        .padding()
+                        .onTapGesture {
+                            self.user.showLogin = false
+                        }
                     }
                 }
+                
+                if showDetail {
+                    Detail(
+                        selectedItem: $poplularRecipes[index],
+                        show: $showDetail,
+                        header: $selectedImage,
+                        animation: animation,
+                        overlay: true,
+                        toProfile: true
+                    )
+                    .ignoresSafeArea(.all)
+                }
+            } else {
+                VStack {
+                    ProgressView()
+                        .progressViewStyle(CircularProgressViewStyle(tint: Color.black))
+                }
+                .frame(width: UIScreen.main.bounds.height, height: UIScreen.main.bounds.height)
             }
-            
-            if showDetail {
-                Detail(
-                    selectedItem: $user.myRecipes[index],
-                    show: $showDetail,
-                    header: $selectedImage,
-                    animation: animation
-                )
-                .ignoresSafeArea(.all)
+        }
+        .onAppear{
+            if (first) {
+                first = false
+                self.getRecipes()
             }
         }
     }
 }
 
-struct Home_Previews: PreviewProvider {
-    static var previews: some View {
-        Home()
-            .environmentObject(UserStore())
-    }
-}
+//struct Home_Previews: PreviewProvider {
+//    static var previews: some View {
+//        Home()
+//            .environmentObject(UserStore())
+//    }
+//}
 
 struct Card: View {
     var i: Int
@@ -279,5 +293,14 @@ struct SectionView: View {
         )
         .shadow(color: Color(.white), radius: 20, x: i%2==0 ? 20 : -20, y: -20)
         
+    }
+}
+
+struct ActivityIndicator: UIViewRepresentable {
+    func makeUIView(context: UIViewRepresentableContext<ActivityIndicator>) -> UIActivityIndicatorView {
+        return UIActivityIndicatorView(style: .large)
+    }
+    func updateUIView(_ uiView: UIActivityIndicatorView, context: UIViewRepresentableContext<ActivityIndicator>) {
+        uiView.startAnimating()
     }
 }

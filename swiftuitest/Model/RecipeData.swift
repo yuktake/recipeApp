@@ -20,7 +20,6 @@ struct RecipeData:Identifiable,Codable {
     var materials: String
     var contents:[Procedure]
     var reviews: [Review]
-    var image: String
     var favNum: Int
     var fav_created_at: String?
     var create_at:String

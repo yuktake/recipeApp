@@ -176,10 +176,6 @@ class UserStore: ObservableObject {
     
     func getMyRecipes() {
         print("getMyRecipes")
-        // main threadで！！！
-//        DispatchQueue.main.async {
-//            self.myRecipes = []
-//        }
         Amplify.API.query(request:.getMyRecipesByDate(userid: self.sub!)) { event in
             switch event {
             case .success(let result):
@@ -206,7 +202,6 @@ class UserStore: ObservableObject {
                                         materials:item.materials,
                                         contents:[],
                                         reviews: [],
-                                        image:item.image,
                                         favNum: item.favNum,
                                         create_at: item.createdAt!,
                                         update_at: item.updatedAt!,
@@ -267,7 +262,6 @@ class UserStore: ObservableObject {
                                         materials:item.materials,
                                         contents:[],
                                         reviews: [],
-                                        image:item.image,
                                         favNum: item.favNum,
                                         create_at: item.createdAt!,
                                         update_at: item.updatedAt!,
@@ -275,7 +269,7 @@ class UserStore: ObservableObject {
                                 ))
                             }
                         }
-                        Amplify.Storage.downloadData(key: "recipes/\(item.image).jpg") { result in
+                        Amplify.Storage.downloadData(key: "recipes/\(item.id).jpg") { result in
                             switch result {
                             case .success(let imageData):
                                 DispatchQueue.main.async{
