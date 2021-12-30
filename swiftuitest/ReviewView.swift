@@ -236,13 +236,11 @@ struct ReviewView: View {
                         HStack(spacing: 10) {
                             Image(systemName: "xmark")
                                 .renderingMode(.template)
-                            Text("Close")
-                                .fontWeight(.semibold)
                         }
-                        .foregroundColor(.yellow)
+                        .foregroundColor(.red)
                         .padding(.vertical, 10)
                         .padding(.horizontal, 15)
-                        .background(.yellow.opacity(0.15))
+                        .background(.red.opacity(0.15))
                         .clipShape(Capsule())
                     }
                     Spacer(minLength: 0)

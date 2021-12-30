@@ -17,16 +17,16 @@ import GoogleMobileAds
 struct swiftuitestApp: App {
     init() {
         GADMobileAds.sharedInstance().start(completionHandler: nil)
-        GADMobileAds.sharedInstance().requestConfiguration.testDeviceIdentifiers = [ "0a8a44aa92a0d7b936290d2b42a2ec14" ]
+        GADMobileAds.sharedInstance().requestConfiguration.testDeviceIdentifiers = ["04a05a8fc19d3fb2f59275ab47fadfd8"]
     }
     let persistenceController = PersistenceController.shared
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     var body: some Scene {
         WindowGroup {
             LaunchScreen()
-//                .environment(\.managedObjectContext, persistenceController.container.viewContext)
                 .environmentObject(UserStore())
                 .environmentObject(RecipesViewModel())
+                .environmentObject(ReviewListViewModel())
                 .environmentObject(Network())
         }
     }

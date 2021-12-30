@@ -79,7 +79,6 @@ struct LoginView: View {
     }
     
     func resendVerification() {
-//        Amplify.Auth.resendSignUpCode(for: username, listener: { result in
         print("resend verification")
         Amplify.Auth.resendSignUpCode(for: email, listener: { result in
             switch result {
@@ -193,37 +192,12 @@ struct LoginView: View {
     var body: some View {
         ZStack {
             Color.black.edgesIgnoringSafeArea(.all)
-            ScrollView {
+            ScrollView(showsIndicators: false) {
                 ZStack(alignment: .top) {
-//                    Color("background2")
-//                        .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-//                        .edgesIgnoringSafeArea(.bottom)
                     VStack {
                         CoverView()
                         
                         VStack {
-//                            if !loginButton && !forgotButton {
-//                                HStack {
-//                                    Image(systemName: "person.crop.circle")
-//                                        .foregroundColor(Color(#colorLiteral(red: 0.6549019608, green: 0.7137254902, blue: 0.862745098, alpha: 1)))
-//                                        .frame(width:44, height: 44)
-//                                        .background(Color.white)
-//                                        .clipShape(RoundedRectangle(cornerRadius: 16, style:.continuous))
-//                                        .shadow(color:Color.black.opacity(0.15),radius: 5, x:0, y:5)
-//                                        .padding(.leading)
-//                                    TextField("Your Username".uppercased(), text:$username)
-//                                        .keyboardType(.emailAddress)
-//                                        .font(.subheadline)
-//                                        .padding(.leading)
-//                                        .frame(height:44)
-//                                        .onTapGesture {
-//                                            self.isFocused = true
-//                                        }
-//                                }
-//
-//                                Divider().padding(.leading, 80)
-//                            }
-                            
                             HStack {
                                 Image(systemName: "envelope.circle.fill")
                                     .foregroundColor(Color(#colorLiteral(red: 0.6549019608, green: 0.7137254902, blue: 0.862745098, alpha: 1)))
@@ -315,6 +289,7 @@ struct LoginView: View {
                                 }){
                                     Text(self.forgotButton ? "Login" : "Forget password?")
                                         .font(.subheadline)
+                                        .foregroundColor(.white)
                                 }
                             } else {
                                 Button(action: {
@@ -331,6 +306,7 @@ struct LoginView: View {
                                 }){
                                     Text(self.forgotButton ? "Signup" : "Resend Verification?")
                                         .font(.subheadline)
+                                        .foregroundColor(.white)
                                 }
                             }
                             
@@ -351,13 +327,12 @@ struct LoginView: View {
                                 }
                             }){
                                 Text(buttonText)
-                                    .foregroundColor(.white)
+                                    .foregroundColor(.black)
                             }
                             .padding(12)
                             .padding(.horizontal, 30)
-                            .background(Color(#colorLiteral(red: 0, green: 0.7529411765, blue: 1, alpha: 1)))
+                            .background(.yellow)
                             .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-                            .shadow(color:Color(#colorLiteral(red: 0, green: 0.7529411765, blue: 1, alpha: 1)).opacity(0.3),radius: 20, x:0, y:20)
                             .alert(isPresented: $showAlert){
                                 Alert(title: Text(self.alertTitle), message: Text(self.alertMessage), dismissButton: .default(Text("OK")))
                             }
@@ -537,68 +512,50 @@ struct LoginView_Previews: PreviewProvider {
 
 struct CoverView: View {
     @State var show = false
-    @State var viewState = CGSize.zero
-    @State var isDragging = false
+    @EnvironmentObject var user:UserStore
     
     var body: some View {
         VStack {
-            GeometryReader { geometry in
-                Text("Learn design & code.\nFrom scratch")
-                    .font(.system(size:geometry.size.width/10, weight: .bold))
-                    .foregroundColor(.black)
+            HStack{
+                Rectangle()
+                    .frame(width: 36, height: 36)
+                    .foregroundColor(.white)
+                Spacer()
+                Image(uiImage: UIImage(named: "AppIcon") ?? UIImage())
+                    .resizable()
+                    .frame(width: 36, height: 36)
+                Spacer()
+                Image(systemName: "xmark")
+                    .frame(width: 36, height: 36)
+                    .foregroundColor(.white)
+                    .background(Color.black)
+                    .clipShape(Circle())
+                    .onTapGesture {
+                        self.user.showLogin = false
+                    }
             }
+            .padding(.horizontal)
+            .padding(.top)
+            
+            Spacer()
+            Text("Share Recipe & Get Healthy.\nFrom Now!!!")
+            .font(.system(size:24, weight: .bold))
+            .foregroundColor(.black)
             .frame(maxWidth: 375, maxHeight: 100)
             .padding(.horizontal, 16)
-            .offset(x: viewState.width/15, y:viewState.height/15)
             
-            Text("80 hours of courses for SwiftUI, React and design tools")
+            Text("Everyone is waiting for your excellent recipe!!!")
                 .font(.subheadline)
                 .frame(width: 250)
                 .foregroundColor(.black)
-                .offset(x: viewState.width/20, y:viewState.height/20)
+            LottieView(filename: "login")
+                .padding(.bottom)
             Spacer()
         }
         .multilineTextAlignment(.center)
-        .padding(.top, 100)
         .frame(height: 477)
         .frame(maxWidth: .infinity)
-        .background(
-            ZStack {
-//                Color(#colorLiteral(red: 0.1764705926, green: 0.4980392158, blue: 0.7568627596, alpha: 1))
-                
-//                Image(uiImage: #imageLiteral(resourceName: "Blob"))
-//                    .offset(x: -150, y:-200)
-//                    // 元の位置に戻すため
-//                    .rotationEffect(Angle(degrees: show ? 450 : 90))
-//                    .blendMode(.plusDarker)
-//                    .animation(Animation.linear(duration: 120).repeatForever(autoreverses: false))
-//                    .onAppear{self.show = true}
-//                Image(uiImage: #imageLiteral(resourceName: "Blob"))
-//                    .offset(x:-200, y:-250)
-//                    .rotationEffect(Angle(degrees: show ? 360 : 0), anchor: .leading)
-//                    .blendMode(.overlay)
-//                    .animation(Animation.linear(duration: 120).repeatForever(autoreverses: false))
-            }
-        )
-        .background(
-//            Image(uiImage: #imageLiteral(resourceName: "Card3"))
-            LottieView(filename: "login")
-//                .offset(x: viewState.width/25, y:viewState.height/25)
-            , alignment: .bottom)
-        .background(Color(#colorLiteral(red: 0.4117647059, green: 0.4705882353, blue: 0.9725490196, alpha: 1)))
+        .background(.white)
         .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-        .scaleEffect(isDragging ? 0.9 : 1)
-        .animation(.timingCurve(0.2, 0.8, 0.2, 1,duration:0.8))
-        .rotation3DEffect(
-            Angle(degrees: 5),
-            axis: (x: viewState.width, y: viewState.height, z: 0))
-        .gesture(DragGesture().onChanged{ value in
-            self.viewState = value.translation
-            self.isDragging = true
-        }
-        .onEnded{ value in
-            self.viewState = .zero
-            self.isDragging = false
-        })
     }
 }

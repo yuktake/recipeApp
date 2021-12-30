@@ -18,6 +18,7 @@ extension Recipe {
     case contents
     case reviews
     case favNum
+    case reviewNum
     case createdAt
     case updatedAt
     case delFlg
@@ -53,6 +54,7 @@ extension Recipe {
       .hasMany(recipe.contents, is: .optional, ofType: Procedure.self, associatedWith: Procedure.keys.recipe),
       .hasMany(recipe.reviews, is: .optional, ofType: Review.self, associatedWith: Review.keys.recipe),
       .field(recipe.favNum, is: .required, ofType: .int),
+      .field(recipe.reviewNum, is: .required, ofType: .int),
       .field(recipe.createdAt, is: .optional, ofType: .string),
       .field(recipe.updatedAt, is: .optional, ofType: .string),
       .field(recipe.delFlg, is: .required, ofType: .int)

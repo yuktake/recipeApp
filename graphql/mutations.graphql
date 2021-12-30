@@ -39,6 +39,7 @@ mutation CreateRecipe(
       nextToken
     }
     favNum
+    reviewNum
     createdAt
     updatedAt
     delFlg
@@ -84,6 +85,7 @@ mutation UpdateRecipe(
       nextToken
     }
     favNum
+    reviewNum
     createdAt
     updatedAt
     delFlg
@@ -129,6 +131,7 @@ mutation DeleteRecipe(
       nextToken
     }
     favNum
+    reviewNum
     createdAt
     updatedAt
     delFlg
@@ -162,6 +165,7 @@ mutation CreateProcedure(
         nextToken
       }
       favNum
+      reviewNum
       createdAt
       updatedAt
       delFlg
@@ -198,6 +202,7 @@ mutation UpdateProcedure(
         nextToken
       }
       favNum
+      reviewNum
       createdAt
       updatedAt
       delFlg
@@ -234,6 +239,7 @@ mutation DeleteProcedure(
         nextToken
       }
       favNum
+      reviewNum
       createdAt
       updatedAt
       delFlg
@@ -270,6 +276,7 @@ mutation CreateReview(
         nextToken
       }
       favNum
+      reviewNum
       createdAt
       updatedAt
       delFlg
@@ -306,6 +313,7 @@ mutation UpdateReview(
         nextToken
       }
       favNum
+      reviewNum
       createdAt
       updatedAt
       delFlg
@@ -342,6 +350,7 @@ mutation DeleteReview(
         nextToken
       }
       favNum
+      reviewNum
       createdAt
       updatedAt
       delFlg
@@ -356,10 +365,13 @@ mutation CreateUser(
 ) {
   createUser(input: $input, condition: $condition) {
     id
+    type
     name
     displayName
     email
     description
+    favNum
+    reviewNum
     createdAt
     updatedAt
   }
@@ -370,10 +382,13 @@ mutation UpdateUser(
 ) {
   updateUser(input: $input, condition: $condition) {
     id
+    type
     name
     displayName
     email
     description
+    favNum
+    reviewNum
     createdAt
     updatedAt
   }
@@ -384,10 +399,13 @@ mutation DeleteUser(
 ) {
   deleteUser(input: $input, condition: $condition) {
     id
+    type
     name
     displayName
     email
     description
+    favNum
+    reviewNum
     createdAt
     updatedAt
   }

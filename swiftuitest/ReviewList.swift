@@ -11,18 +11,16 @@ import AWSPluginsCore
 
 struct ReviewList: View {
     @Binding var showList: Bool
-    @State var reviews:[Review] = []
-    @State var reviewImages:[String:Data] = [:]
+//    @State var reviews:[Review] = []
+//    @State var reviewImages:[String:Data] = [:]
     @State var selectedReview: Review?
     @State var showReview = false
-    
-    @EnvironmentObject var viewModel: RecipesViewModel
+    @EnvironmentObject var viewModel: ReviewListViewModel
     
     var recipeId: String
-//    var currentPage: List<Review>?
     
     func load(){
-        self.reviews = []
+        self.viewModel.reviews = []
         let r = Review.keys
         var predicate = QueryPredicateGroup.init()
         predicate = predicate.and(r.recipe == self.recipeId)
@@ -31,13 +29,14 @@ struct ReviewList: View {
             case .success(let result):
                 switch result {
                 case .success(let reviews):
+                    self.viewModel.currentPage = reviews
                     reviews.forEach{review in
                         Amplify.Storage.downloadData(key: review.image) { result in
                             switch result {
                             case .success(let imageData):
                                 DispatchQueue.main.async{
-                                    self.reviewImages[review.id] = imageData
-                                    self.reviews.append(review)
+                                    self.viewModel.reviewImages[review.id] = imageData
+                                    self.viewModel.reviews.append(review)
                                 }
                             case .failure(let error):
                                 print("Failed to download image data - \(error)")
@@ -59,12 +58,17 @@ struct ReviewList: View {
             ScrollView (.vertical, showsIndicators: false) {
 //                let adPlacement: Int = 5
                 LazyVStack {
-                    ForEach(0..<self.reviews.count, id: \.self) { i in
-                        CardView(review: reviews[i])
+                    ForEach(0..<self.viewModel.reviews.count, id: \.self) { i in
+                        CardView(review: self.viewModel.reviews[i])
                             .onTapGesture {
-                                selectedReview = reviews[i]
+                                selectedReview = self.viewModel.reviews[i]
                                 withAnimation {
                                     showReview = true
+                                }
+                            }
+                            .onAppear {
+                                if i == self.viewModel.reviews.count-1 {
+                                    self.viewModel.listNextPage()
                                 }
                             }
                         BannerAd(unitID: "ca-app-pub-5558779899182260/4197512760")
@@ -74,7 +78,7 @@ struct ReviewList: View {
             }
             .opacity(showReview ? 0 : 1)
             .onAppear {
-                if (self.reviews.count == 0) {
+                if (self.viewModel.reviews.count == 0) {
                     load()
                 }
             }
@@ -97,7 +101,7 @@ struct ReviewList: View {
                 if let review = selectedReview {
                     StoryView(
                         showReview: $showReview,
-                        reviewImage: reviewImages[review.id] ?? Data(),
+                        reviewImage: viewModel.reviewImages[review.id] ?? Data(),
                         reviewData: review
                     )
                     .ignoresSafeArea(.all)
@@ -114,7 +118,7 @@ struct ReviewList: View {
             GeometryReader{proxy in
                 let size = proxy.size
                 
-                if let uiimage = UIImage(data: reviewImages[review.id] ?? Data()) {
+                if let uiimage = UIImage(data: viewModel.reviewImages[review.id] ?? Data()) {
                     Image(uiImage: uiimage)
                         .resizable()
                         .aspectRatio(contentMode: .fill)

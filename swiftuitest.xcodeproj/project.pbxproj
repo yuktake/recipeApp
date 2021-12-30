@@ -322,6 +322,10 @@
 		CA401F8026BFB44C0061998B /* awsconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = CA401F7E26BFB44B0061998B /* awsconfiguration.json */; };
 		CA401F8126BFB44C0061998B /* amplifyconfiguration.json in Resources */ = {isa = PBXBuildFile; fileRef = CA401F7F26BFB44B0061998B /* amplifyconfiguration.json */; };
 		CA485FC4062B047D185AC100 /* User+Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = A8E5EA4CA14BCD86B04C516A /* User+Schema.swift */; };
+		CA487271277AB8C000834288 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CAB6A43326ABA1B400AF5C99 /* Assets.xcassets */; };
+		CA487273277AC66300834288 /* StoreKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = CA487272277AC66300834288 /* StoreKit.framework */; };
+		CA487275277C064300834288 /* Colors.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CA487274277C064300834288 /* Colors.xcassets */; };
+		CA487277277C0EB900834288 /* ColorExtension.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA487276277C0EB900834288 /* ColorExtension.swift */; };
 		CA4E85E62712F94A008E2C85 /* ReviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA4E85E52712F94A008E2C85 /* ReviewView.swift */; };
 		CA50395E2748B40000110F63 /* OffsetPageTabView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA50395D2748B40000110F63 /* OffsetPageTabView.swift */; };
 		CA5039602748C6D800110F63 /* Intro.swift in Sources */ = {isa = PBXBuildFile; fileRef = CA50395F2748C6D800110F63 /* Intro.swift */; };
@@ -348,7 +352,6 @@
 		CAA903C226B5208F00803AAC /* AvatarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAA903C126B5208F00803AAC /* AvatarView.swift */; };
 		CAB6A43026ABA1B300AF5C99 /* swiftuitestApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAB6A42F26ABA1B300AF5C99 /* swiftuitestApp.swift */; };
 		CAB6A43226ABA1B300AF5C99 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAB6A43126ABA1B300AF5C99 /* ContentView.swift */; };
-		CAB6A43426ABA1B400AF5C99 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CAB6A43326ABA1B400AF5C99 /* Assets.xcassets */; };
 		CAB6A43726ABA1B400AF5C99 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = CAB6A43626ABA1B400AF5C99 /* Preview Assets.xcassets */; };
 		CAB6A43926ABA1B400AF5C99 /* Persistence.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAB6A43826ABA1B400AF5C99 /* Persistence.swift */; };
 		CAB6A43C26ABA1B400AF5C99 /* swiftuitest.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = CAB6A43A26ABA1B400AF5C99 /* swiftuitest.xcdatamodeld */; };
@@ -374,6 +377,7 @@
 		CAF35CBC26B3ED57001DD9A5 /* LoadingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAF35CBB26B3ED57001DD9A5 /* LoadingView.swift */; };
 		CAF35CBE26B3EFC5001DD9A5 /* SuccessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAF35CBD26B3EFC5001DD9A5 /* SuccessView.swift */; };
 		CAF368682764F0DF004C7437 /* 851MkPOP.ttf in Resources */ = {isa = PBXBuildFile; fileRef = CAF368672764F0DF004C7437 /* 851MkPOP.ttf */; };
+		CAF749E5277864F40053CAC5 /* ReviewListViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAF749E4277864F30053CAC5 /* ReviewListViewModel.swift */; };
 		CAF7E4152768D18300F6C7C1 /* UserPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = CAF7E4142768D18300F6C7C1 /* UserPage.swift */; };
 		CAF966F70DA35D71649C8186 /* Review+Schema.swift in Sources */ = {isa = PBXBuildFile; fileRef = 81E2BAECBBDB63AA4ED8A211 /* Review+Schema.swift */; };
 		CD9DECB709455CA6FA76E64D /* AmplifyModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B057FA80AB56D1D0D5E1A0EF /* AmplifyModels.swift */; };
@@ -479,6 +483,9 @@
 		CA2900D226EDF43600389EEE /* login.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = login.json; sourceTree = "<group>"; };
 		CA401F7E26BFB44B0061998B /* awsconfiguration.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = awsconfiguration.json; sourceTree = SOURCE_ROOT; };
 		CA401F7F26BFB44B0061998B /* amplifyconfiguration.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; path = amplifyconfiguration.json; sourceTree = SOURCE_ROOT; };
+		CA487272277AC66300834288 /* StoreKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = StoreKit.framework; path = System/Library/Frameworks/StoreKit.framework; sourceTree = SDKROOT; };
+		CA487274277C064300834288 /* Colors.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Colors.xcassets; sourceTree = "<group>"; };
+		CA487276277C0EB900834288 /* ColorExtension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorExtension.swift; sourceTree = "<group>"; };
 		CA4E85E52712F94A008E2C85 /* ReviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewView.swift; sourceTree = "<group>"; };
 		CA50395D2748B40000110F63 /* OffsetPageTabView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OffsetPageTabView.swift; sourceTree = "<group>"; };
 		CA50395F2748C6D800110F63 /* Intro.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Intro.swift; sourceTree = "<group>"; };
@@ -524,6 +531,7 @@
 		CAF35CBB26B3ED57001DD9A5 /* LoadingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingView.swift; sourceTree = "<group>"; };
 		CAF35CBD26B3EFC5001DD9A5 /* SuccessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SuccessView.swift; sourceTree = "<group>"; };
 		CAF368672764F0DF004C7437 /* 851MkPOP.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = 851MkPOP.ttf; sourceTree = "<group>"; };
+		CAF749E4277864F30053CAC5 /* ReviewListViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewListViewModel.swift; sourceTree = "<group>"; };
 		CAF7E4142768D18300F6C7C1 /* UserPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserPage.swift; sourceTree = "<group>"; };
 		CEEF54180D1C0149D5E78CFF /* Review.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; name = Review.swift; path = amplify/generated/models/Review.swift; sourceTree = "<group>"; };
 		EC8191343891526B7CB661AA /* Fav+Schema.swift */ = {isa = PBXFileReference; explicitFileType = sourcecode.swift; name = "Fav+Schema.swift"; path = "amplify/generated/models/Fav+Schema.swift"; sourceTree = "<group>"; };
@@ -542,6 +550,7 @@
 				CAF35CB826B3EA2F001DD9A5 /* Lottie in Frameworks */,
 				CAB9C7D726BF617D001F3A23 /* AWSAPIPlugin in Frameworks */,
 				CAB9C7CD26BF617D001F3A23 /* AWSCognitoAuthPlugin in Frameworks */,
+				CA487273277AC66300834288 /* StoreKit.framework in Frameworks */,
 				CAB9C7D326BF617D001F3A23 /* AWSPinpointAnalyticsPlugin in Frameworks */,
 				D7FE38DD617AB5E553841D4F /* Pods_swiftuitest.framework in Frameworks */,
 			);
@@ -553,6 +562,7 @@
 		68883FC99695ADD6F670C5B1 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				CA487272277AC66300834288 /* StoreKit.framework */,
 				0F8C42636BFEE327CE078AB4 /* Pods_swiftuitest.framework */,
 			);
 			name = Frameworks;
@@ -619,6 +629,7 @@
 			children = (
 				CA272DC726C2CEAE004A2BCF /* Recipe+Extensions.swift */,
 				CAA830C2273DCE050023C6F1 /* GraphQLExtension.swift */,
+				CA487276277C0EB900834288 /* ColorExtension.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -628,6 +639,7 @@
 			children = (
 				CA6C199726B69C0F0064FE2D /* CreateRecipeViewModel.swift */,
 				CA8A971526B6B94D003671F0 /* RecipesViewModel.swift */,
+				CAF749E4277864F30053CAC5 /* ReviewListViewModel.swift */,
 			);
 			path = ViewModels;
 			sourceTree = "<group>";
@@ -709,6 +721,7 @@
 				CAA903AD26B4E63B00803AAC /* Views */,
 				CAA903B226B4E88400803AAC /* Helpers */,
 				CAB6A43326ABA1B400AF5C99 /* Assets.xcassets */,
+				CA487274277C064300834288 /* Colors.xcassets */,
 				CAF35CB126B3E98F001DD9A5 /* Lottie */,
 				CA0CD3F826AC239700600723 /* Fonts */,
 				CAB6A43826ABA1B400AF5C99 /* Persistence.swift */,
@@ -824,13 +837,13 @@
 				CAB6A43726ABA1B400AF5C99 /* Preview Assets.xcassets in Resources */,
 				CAF35CB426B3E98F001DD9A5 /* loading.json in Resources */,
 				CA2900CF26EDED1400389EEE /* splash.json in Resources */,
-				CAB6A43426ABA1B400AF5C99 /* Assets.xcassets in Resources */,
 				D98F29A8A6F6BFD605DA4B7E /* awsconfiguration.json in Resources */,
 				8EC04ECB2FAED6471653F6A6 /* amplifyconfiguration.json in Resources */,
 				FB2F6C3501A03052AB8496FC /* awsconfiguration.json in Resources */,
 				B6BF8C6BB2C1E649F6DB2323 /* amplifyconfiguration.json in Resources */,
 				CAE1F977274B0D3100376A8B /* tutorial1.json in Resources */,
 				2A01EF03C2A381E75824E9FF /* awsconfiguration.json in Resources */,
+				CA487271277AB8C000834288 /* Assets.xcassets in Resources */,
 				CA2900D326EDF43600389EEE /* login.json in Resources */,
 				DD0D61C0CC5910CFE6359E71 /* amplifyconfiguration.json in Resources */,
 				8A21C22238884DBD8D5D28FB /* awsconfiguration.json in Resources */,
@@ -843,6 +856,7 @@
 				931529F3B44AAEB6A3F388E4 /* awsconfiguration.json in Resources */,
 				520FC60E95B12161D797AB9F /* amplifyconfiguration.json in Resources */,
 				50AE03A11C59D5F68CD021B4 /* awsconfiguration.json in Resources */,
+				CA487275277C064300834288 /* Colors.xcassets in Resources */,
 				AD20DDF16F275BCB638BBC3F /* amplifyconfiguration.json in Resources */,
 				CA2900D126EDF33200389EEE /* search.json in Resources */,
 				08D5C7691ADB136DE1AB4936 /* awsconfiguration.json in Resources */,
@@ -899,8 +913,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "
-";
+			shellScript = "\n";
 		};
 		F0A7353988332686D491E3CA /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1032,6 +1045,7 @@
 				55EDCF3DD11CA9BC3D61C809 /* Recipe.swift in Sources */,
 				2A732835A43E1FF871CBFBE3 /* Review+Schema.swift in Sources */,
 				33124F74ADD013DDD6556F7E /* Review.swift in Sources */,
+				CAF749E5277864F40053CAC5 /* ReviewListViewModel.swift in Sources */,
 				0BFA6368D0D4D571582AA18D /* User+Schema.swift in Sources */,
 				B17CED99B57DFE8866D56ECA /* User.swift in Sources */,
 				B645C008153473BD3A4AAE93 /* AmplifyModels.swift in Sources */,
@@ -1308,6 +1322,7 @@
 				6C77EDA6BCD7A8813E1025EC /* AmplifyModels.swift in Sources */,
 				BB56A9FBDC6F401E9C2C4DC3 /* Procedure+Schema.swift in Sources */,
 				9B1C872E1E074B03733E8093 /* Procedure.swift in Sources */,
+				CA487277277C0EB900834288 /* ColorExtension.swift in Sources */,
 				7C2C78A60661A42A8BE957F1 /* Recipe+Schema.swift in Sources */,
 				D22A92059BF5586D2919675C /* Recipe.swift in Sources */,
 				3637FC0A47F0FEC83B5DB90E /* Review+Schema.swift in Sources */,
@@ -1457,7 +1472,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"swiftuitest/Preview Content\"";
-				DEVELOPMENT_TEAM = S85MN696CS;
+				DEVELOPMENT_TEAM = X25E8HCF9U;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = swiftuitest/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -1465,7 +1480,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.bratech.co.jp.swiftuitest;
+				PRODUCT_BUNDLE_IDENTIFIER = com.koshi.yukitake.pfcMake;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1480,7 +1495,7 @@
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_ASSET_PATHS = "\"swiftuitest/Preview Content\"";
-				DEVELOPMENT_TEAM = S85MN696CS;
+				DEVELOPMENT_TEAM = X25E8HCF9U;
 				ENABLE_PREVIEWS = YES;
 				INFOPLIST_FILE = swiftuitest/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
@@ -1488,7 +1503,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.bratech.co.jp.swiftuitest;
+				PRODUCT_BUNDLE_IDENTIFIER = com.koshi.yukitake.pfcMake;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";

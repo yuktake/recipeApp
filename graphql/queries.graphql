@@ -36,6 +36,7 @@ query GetRecipe($id: ID!) {
       nextToken
     }
     favNum
+    reviewNum
     createdAt
     updatedAt
     delFlg
@@ -65,6 +66,7 @@ query ListRecipes(
         nextToken
       }
       favNum
+      reviewNum
       createdAt
       updatedAt
       delFlg
@@ -97,6 +99,7 @@ query GetProcedure($id: ID!) {
         nextToken
       }
       favNum
+      reviewNum
       createdAt
       updatedAt
       delFlg
@@ -129,6 +132,7 @@ query ListProcedures(
         state
         materials
         favNum
+        reviewNum
         createdAt
         updatedAt
         delFlg
@@ -164,6 +168,7 @@ query GetReview($id: ID!) {
         nextToken
       }
       favNum
+      reviewNum
       createdAt
       updatedAt
       delFlg
@@ -196,6 +201,7 @@ query ListReviews(
         state
         materials
         favNum
+        reviewNum
         createdAt
         updatedAt
         delFlg
@@ -209,10 +215,13 @@ query ListReviews(
 query GetUser($id: ID!) {
   getUser(id: $id) {
     id
+    type
     name
     displayName
     email
     description
+    favNum
+    reviewNum
     createdAt
     updatedAt
   }
@@ -225,10 +234,13 @@ query ListUsers(
   listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
     items {
       id
+      type
       name
       displayName
       email
       description
+      favNum
+      reviewNum
       createdAt
       updatedAt
     }
@@ -292,6 +304,7 @@ query RecipesByProtein(
         nextToken
       }
       favNum
+      reviewNum
       createdAt
       updatedAt
       delFlg
@@ -333,6 +346,7 @@ query RecipesByFat(
         nextToken
       }
       favNum
+      reviewNum
       createdAt
       updatedAt
       delFlg
@@ -374,6 +388,7 @@ query RecipesByCarbo(
         nextToken
       }
       favNum
+      reviewNum
       createdAt
       updatedAt
       delFlg
@@ -415,6 +430,7 @@ query RecipesByFav(
         nextToken
       }
       favNum
+      reviewNum
       createdAt
       updatedAt
       delFlg
@@ -456,6 +472,7 @@ query RecipesByDate(
         nextToken
       }
       favNum
+      reviewNum
       createdAt
       updatedAt
       delFlg
@@ -497,6 +514,7 @@ query ByProcedure(
         state
         materials
         favNum
+        reviewNum
         createdAt
         updatedAt
         delFlg
@@ -541,10 +559,73 @@ query ByReview(
         state
         materials
         favNum
+        reviewNum
         createdAt
         updatedAt
         delFlg
       }
+      createdAt
+      updatedAt
+    }
+    nextToken
+  }
+}
+query UsersByFav(
+  $type: String
+  $favNum: ModelIntKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelUserFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  usersByFav(
+    type: $type
+    favNum: $favNum
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      type
+      name
+      displayName
+      email
+      description
+      favNum
+      reviewNum
+      createdAt
+      updatedAt
+    }
+    nextToken
+  }
+}
+query UsersByReview(
+  $type: String
+  $reviewNum: ModelIntKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelUserFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  usersByReview(
+    type: $type
+    reviewNum: $reviewNum
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      type
+      name
+      displayName
+      email
+      description
+      favNum
+      reviewNum
       createdAt
       updatedAt
     }

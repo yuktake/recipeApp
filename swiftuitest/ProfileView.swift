@@ -52,6 +52,7 @@ struct ProfileView: View {
             state: recipe.state,
             materials: recipe.materials,
             favNum: recipe.favNum,
+            reviewNum: 0,
             createdAt: recipe.create_at,
             updatedAt: recipe.update_at,
             delFlg: 1
@@ -81,171 +82,133 @@ struct ProfileView: View {
     
     var body: some View {
         ZStack {
-            ScrollView(showsIndicators: false) {
-                GeometryReader{ reader -> AnyView in
-                    DispatchQueue.main.async {
-                        if refresh.startOffset == 0 {
-                            refresh.startOffset = reader.frame(in: .global).minY
-                        }
-
-                        refresh.offset = reader.frame(in: .global).minY
-
-                        if refresh.offset - refresh.startOffset > 80 && !refresh.started {
-                            refresh.started = true
-                        }
-                        if refresh.startOffset == refresh.offset && refresh.started && !refresh.released {
-                            withAnimation(Animation.linear){refresh.released = true}
-                            updateData()
-                        }
-                        if refresh.startOffset == refresh.offset && refresh.started && !refresh.released && refresh.invalid {
-                            refresh.invalid = false
-                            updateData()
-                        }
-                    }
-                    return AnyView(Color.black.frame(width: 0, height: 0))
-                }
-                .frame(width: 0, height: 0)
-                
-                ZStack(alignment: Alignment(horizontal: .center, vertical: .top)) {
-                    if refresh.started && refresh.released {
-                        ProgressView()
-                            .offset(y: -35)
-                    } else {
-                        Image(systemName: "arrow.down")
-                            .font(.system(size: 16, weight: .heavy))
-                            .foregroundColor(.white)
-                            .rotationEffect(.init(degrees: refresh.started ? 180 : 0))
-                            .offset(y: -25)
-                            .animation(.easeIn)
-                    }
-                    
+            ScrollView(showsIndicators: false) {   
+                VStack {
+                    // profileCard
                     VStack {
-                        // profileCard
-                        VStack {
-                            VStack(alignment: .leading,spacing: 16) {
-                                HStack {
-                                    if let imageData = user.image {
-                                        let uiimage = UIImage(data: imageData)
-                                        Image(uiImage: uiimage!)
-                                            .resizable()
-                                            .aspectRatio(contentMode: .fit)
-                                            .frame(width:66)
-                                            .clipShape(Circle())
-                                    } else {
-                                        ZStack {
-                                            Circle()
-                                                .frame(width: 66, height: 66, alignment: .center)
-                                            Image(systemName: "person.fill")
-                                                .foregroundColor(.black)
-                                                .font(.system(size: 24, weight: .medium, design: .rounded))
-                                        }
-                                        .frame(width: 66, height: 66, alignment: .center)
+                        VStack(alignment: .leading,spacing: 16) {
+                            HStack {
+                                if let imageData = user.image {
+                                    let uiimage = UIImage(data: imageData)
+                                    Image(uiImage: uiimage!)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .frame(width:66)
+                                        .clipShape(Circle())
+                                } else {
+                                    ZStack {
+                                        Circle()
+                                            .frame(width: 66, height: 66, alignment: .center)
+                                        Image(systemName: "person.fill")
+                                            .foregroundColor(.black)
+                                            .font(.system(size: 24, weight: .medium, design: .rounded))
                                     }
-                                    
-                                    VStack {
-                                        Text(((user.sub == nil ? "Who Are You?": user.username) ?? ""))
-                                            .foregroundColor(.white)
-                                            .font(.title3)
-                                            .bold()
-                                            .frame(maxWidth: .infinity)
-                                    }
-                                    .frame(maxWidth: .infinity)
-                                    
-                                    Spacer()
-                                    
-                                    if user.sub != nil {
-                                        Button(action:{
-                                            showSettings.toggle()
-                                        }, label: {
-                                            TextfieldIcon(iconName:"gearshape.fill", passedImage: .constant(nil), currentlyEditing: .constant(true))
-                                        })
-                                        .sheet(isPresented:$showSettings , content: {
-                                            SettingsView()
-                                        })
-                                    }
+                                    .frame(width: 66, height: 66, alignment: .center)
                                 }
                                 
-                                Rectangle()
-                                    .frame(height:1)
-                                    .foregroundColor(.white.opacity(0.1))
-                                
-                                Text(user.description ?? "")
-                                    .foregroundColor(.white)
-                                    .font(.caption)
-                            }
-                            .padding(16)
-                            
-                            if user.isLogged {
                                 VStack {
-                                    Button {
-                                        print("tap signout")
-                                        user.signOut()
-                                        self.tabSelection = 1
-                                    } label: {
-                                        HStack(spacing: 12) {
-                                            Image(systemName: "person.crop.circle")
-                                                .foregroundColor(.primary)
-                                                .font(.system(size: 16, weight: .medium))
-                                                .frame(width: 36, height: 36)
-                                                .clipShape(Circle())
-                                                .shadow(color: Color.black.opacity(0.1), radius: 1, x: 0, y: 1)
-                                                .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
-                                            GradientText(text: "Sign Out")
-                                            Spacer()
-                                        }
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 16, style: .circular)
-                                                .stroke(Color.white.opacity(0.1), lineWidth: 1)
-                                        )
-                                        .background(
-                                            Color.init(red: 26/255, green: 20/255, blue: 51/255)
-                                                .cornerRadius(16)
-                                        )
-                                    }
+                                    Text(((user.sub == nil ? "Who Are You?": user.username) ?? ""))
+                                        .foregroundColor(.white)
+                                        .font(.title3)
+                                        .bold()
+                                        .frame(maxWidth: .infinity)
                                 }
-                                .padding()
+                                .frame(maxWidth: .infinity)
+                                
+                                Spacer()
+                                
+                                if user.sub != nil {
+                                    Button(action:{
+                                        showSettings.toggle()
+                                    }, label: {
+                                        TextfieldIcon(iconName:"gearshape.fill", passedImage: .constant(nil), currentlyEditing: .constant(true))
+                                    })
+                                    .sheet(isPresented:$showSettings , content: {
+                                        SettingsView()
+                                    })
+                                }
                             }
                             
+                            Rectangle()
+                                .frame(height:1)
+                                .foregroundColor(.white.opacity(0.1))
+                            
+                            Text(user.description ?? "")
+                                .foregroundColor(.white)
+                                .font(.caption)
                         }
-                        .background(
-                            RoundedRectangle(cornerRadius: 30)
-                                .stroke(Color.white.opacity(0.2))
-                                .background(VisualEffectBlur(blurStyle: .dark))
-                        )
-                        .cornerRadius(30)
-                        .padding()
+                        .padding(16)
                         
                         if user.isLogged {
-                            if (user.myRecipes.count >= 1) {
-                                ForEach(0...user.myRecipes.count-1,id: \.self) { i in
-                                    if let recipe = user.myRecipes[i] {
-                                        UserView(
-                                            profile: user.image ?? Data(),
-                                            username: user.username ?? "",
-                                            recipeId: recipe.id,
-                                            i: i,
-                                            index: $index,
-                                            showModal: $showModal,
-                                            showAlert: $showAlert,
-                                            currentImage: $currentImage
-                                        )
-                                        PostView(
-                                            recipe: recipe,
-                                            header: user.imageDatum[recipe.id] ?? Data()
-                                        )
-                                        .onTapGesture{
-                                            withAnimation(.spring()){
-                                                showDetail = true
-                                                index = i
-                                                currentImage = user.imageDatum[recipe.id] ?? Data()
-                                            }
+                            VStack {
+                                Button {
+                                    print("tap signout")
+                                    user.signOut()
+                                    self.tabSelection = 1
+                                } label: {
+                                    HStack(spacing: 12) {
+                                        Image(systemName: "person.crop.circle")
+                                            .foregroundColor(.primary)
+                                            .font(.system(size: 16, weight: .medium))
+                                            .frame(width: 36, height: 36)
+                                            .clipShape(Circle())
+                                            .shadow(color: Color.black.opacity(0.1), radius: 1, x: 0, y: 1)
+                                            .shadow(color: Color.black.opacity(0.2), radius: 10, x: 0, y: 10)
+                                        GradientText(text: "Sign Out")
+                                        Spacer()
+                                    }
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 16, style: .circular)
+                                            .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                                    )
+                                    .background(
+                                        Color.init(red: 26/255, green: 20/255, blue: 51/255)
+                                            .cornerRadius(16)
+                                    )
+                                }
+                            }
+                            .padding()
+                        }
+                        
+                    }
+                    .background(
+                        RoundedRectangle(cornerRadius: 30)
+                            .stroke(Color.white.opacity(0.2))
+                            .background(VisualEffectBlur(blurStyle: .dark))
+                    )
+                    .cornerRadius(30)
+                    .padding()
+                    
+                    if user.isLogged {
+                        if (user.myRecipes.count >= 1) {
+                            ForEach(0...user.myRecipes.count-1,id: \.self) { i in
+                                if let recipe = user.myRecipes[i] {
+                                    UserView(
+                                        profile: user.image ?? Data(),
+                                        username: user.username ?? "",
+                                        recipeId: recipe.id,
+                                        i: i,
+                                        index: $index,
+                                        showModal: $showModal,
+                                        showAlert: $showAlert,
+                                        currentImage: $currentImage
+                                    )
+                                    PostView(
+                                        recipe: recipe,
+                                        header: user.imageDatum[recipe.id] ?? Data()
+                                    )
+                                    .onTapGesture{
+                                        withAnimation(.spring()){
+                                            showDetail = true
+                                            index = i
+                                            currentImage = user.imageDatum[recipe.id] ?? Data()
                                         }
-                                        .onAppear {
-                                            // 最低３つないといけない
-                                            if i == user.myRecipes.count - 1 {
-                                                if (!user.token.isEmpty) {
-                                                    user.listNextPage(nextToken: user.token)
-                                                }
+                                    }
+                                    .onAppear {
+                                        // 最低３つないといけない
+                                        if i == user.myRecipes.count - 1 {
+                                            if (!user.token.isEmpty) {
+                                                user.listNextPage(nextToken: user.token)
                                             }
                                         }
                                     }
@@ -254,16 +217,8 @@ struct ProfileView: View {
                         }
                     }
                 }
-                .offset(y: refresh.released ? 40 : -20)
             }
             .navigationBarHidden(true)
-//            .fullScreenCover(isPresented: $showModal){
-//                RecipeEdit(
-//                    detail_recipe: user.myRecipes[index],
-//                    detail_image: $currentImage,
-//                    showSheet: $showModal
-//                )
-//            }
             .alert(isPresented: $showAlert) {
                 Alert(
                     title: Text("Warning"),

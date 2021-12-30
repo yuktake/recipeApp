@@ -56,10 +56,9 @@ class RecipesViewModel: ObservableObject {
             predicate = predicate.and(r.title.contains(keyword) || r.materials.contains(keyword))
         }
         
-//        Amplify.API.query(request: .)
+        group.enter()
         switch sort {
         case 0:
-            group.enter()
             getRecentOrdered(
                 protein: protein,
                 fat: fat,
@@ -68,11 +67,6 @@ class RecipesViewModel: ObservableObject {
                 keyword: keyword,
                 group: group
             )
-            group.notify(queue: .main) {
-                DispatchQueue.main.async {
-                    self.searched = true
-                }
-            }
             break
         case 1:
             getProteinOrdered(
@@ -80,7 +74,8 @@ class RecipesViewModel: ObservableObject {
                 fat: fat,
                 carbo: carbo,
                 state: state,
-                keyword: keyword
+                keyword: keyword,
+                group: group
             )
             break
         case 2:
@@ -89,7 +84,8 @@ class RecipesViewModel: ObservableObject {
                 fat: fat,
                 carbo: carbo,
                 state: state,
-                keyword: keyword
+                keyword: keyword,
+                group: group
             )
             break
         case 3:
@@ -98,8 +94,45 @@ class RecipesViewModel: ObservableObject {
                 fat: fat,
                 carbo: carbo,
                 state: state,
-                keyword: keyword
+                keyword: keyword,
+                group: group
             )
+            break
+        case 4:
+            getFavOrdered(
+                protein: protein,
+                fat: fat,
+                carbo: carbo,
+                state: state,
+                keyword: keyword,
+                group: group
+            )
+        default:
+            break
+        }
+        group.notify(queue: .main) {
+            DispatchQueue.main.async {
+                self.searched = true
+            }
+        }
+    }
+    
+    func getNext(sort: Int) {
+        switch sort {
+        case 0:
+            listNextRecentPage()
+            break
+        case 1:
+            listNextProteinOrderedPage()
+            break
+        case 2:
+            listNextFatOrderedPage()
+            break
+        case 3:
+            listNextCarboOrderedPage()
+            break
+        case 4:
+            listNextFavOrderedPage()
             break
         default:
             break
@@ -111,7 +144,8 @@ class RecipesViewModel: ObservableObject {
         fat:Double,
         carbo:Double,
         state:Int,
-        keyword:String
+        keyword:String,
+        group:DispatchGroup
     ) {
         Amplify.API.query(request: .getRecipesByProtein(protein: protein, fat: fat, carbo: carbo, state: state, keyword: keyword)) { event in
             switch event {
@@ -121,15 +155,15 @@ class RecipesViewModel: ObservableObject {
                     print("getProteinOrdered")
                     print("Successfully retrieved list of protein ordered recipes:")
                     let recipes = query.getItems()
-                    self.currentPage = recipes
+                    let token = query.getNextToken()
+//                    self.currentPage = recipes
                     DispatchQueue.main.async {
-                        if recipes.count != 20 {
+                        if token.isEmpty {
                             self.next = false
                         }
-                        self.token = query.getNextToken()
+                        self.token = token
                     }
                     recipes.forEach { item in
-                        
                         DispatchQueue.main.async {
                             self.recipes.append(RecipeData(
                                 id:item.id,
@@ -177,7 +211,8 @@ class RecipesViewModel: ObservableObject {
         fat:Double,
         carbo:Double,
         state:Int,
-        keyword:String
+        keyword:String,
+        group:DispatchGroup
     ) {
         Amplify.API.query(request: .getRecipesByFat(protein: protein, fat: fat, carbo: carbo, state: state, keyword: keyword)) { event in
             switch event {
@@ -187,17 +222,15 @@ class RecipesViewModel: ObservableObject {
                     print("getFatOrdered")
                     print("Successfully retrieved list of fat ordered recipes:")
                     let recipes = query.getItems()
-                    self.currentPage = recipes
+                    let token = query.getNextToken()
+//                    self.currentPage = recipes
                     DispatchQueue.main.async {
-                        if recipes.count != 20 {
+                        if token.isEmpty {
                             self.next = false
                         }
-                        self.token = query.getNextToken()
+                        self.token = token
                     }
                     recipes.forEach { item in
-                        print("recipeeeee")
-                        print(item)
-                        
                         DispatchQueue.main.async {
                             self.recipes.append(RecipeData(
                                 id:item.id,
@@ -245,7 +278,8 @@ class RecipesViewModel: ObservableObject {
         fat:Double,
         carbo:Double,
         state:Int,
-        keyword:String
+        keyword:String,
+        group:DispatchGroup
     ) {
         Amplify.API.query(request: .getRecipesByCarbo(protein: protein, fat: fat, carbo: carbo, state: state, keyword: keyword)) { event in
             switch event {
@@ -255,17 +289,15 @@ class RecipesViewModel: ObservableObject {
                     print("getCarboOrdered")
                     print("Successfully retrieved list of carbo ordered recipes:")
                     let recipes = query.getItems()
-                    self.currentPage = recipes
+                    let token = query.getNextToken()
+//                    self.currentPage = recipes
                     DispatchQueue.main.async {
-                        if recipes.count != 20 {
+                        if token.isEmpty {
                             self.next = false
                         }
-                        self.token = query.getNextToken()
+                        self.token = token
                     }
                     recipes.forEach { item in
-                        print("recipeeeee")
-                        print(item)
-                        
                         DispatchQueue.main.async {
                             self.recipes.append(RecipeData(
                                 id:item.id,
@@ -324,16 +356,14 @@ class RecipesViewModel: ObservableObject {
                     print("getRecentOrdered")
                     print("Successfully retrieved list of recent ordered recipes:")
                     let recipes = query.getItems()
+                    let token = query.getNextToken()
                     DispatchQueue.main.async {
-                        if recipes.count != 20 {
+                        if token.isEmpty {
                             self.next = false
                         }
-                        self.token = query.getNextToken()
+                        self.token = token
                     }
                     recipes.forEach { item in
-                        print("recipeeeee")
-                        print(item.title)
-                        
                         DispatchQueue.main.async {
                             self.recipes.append(RecipeData(
                                 id:item.id,
@@ -377,22 +407,70 @@ class RecipesViewModel: ObservableObject {
         }
     }
     
-    func getNext(sort: Int) {
-        switch sort {
-        case 0:
-            listNextRecentPage()
-            break
-        case 1:
-            listNextProteinOrderedPage()
-            break
-        case 2:
-            listNextFatOrderedPage()
-            break
-        case 3:
-            listNextCarboOrderedPage()
-            break
-        default:
-            break
+    func getFavOrdered(
+        protein:Double,
+        fat:Double,
+        carbo:Double,
+        state:Int,
+        keyword:String,
+        group: DispatchGroup
+    ) {
+        Amplify.API.query(request: .getRecipesByFav(protein: protein, fat: fat, carbo: carbo, state: state, keyword: keyword)) { event in
+            switch event {
+            case .success(let result):
+                switch result {
+                case .success(let query):
+                    print("getRecentOrdered")
+                    print("Successfully retrieved list of recent ordered recipes:")
+                    let recipes = query.getItems()
+                    let token = query.getNextToken()
+                    DispatchQueue.main.async {
+                        if token.isEmpty {
+                            self.next = false
+                        }
+                        self.token = token
+                    }
+                    recipes.forEach { item in
+                        DispatchQueue.main.async {
+                            self.recipes.append(RecipeData(
+                                id:item.id,
+                                userId:item.user,
+                                title:item.title,
+                                calorie: String(item.calorie),
+                                protein:String(item.protein),
+                                fat:String(item.fat),
+                                carbo:String(item.carbo),
+                                state:item.state,
+                                materials:item.materials,
+                                contents:[],
+                                reviews: [],
+                                favNum: item.favNum,
+                                create_at: item.createdAt!,
+                                update_at: item.updatedAt!,
+                                delFlg: item.delFlg
+                            ))
+                        }
+                        Amplify.Storage.downloadData(key: "recipes/\(item.id).jpg") { result in
+                            switch result {
+                            case .success(let imageData):
+                                DispatchQueue.main.async{
+                                    self.imageDatum[item.id] = imageData
+                                }
+                            case .failure(let error):
+                                print("Failed to download image data - \(error)")
+                            }
+                        }
+
+                    }
+                    group.leave()
+                case .failure(let error):
+                    print("Got failed result with \(error.errorDescription)")
+                    print(error.recoverySuggestion)
+                    print(error.debugDescription)
+                }
+            case .failure(let error):
+                print("Got failed event with error \(error)")
+            }
         }
     }
     
@@ -406,26 +484,20 @@ class RecipesViewModel: ObservableObject {
             keyword: self.keyword,
             nextToken: self.token
         )) { event in
-            print(self.token)
             switch event {
             case .success(let result):
                 switch result {
                 case .success(let query):
-//                    print(query.getNextToken())
                     let recipes = query.getItems()
+                    let token = query.getNextToken()
                     DispatchQueue.main.async {
-                        if recipes.count != 20 {
+                        if token.isEmpty {
                             self.next = false
                         }
-                        self.token = query.getNextToken()
+                        self.token = token
                     }
                     print("Successfully retrieved next list of recent recipes:")
-//                    print(recipes)
-                    
                     recipes.forEach { item in
-                        print("next recipeeeee")
-                        print(item.title)
-
                         DispatchQueue.main.async {
                             self.recipes.append(
                                 RecipeData(
@@ -479,26 +551,20 @@ class RecipesViewModel: ObservableObject {
             keyword: self.keyword,
             nextToken: self.token
         )) { event in
-            print(self.token)
             switch event {
             case .success(let result):
                 switch result {
                 case .success(let query):
-//                    print(query.getNextToken())
                     let recipes = query.getItems()
+                    let token = query.getNextToken()
                     DispatchQueue.main.async {
-                        if recipes.count != 20 {
+                        if token.isEmpty {
                             self.next = false
                         }
-                        self.token = query.getNextToken()
+                        self.token = token
                     }
                     print("Successfully retrieved next list of protein ordered recipes:")
-//                    print(recipes)
-                    
                     recipes.forEach { item in
-                        print("next recipeeeee")
-                        print(item.title)
-
                         DispatchQueue.main.async {
                             self.recipes.append(
                                 RecipeData(
@@ -552,26 +618,88 @@ class RecipesViewModel: ObservableObject {
             keyword: self.keyword,
             nextToken: self.token
         )) { event in
-            print(self.token)
             switch event {
             case .success(let result):
                 switch result {
                 case .success(let query):
-//                    print(query.getNextToken())
                     let recipes = query.getItems()
+                    let token = query.getNextToken()
                     DispatchQueue.main.async {
-                        if recipes.count != 20 {
+                        if token.isEmpty {
                             self.next = false
                         }
-                        self.token = query.getNextToken()
+                        self.token = token
                     }
                     print("Successfully retrieved next list of fat ordered recipes:")
-//                    print(recipes)
                     
                     recipes.forEach { item in
-                        print("next recipeeeee")
-                        print(item.title)
-
+                        DispatchQueue.main.async {
+                            self.recipes.append(
+                                RecipeData(
+                                    id:item.id,
+                                    userId:item.user,
+                                    title:item.title,
+                                    calorie: String(item.calorie),
+                                    protein:String(item.protein),
+                                    fat:String(item.fat),
+                                    carbo:String(item.carbo),
+                                    state:item.state,
+                                    materials:item.materials,
+                                    contents:[],
+                                    reviews: [],
+                                    favNum: item.favNum,
+                                    create_at: item.createdAt!,
+                                    update_at: item.updatedAt!,
+                                    delFlg: item.delFlg
+                                ))
+                        }
+                        Amplify.Storage.downloadData(key: "recipes/\(item.id).jpg") { result in
+                            switch result {
+                            case .success(let imageData):
+                                DispatchQueue.main.async{
+                                    self.imageDatum[item.id] = imageData
+                                }
+                            case .failure(let error):
+                                print("Failed to download image data - \(error)")
+                            }
+                        }
+                    }
+                case .failure(let error):
+                    print("Got failed get next result with \(error.errorDescription)")
+                    print(error.recoverySuggestion)
+                    print(error.debugDescription)
+                }
+            case .failure(let error):
+                print("Got failed get next event with error \(error)")
+            }
+        }
+    }
+    
+    func listNextCarboOrderedPage() {
+        print("listNextCarboOrderedPage")
+        Amplify.API.query(request:.getRecipesByCarboOrderedNextPage(
+            protein: self.protein,
+            fat: self.fat,
+            carbo: self.carbo,
+            state: self.state,
+            keyword: self.keyword,
+            nextToken: self.token
+        )) { event in
+            switch event {
+            case .success(let result):
+                switch result {
+                case .success(let query):
+                    let recipes = query.getItems()
+                    let token = query.getNextToken()
+                    DispatchQueue.main.async {
+                        if token.isEmpty {
+                            self.next = false
+                        }
+                        self.token = token
+                    }
+                    print("Successfully retrieved next list of carbo ordered recipes:")
+                    
+                    recipes.forEach { item in
                         DispatchQueue.main.async {
                             self.recipes.append(
                                 RecipeData(
@@ -615,9 +743,9 @@ class RecipesViewModel: ObservableObject {
         }
     }
     
-    func listNextCarboOrderedPage() {
-        print("listNextCarboOrderedPage")
-        Amplify.API.query(request:.getRecipesByCarboOrderedNextPage(
+    func listNextFavOrderedPage() {
+        print("listNextFavOrderedPage")
+        Amplify.API.query(request:.getRecipesByDateNextPage(
             protein: self.protein,
             fat: self.fat,
             carbo: self.carbo,
@@ -630,7 +758,6 @@ class RecipesViewModel: ObservableObject {
             case .success(let result):
                 switch result {
                 case .success(let query):
-//                    print(query.getNextToken())
                     let recipes = query.getItems()
                     DispatchQueue.main.async {
                         if recipes.count != 20 {
@@ -638,13 +765,9 @@ class RecipesViewModel: ObservableObject {
                         }
                         self.token = query.getNextToken()
                     }
-                    print("Successfully retrieved next list of carbo ordered recipes:")
-//                    print(recipes)
+                    print("Successfully retrieved next list of fav ordered recipes:")
                     
                     recipes.forEach { item in
-                        print("next recipeeeee")
-                        print(item.title)
-
                         DispatchQueue.main.async {
                             self.recipes.append(
                                 RecipeData(
@@ -668,7 +791,6 @@ class RecipesViewModel: ObservableObject {
                         Amplify.Storage.downloadData(key: "recipes/\(item.id).jpg") { result in
                             switch result {
                             case .success(let imageData):
-                                print("next image success")
                                 DispatchQueue.main.async{
                                     self.imageDatum[item.id] = imageData
                                 }
@@ -704,6 +826,16 @@ class QueryFavs: Decodable {
     private var nextToken: String? = ""
 
     public func getItems() -> List<Fav> { return items; }
+    public func getNextToken() -> String {
+        return nextToken ?? ""
+    }
+}
+
+class QueryUsers: Decodable {
+    private var items: List<User> = []
+    private var nextToken: String? = ""
+
+    public func getItems() -> List<User> { return items; }
     public func getNextToken() -> String {
         return nextToken ?? ""
     }

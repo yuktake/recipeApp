@@ -36,6 +36,7 @@ subscription OnCreateRecipe {
       nextToken
     }
     favNum
+    reviewNum
     createdAt
     updatedAt
     delFlg
@@ -78,6 +79,7 @@ subscription OnUpdateRecipe {
       nextToken
     }
     favNum
+    reviewNum
     createdAt
     updatedAt
     delFlg
@@ -120,6 +122,7 @@ subscription OnDeleteRecipe {
       nextToken
     }
     favNum
+    reviewNum
     createdAt
     updatedAt
     delFlg
@@ -150,6 +153,7 @@ subscription OnCreateProcedure {
         nextToken
       }
       favNum
+      reviewNum
       createdAt
       updatedAt
       delFlg
@@ -183,6 +187,7 @@ subscription OnUpdateProcedure {
         nextToken
       }
       favNum
+      reviewNum
       createdAt
       updatedAt
       delFlg
@@ -216,6 +221,7 @@ subscription OnDeleteProcedure {
         nextToken
       }
       favNum
+      reviewNum
       createdAt
       updatedAt
       delFlg
@@ -249,6 +255,7 @@ subscription OnCreateReview {
         nextToken
       }
       favNum
+      reviewNum
       createdAt
       updatedAt
       delFlg
@@ -282,6 +289,7 @@ subscription OnUpdateReview {
         nextToken
       }
       favNum
+      reviewNum
       createdAt
       updatedAt
       delFlg
@@ -315,6 +323,7 @@ subscription OnDeleteReview {
         nextToken
       }
       favNum
+      reviewNum
       createdAt
       updatedAt
       delFlg
@@ -326,10 +335,13 @@ subscription OnDeleteReview {
 subscription OnCreateUser {
   onCreateUser {
     id
+    type
     name
     displayName
     email
     description
+    favNum
+    reviewNum
     createdAt
     updatedAt
   }
@@ -337,10 +349,13 @@ subscription OnCreateUser {
 subscription OnUpdateUser {
   onUpdateUser {
     id
+    type
     name
     displayName
     email
     description
+    favNum
+    reviewNum
     createdAt
     updatedAt
   }
@@ -348,10 +363,13 @@ subscription OnUpdateUser {
 subscription OnDeleteUser {
   onDeleteUser {
     id
+    type
     name
     displayName
     email
     description
+    favNum
+    reviewNum
     createdAt
     updatedAt
   }

@@ -5,8 +5,8 @@ import AWSAppSync
 public struct CreateRecipeInput: GraphQLMapConvertible {
   public var graphQLMap: GraphQLMap
 
-  public init(id: GraphQLID? = nil, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, favNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
-    graphQLMap = ["id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg]
+  public init(id: GraphQLID? = nil, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
+    graphQLMap = ["id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg]
   }
 
   public var id: GraphQLID? {
@@ -108,6 +108,15 @@ public struct CreateRecipeInput: GraphQLMapConvertible {
     }
   }
 
+  public var reviewNum: Int {
+    get {
+      return graphQLMap["reviewNum"] as! Int
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "reviewNum")
+    }
+  }
+
   public var createdAt: String? {
     get {
       return graphQLMap["createdAt"] as! String?
@@ -139,8 +148,8 @@ public struct CreateRecipeInput: GraphQLMapConvertible {
 public struct ModelRecipeConditionInput: GraphQLMapConvertible {
   public var graphQLMap: GraphQLMap
 
-  public init(user: ModelStringInput? = nil, type: ModelStringInput? = nil, title: ModelStringInput? = nil, calorie: ModelIntInput? = nil, protein: ModelFloatInput? = nil, fat: ModelFloatInput? = nil, carbo: ModelFloatInput? = nil, state: ModelIntInput? = nil, materials: ModelStringInput? = nil, favNum: ModelIntInput? = nil, createdAt: ModelStringInput? = nil, updatedAt: ModelStringInput? = nil, delFlg: ModelIntInput? = nil, and: [ModelRecipeConditionInput?]? = nil, or: [ModelRecipeConditionInput?]? = nil, not: ModelRecipeConditionInput? = nil) {
-    graphQLMap = ["user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg, "and": and, "or": or, "not": not]
+  public init(user: ModelStringInput? = nil, type: ModelStringInput? = nil, title: ModelStringInput? = nil, calorie: ModelIntInput? = nil, protein: ModelFloatInput? = nil, fat: ModelFloatInput? = nil, carbo: ModelFloatInput? = nil, state: ModelIntInput? = nil, materials: ModelStringInput? = nil, favNum: ModelIntInput? = nil, reviewNum: ModelIntInput? = nil, createdAt: ModelStringInput? = nil, updatedAt: ModelStringInput? = nil, delFlg: ModelIntInput? = nil, and: [ModelRecipeConditionInput?]? = nil, or: [ModelRecipeConditionInput?]? = nil, not: ModelRecipeConditionInput? = nil) {
+    graphQLMap = ["user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg, "and": and, "or": or, "not": not]
   }
 
   public var user: ModelStringInput? {
@@ -230,6 +239,15 @@ public struct ModelRecipeConditionInput: GraphQLMapConvertible {
     }
     set {
       graphQLMap.updateValue(newValue, forKey: "favNum")
+    }
+  }
+
+  public var reviewNum: ModelIntInput? {
+    get {
+      return graphQLMap["reviewNum"] as! ModelIntInput?
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "reviewNum")
     }
   }
 
@@ -730,8 +748,8 @@ public struct ModelFloatInput: GraphQLMapConvertible {
 public struct UpdateRecipeInput: GraphQLMapConvertible {
   public var graphQLMap: GraphQLMap
 
-  public init(id: GraphQLID, user: String? = nil, type: String? = nil, title: String? = nil, calorie: Int? = nil, protein: Double? = nil, fat: Double? = nil, carbo: Double? = nil, state: Int? = nil, materials: String? = nil, favNum: Int? = nil, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int? = nil) {
-    graphQLMap = ["id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg]
+  public init(id: GraphQLID, user: String? = nil, type: String? = nil, title: String? = nil, calorie: Int? = nil, protein: Double? = nil, fat: Double? = nil, carbo: Double? = nil, state: Int? = nil, materials: String? = nil, favNum: Int? = nil, reviewNum: Int? = nil, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int? = nil) {
+    graphQLMap = ["id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg]
   }
 
   public var id: GraphQLID {
@@ -830,6 +848,15 @@ public struct UpdateRecipeInput: GraphQLMapConvertible {
     }
     set {
       graphQLMap.updateValue(newValue, forKey: "favNum")
+    }
+  }
+
+  public var reviewNum: Int? {
+    get {
+      return graphQLMap["reviewNum"] as! Int?
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "reviewNum")
     }
   }
 
@@ -1448,8 +1475,8 @@ public struct DeleteReviewInput: GraphQLMapConvertible {
 public struct CreateUserInput: GraphQLMapConvertible {
   public var graphQLMap: GraphQLMap
 
-  public init(id: GraphQLID? = nil, name: String, displayName: String, email: String, description: String? = nil) {
-    graphQLMap = ["id": id, "name": name, "displayName": displayName, "email": email, "description": description]
+  public init(id: GraphQLID? = nil, type: String, name: String, displayName: String, email: String, description: String? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil) {
+    graphQLMap = ["id": id, "type": type, "name": name, "displayName": displayName, "email": email, "description": description, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt]
   }
 
   public var id: GraphQLID? {
@@ -1458,6 +1485,15 @@ public struct CreateUserInput: GraphQLMapConvertible {
     }
     set {
       graphQLMap.updateValue(newValue, forKey: "id")
+    }
+  }
+
+  public var type: String {
+    get {
+      return graphQLMap["type"] as! String
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "type")
     }
   }
 
@@ -1496,13 +1532,58 @@ public struct CreateUserInput: GraphQLMapConvertible {
       graphQLMap.updateValue(newValue, forKey: "description")
     }
   }
+
+  public var favNum: Int {
+    get {
+      return graphQLMap["favNum"] as! Int
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "favNum")
+    }
+  }
+
+  public var reviewNum: Int {
+    get {
+      return graphQLMap["reviewNum"] as! Int
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "reviewNum")
+    }
+  }
+
+  public var createdAt: String? {
+    get {
+      return graphQLMap["createdAt"] as! String?
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "createdAt")
+    }
+  }
+
+  public var updatedAt: String? {
+    get {
+      return graphQLMap["updatedAt"] as! String?
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "updatedAt")
+    }
+  }
 }
 
 public struct ModelUserConditionInput: GraphQLMapConvertible {
   public var graphQLMap: GraphQLMap
 
-  public init(name: ModelStringInput? = nil, displayName: ModelStringInput? = nil, email: ModelStringInput? = nil, description: ModelStringInput? = nil, and: [ModelUserConditionInput?]? = nil, or: [ModelUserConditionInput?]? = nil, not: ModelUserConditionInput? = nil) {
-    graphQLMap = ["name": name, "displayName": displayName, "email": email, "description": description, "and": and, "or": or, "not": not]
+  public init(type: ModelStringInput? = nil, name: ModelStringInput? = nil, displayName: ModelStringInput? = nil, email: ModelStringInput? = nil, description: ModelStringInput? = nil, favNum: ModelIntInput? = nil, reviewNum: ModelIntInput? = nil, createdAt: ModelStringInput? = nil, updatedAt: ModelStringInput? = nil, and: [ModelUserConditionInput?]? = nil, or: [ModelUserConditionInput?]? = nil, not: ModelUserConditionInput? = nil) {
+    graphQLMap = ["type": type, "name": name, "displayName": displayName, "email": email, "description": description, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "and": and, "or": or, "not": not]
+  }
+
+  public var type: ModelStringInput? {
+    get {
+      return graphQLMap["type"] as! ModelStringInput?
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "type")
+    }
   }
 
   public var name: ModelStringInput? {
@@ -1541,6 +1622,42 @@ public struct ModelUserConditionInput: GraphQLMapConvertible {
     }
   }
 
+  public var favNum: ModelIntInput? {
+    get {
+      return graphQLMap["favNum"] as! ModelIntInput?
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "favNum")
+    }
+  }
+
+  public var reviewNum: ModelIntInput? {
+    get {
+      return graphQLMap["reviewNum"] as! ModelIntInput?
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "reviewNum")
+    }
+  }
+
+  public var createdAt: ModelStringInput? {
+    get {
+      return graphQLMap["createdAt"] as! ModelStringInput?
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "createdAt")
+    }
+  }
+
+  public var updatedAt: ModelStringInput? {
+    get {
+      return graphQLMap["updatedAt"] as! ModelStringInput?
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "updatedAt")
+    }
+  }
+
   public var and: [ModelUserConditionInput?]? {
     get {
       return graphQLMap["and"] as! [ModelUserConditionInput?]?
@@ -1572,8 +1689,8 @@ public struct ModelUserConditionInput: GraphQLMapConvertible {
 public struct UpdateUserInput: GraphQLMapConvertible {
   public var graphQLMap: GraphQLMap
 
-  public init(id: GraphQLID, name: String? = nil, displayName: String? = nil, email: String? = nil, description: String? = nil) {
-    graphQLMap = ["id": id, "name": name, "displayName": displayName, "email": email, "description": description]
+  public init(id: GraphQLID, type: String? = nil, name: String? = nil, displayName: String? = nil, email: String? = nil, description: String? = nil, favNum: Int? = nil, reviewNum: Int? = nil, createdAt: String? = nil, updatedAt: String? = nil) {
+    graphQLMap = ["id": id, "type": type, "name": name, "displayName": displayName, "email": email, "description": description, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt]
   }
 
   public var id: GraphQLID {
@@ -1582,6 +1699,15 @@ public struct UpdateUserInput: GraphQLMapConvertible {
     }
     set {
       graphQLMap.updateValue(newValue, forKey: "id")
+    }
+  }
+
+  public var type: String? {
+    get {
+      return graphQLMap["type"] as! String?
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "type")
     }
   }
 
@@ -1618,6 +1744,42 @@ public struct UpdateUserInput: GraphQLMapConvertible {
     }
     set {
       graphQLMap.updateValue(newValue, forKey: "description")
+    }
+  }
+
+  public var favNum: Int? {
+    get {
+      return graphQLMap["favNum"] as! Int?
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "favNum")
+    }
+  }
+
+  public var reviewNum: Int? {
+    get {
+      return graphQLMap["reviewNum"] as! Int?
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "reviewNum")
+    }
+  }
+
+  public var createdAt: String? {
+    get {
+      return graphQLMap["createdAt"] as! String?
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "createdAt")
+    }
+  }
+
+  public var updatedAt: String? {
+    get {
+      return graphQLMap["updatedAt"] as! String?
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "updatedAt")
     }
   }
 }
@@ -1836,8 +1998,8 @@ public struct DeleteFavInput: GraphQLMapConvertible {
 public struct ModelRecipeFilterInput: GraphQLMapConvertible {
   public var graphQLMap: GraphQLMap
 
-  public init(id: ModelIDInput? = nil, user: ModelStringInput? = nil, type: ModelStringInput? = nil, title: ModelStringInput? = nil, calorie: ModelIntInput? = nil, protein: ModelFloatInput? = nil, fat: ModelFloatInput? = nil, carbo: ModelFloatInput? = nil, state: ModelIntInput? = nil, materials: ModelStringInput? = nil, favNum: ModelIntInput? = nil, createdAt: ModelStringInput? = nil, updatedAt: ModelStringInput? = nil, delFlg: ModelIntInput? = nil, and: [ModelRecipeFilterInput?]? = nil, or: [ModelRecipeFilterInput?]? = nil, not: ModelRecipeFilterInput? = nil) {
-    graphQLMap = ["id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg, "and": and, "or": or, "not": not]
+  public init(id: ModelIDInput? = nil, user: ModelStringInput? = nil, type: ModelStringInput? = nil, title: ModelStringInput? = nil, calorie: ModelIntInput? = nil, protein: ModelFloatInput? = nil, fat: ModelFloatInput? = nil, carbo: ModelFloatInput? = nil, state: ModelIntInput? = nil, materials: ModelStringInput? = nil, favNum: ModelIntInput? = nil, reviewNum: ModelIntInput? = nil, createdAt: ModelStringInput? = nil, updatedAt: ModelStringInput? = nil, delFlg: ModelIntInput? = nil, and: [ModelRecipeFilterInput?]? = nil, or: [ModelRecipeFilterInput?]? = nil, not: ModelRecipeFilterInput? = nil) {
+    graphQLMap = ["id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg, "and": and, "or": or, "not": not]
   }
 
   public var id: ModelIDInput? {
@@ -1936,6 +2098,15 @@ public struct ModelRecipeFilterInput: GraphQLMapConvertible {
     }
     set {
       graphQLMap.updateValue(newValue, forKey: "favNum")
+    }
+  }
+
+  public var reviewNum: ModelIntInput? {
+    get {
+      return graphQLMap["reviewNum"] as! ModelIntInput?
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "reviewNum")
     }
   }
 
@@ -2175,8 +2346,8 @@ public struct ModelReviewFilterInput: GraphQLMapConvertible {
 public struct ModelUserFilterInput: GraphQLMapConvertible {
   public var graphQLMap: GraphQLMap
 
-  public init(id: ModelIDInput? = nil, name: ModelStringInput? = nil, displayName: ModelStringInput? = nil, email: ModelStringInput? = nil, description: ModelStringInput? = nil, and: [ModelUserFilterInput?]? = nil, or: [ModelUserFilterInput?]? = nil, not: ModelUserFilterInput? = nil) {
-    graphQLMap = ["id": id, "name": name, "displayName": displayName, "email": email, "description": description, "and": and, "or": or, "not": not]
+  public init(id: ModelIDInput? = nil, type: ModelStringInput? = nil, name: ModelStringInput? = nil, displayName: ModelStringInput? = nil, email: ModelStringInput? = nil, description: ModelStringInput? = nil, favNum: ModelIntInput? = nil, reviewNum: ModelIntInput? = nil, createdAt: ModelStringInput? = nil, updatedAt: ModelStringInput? = nil, and: [ModelUserFilterInput?]? = nil, or: [ModelUserFilterInput?]? = nil, not: ModelUserFilterInput? = nil) {
+    graphQLMap = ["id": id, "type": type, "name": name, "displayName": displayName, "email": email, "description": description, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "and": and, "or": or, "not": not]
   }
 
   public var id: ModelIDInput? {
@@ -2185,6 +2356,15 @@ public struct ModelUserFilterInput: GraphQLMapConvertible {
     }
     set {
       graphQLMap.updateValue(newValue, forKey: "id")
+    }
+  }
+
+  public var type: ModelStringInput? {
+    get {
+      return graphQLMap["type"] as! ModelStringInput?
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "type")
     }
   }
 
@@ -2221,6 +2401,42 @@ public struct ModelUserFilterInput: GraphQLMapConvertible {
     }
     set {
       graphQLMap.updateValue(newValue, forKey: "description")
+    }
+  }
+
+  public var favNum: ModelIntInput? {
+    get {
+      return graphQLMap["favNum"] as! ModelIntInput?
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "favNum")
+    }
+  }
+
+  public var reviewNum: ModelIntInput? {
+    get {
+      return graphQLMap["reviewNum"] as! ModelIntInput?
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "reviewNum")
+    }
+  }
+
+  public var createdAt: ModelStringInput? {
+    get {
+      return graphQLMap["createdAt"] as! ModelStringInput?
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "createdAt")
+    }
+  }
+
+  public var updatedAt: ModelStringInput? {
+    get {
+      return graphQLMap["updatedAt"] as! ModelStringInput?
+    }
+    set {
+      graphQLMap.updateValue(newValue, forKey: "updatedAt")
     }
   }
 
@@ -2562,7 +2778,7 @@ public struct ModelStringKeyConditionInput: GraphQLMapConvertible {
 
 public final class CreateRecipeMutation: GraphQLMutation {
   public static let operationString =
-    "mutation CreateRecipe($input: CreateRecipeInput!, $condition: ModelRecipeConditionInput) {\n  createRecipe(input: $input, condition: $condition) {\n    __typename\n    id\n    user\n    type\n    title\n    calorie\n    protein\n    fat\n    carbo\n    state\n    materials\n    contents {\n      __typename\n      items {\n        __typename\n        id\n        recipeID\n        order\n        content\n        image\n        createdAt\n        updatedAt\n      }\n      nextToken\n    }\n    reviews {\n      __typename\n      items {\n        __typename\n        id\n        user\n        recipeID\n        content\n        image\n        createdAt\n        updatedAt\n      }\n      nextToken\n    }\n    favNum\n    createdAt\n    updatedAt\n    delFlg\n  }\n}"
+    "mutation CreateRecipe($input: CreateRecipeInput!, $condition: ModelRecipeConditionInput) {\n  createRecipe(input: $input, condition: $condition) {\n    __typename\n    id\n    user\n    type\n    title\n    calorie\n    protein\n    fat\n    carbo\n    state\n    materials\n    contents {\n      __typename\n      items {\n        __typename\n        id\n        recipeID\n        order\n        content\n        image\n        createdAt\n        updatedAt\n      }\n      nextToken\n    }\n    reviews {\n      __typename\n      items {\n        __typename\n        id\n        user\n        recipeID\n        content\n        image\n        createdAt\n        updatedAt\n      }\n      nextToken\n    }\n    favNum\n    reviewNum\n    createdAt\n    updatedAt\n    delFlg\n  }\n}"
 
   public var input: CreateRecipeInput
   public var condition: ModelRecipeConditionInput?
@@ -2620,6 +2836,7 @@ public final class CreateRecipeMutation: GraphQLMutation {
         GraphQLField("contents", type: .object(Content.selections)),
         GraphQLField("reviews", type: .object(Review.selections)),
         GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
         GraphQLField("createdAt", type: .scalar(String.self)),
         GraphQLField("updatedAt", type: .scalar(String.self)),
         GraphQLField("delFlg", type: .nonNull(.scalar(Int.self))),
@@ -2631,8 +2848,8 @@ public final class CreateRecipeMutation: GraphQLMutation {
         self.snapshot = snapshot
       }
 
-      public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
-        self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
+      public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
+        self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
       }
 
       public var __typename: String {
@@ -2758,6 +2975,15 @@ public final class CreateRecipeMutation: GraphQLMutation {
         }
         set {
           snapshot.updateValue(newValue, forKey: "favNum")
+        }
+      }
+
+      public var reviewNum: Int {
+        get {
+          return snapshot["reviewNum"]! as! Int
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "reviewNum")
         }
       }
 
@@ -3081,7 +3307,7 @@ public final class CreateRecipeMutation: GraphQLMutation {
 
 public final class UpdateRecipeMutation: GraphQLMutation {
   public static let operationString =
-    "mutation UpdateRecipe($input: UpdateRecipeInput!, $condition: ModelRecipeConditionInput) {\n  updateRecipe(input: $input, condition: $condition) {\n    __typename\n    id\n    user\n    type\n    title\n    calorie\n    protein\n    fat\n    carbo\n    state\n    materials\n    contents {\n      __typename\n      items {\n        __typename\n        id\n        recipeID\n        order\n        content\n        image\n        createdAt\n        updatedAt\n      }\n      nextToken\n    }\n    reviews {\n      __typename\n      items {\n        __typename\n        id\n        user\n        recipeID\n        content\n        image\n        createdAt\n        updatedAt\n      }\n      nextToken\n    }\n    favNum\n    createdAt\n    updatedAt\n    delFlg\n  }\n}"
+    "mutation UpdateRecipe($input: UpdateRecipeInput!, $condition: ModelRecipeConditionInput) {\n  updateRecipe(input: $input, condition: $condition) {\n    __typename\n    id\n    user\n    type\n    title\n    calorie\n    protein\n    fat\n    carbo\n    state\n    materials\n    contents {\n      __typename\n      items {\n        __typename\n        id\n        recipeID\n        order\n        content\n        image\n        createdAt\n        updatedAt\n      }\n      nextToken\n    }\n    reviews {\n      __typename\n      items {\n        __typename\n        id\n        user\n        recipeID\n        content\n        image\n        createdAt\n        updatedAt\n      }\n      nextToken\n    }\n    favNum\n    reviewNum\n    createdAt\n    updatedAt\n    delFlg\n  }\n}"
 
   public var input: UpdateRecipeInput
   public var condition: ModelRecipeConditionInput?
@@ -3139,6 +3365,7 @@ public final class UpdateRecipeMutation: GraphQLMutation {
         GraphQLField("contents", type: .object(Content.selections)),
         GraphQLField("reviews", type: .object(Review.selections)),
         GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
         GraphQLField("createdAt", type: .scalar(String.self)),
         GraphQLField("updatedAt", type: .scalar(String.self)),
         GraphQLField("delFlg", type: .nonNull(.scalar(Int.self))),
@@ -3150,8 +3377,8 @@ public final class UpdateRecipeMutation: GraphQLMutation {
         self.snapshot = snapshot
       }
 
-      public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
-        self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
+      public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
+        self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
       }
 
       public var __typename: String {
@@ -3277,6 +3504,15 @@ public final class UpdateRecipeMutation: GraphQLMutation {
         }
         set {
           snapshot.updateValue(newValue, forKey: "favNum")
+        }
+      }
+
+      public var reviewNum: Int {
+        get {
+          return snapshot["reviewNum"]! as! Int
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "reviewNum")
         }
       }
 
@@ -3600,7 +3836,7 @@ public final class UpdateRecipeMutation: GraphQLMutation {
 
 public final class DeleteRecipeMutation: GraphQLMutation {
   public static let operationString =
-    "mutation DeleteRecipe($input: DeleteRecipeInput!, $condition: ModelRecipeConditionInput) {\n  deleteRecipe(input: $input, condition: $condition) {\n    __typename\n    id\n    user\n    type\n    title\n    calorie\n    protein\n    fat\n    carbo\n    state\n    materials\n    contents {\n      __typename\n      items {\n        __typename\n        id\n        recipeID\n        order\n        content\n        image\n        createdAt\n        updatedAt\n      }\n      nextToken\n    }\n    reviews {\n      __typename\n      items {\n        __typename\n        id\n        user\n        recipeID\n        content\n        image\n        createdAt\n        updatedAt\n      }\n      nextToken\n    }\n    favNum\n    createdAt\n    updatedAt\n    delFlg\n  }\n}"
+    "mutation DeleteRecipe($input: DeleteRecipeInput!, $condition: ModelRecipeConditionInput) {\n  deleteRecipe(input: $input, condition: $condition) {\n    __typename\n    id\n    user\n    type\n    title\n    calorie\n    protein\n    fat\n    carbo\n    state\n    materials\n    contents {\n      __typename\n      items {\n        __typename\n        id\n        recipeID\n        order\n        content\n        image\n        createdAt\n        updatedAt\n      }\n      nextToken\n    }\n    reviews {\n      __typename\n      items {\n        __typename\n        id\n        user\n        recipeID\n        content\n        image\n        createdAt\n        updatedAt\n      }\n      nextToken\n    }\n    favNum\n    reviewNum\n    createdAt\n    updatedAt\n    delFlg\n  }\n}"
 
   public var input: DeleteRecipeInput
   public var condition: ModelRecipeConditionInput?
@@ -3658,6 +3894,7 @@ public final class DeleteRecipeMutation: GraphQLMutation {
         GraphQLField("contents", type: .object(Content.selections)),
         GraphQLField("reviews", type: .object(Review.selections)),
         GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
         GraphQLField("createdAt", type: .scalar(String.self)),
         GraphQLField("updatedAt", type: .scalar(String.self)),
         GraphQLField("delFlg", type: .nonNull(.scalar(Int.self))),
@@ -3669,8 +3906,8 @@ public final class DeleteRecipeMutation: GraphQLMutation {
         self.snapshot = snapshot
       }
 
-      public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
-        self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
+      public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
+        self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
       }
 
       public var __typename: String {
@@ -3796,6 +4033,15 @@ public final class DeleteRecipeMutation: GraphQLMutation {
         }
         set {
           snapshot.updateValue(newValue, forKey: "favNum")
+        }
+      }
+
+      public var reviewNum: Int {
+        get {
+          return snapshot["reviewNum"]! as! Int
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "reviewNum")
         }
       }
 
@@ -4119,7 +4365,7 @@ public final class DeleteRecipeMutation: GraphQLMutation {
 
 public final class CreateProcedureMutation: GraphQLMutation {
   public static let operationString =
-    "mutation CreateProcedure($input: CreateProcedureInput!, $condition: ModelProcedureConditionInput) {\n  createProcedure(input: $input, condition: $condition) {\n    __typename\n    id\n    recipeID\n    order\n    content\n    image\n    recipe {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    createdAt\n    updatedAt\n  }\n}"
+    "mutation CreateProcedure($input: CreateProcedureInput!, $condition: ModelProcedureConditionInput) {\n  createProcedure(input: $input, condition: $condition) {\n    __typename\n    id\n    recipeID\n    order\n    content\n    image\n    recipe {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      reviewNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    createdAt\n    updatedAt\n  }\n}"
 
   public var input: CreateProcedureInput
   public var condition: ModelProcedureConditionInput?
@@ -4283,6 +4529,7 @@ public final class CreateProcedureMutation: GraphQLMutation {
           GraphQLField("contents", type: .object(Content.selections)),
           GraphQLField("reviews", type: .object(Review.selections)),
           GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
           GraphQLField("createdAt", type: .scalar(String.self)),
           GraphQLField("updatedAt", type: .scalar(String.self)),
           GraphQLField("delFlg", type: .nonNull(.scalar(Int.self))),
@@ -4294,8 +4541,8 @@ public final class CreateProcedureMutation: GraphQLMutation {
           self.snapshot = snapshot
         }
 
-        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
-          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
+        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
+          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
         }
 
         public var __typename: String {
@@ -4424,6 +4671,15 @@ public final class CreateProcedureMutation: GraphQLMutation {
           }
         }
 
+        public var reviewNum: Int {
+          get {
+            return snapshot["reviewNum"]! as! Int
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "reviewNum")
+          }
+        }
+
         public var createdAt: String? {
           get {
             return snapshot["createdAt"] as? String
@@ -4531,7 +4787,7 @@ public final class CreateProcedureMutation: GraphQLMutation {
 
 public final class UpdateProcedureMutation: GraphQLMutation {
   public static let operationString =
-    "mutation UpdateProcedure($input: UpdateProcedureInput!, $condition: ModelProcedureConditionInput) {\n  updateProcedure(input: $input, condition: $condition) {\n    __typename\n    id\n    recipeID\n    order\n    content\n    image\n    recipe {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    createdAt\n    updatedAt\n  }\n}"
+    "mutation UpdateProcedure($input: UpdateProcedureInput!, $condition: ModelProcedureConditionInput) {\n  updateProcedure(input: $input, condition: $condition) {\n    __typename\n    id\n    recipeID\n    order\n    content\n    image\n    recipe {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      reviewNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    createdAt\n    updatedAt\n  }\n}"
 
   public var input: UpdateProcedureInput
   public var condition: ModelProcedureConditionInput?
@@ -4695,6 +4951,7 @@ public final class UpdateProcedureMutation: GraphQLMutation {
           GraphQLField("contents", type: .object(Content.selections)),
           GraphQLField("reviews", type: .object(Review.selections)),
           GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
           GraphQLField("createdAt", type: .scalar(String.self)),
           GraphQLField("updatedAt", type: .scalar(String.self)),
           GraphQLField("delFlg", type: .nonNull(.scalar(Int.self))),
@@ -4706,8 +4963,8 @@ public final class UpdateProcedureMutation: GraphQLMutation {
           self.snapshot = snapshot
         }
 
-        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
-          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
+        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
+          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
         }
 
         public var __typename: String {
@@ -4836,6 +5093,15 @@ public final class UpdateProcedureMutation: GraphQLMutation {
           }
         }
 
+        public var reviewNum: Int {
+          get {
+            return snapshot["reviewNum"]! as! Int
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "reviewNum")
+          }
+        }
+
         public var createdAt: String? {
           get {
             return snapshot["createdAt"] as? String
@@ -4943,7 +5209,7 @@ public final class UpdateProcedureMutation: GraphQLMutation {
 
 public final class DeleteProcedureMutation: GraphQLMutation {
   public static let operationString =
-    "mutation DeleteProcedure($input: DeleteProcedureInput!, $condition: ModelProcedureConditionInput) {\n  deleteProcedure(input: $input, condition: $condition) {\n    __typename\n    id\n    recipeID\n    order\n    content\n    image\n    recipe {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    createdAt\n    updatedAt\n  }\n}"
+    "mutation DeleteProcedure($input: DeleteProcedureInput!, $condition: ModelProcedureConditionInput) {\n  deleteProcedure(input: $input, condition: $condition) {\n    __typename\n    id\n    recipeID\n    order\n    content\n    image\n    recipe {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      reviewNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    createdAt\n    updatedAt\n  }\n}"
 
   public var input: DeleteProcedureInput
   public var condition: ModelProcedureConditionInput?
@@ -5107,6 +5373,7 @@ public final class DeleteProcedureMutation: GraphQLMutation {
           GraphQLField("contents", type: .object(Content.selections)),
           GraphQLField("reviews", type: .object(Review.selections)),
           GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
           GraphQLField("createdAt", type: .scalar(String.self)),
           GraphQLField("updatedAt", type: .scalar(String.self)),
           GraphQLField("delFlg", type: .nonNull(.scalar(Int.self))),
@@ -5118,8 +5385,8 @@ public final class DeleteProcedureMutation: GraphQLMutation {
           self.snapshot = snapshot
         }
 
-        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
-          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
+        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
+          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
         }
 
         public var __typename: String {
@@ -5248,6 +5515,15 @@ public final class DeleteProcedureMutation: GraphQLMutation {
           }
         }
 
+        public var reviewNum: Int {
+          get {
+            return snapshot["reviewNum"]! as! Int
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "reviewNum")
+          }
+        }
+
         public var createdAt: String? {
           get {
             return snapshot["createdAt"] as? String
@@ -5355,7 +5631,7 @@ public final class DeleteProcedureMutation: GraphQLMutation {
 
 public final class CreateReviewMutation: GraphQLMutation {
   public static let operationString =
-    "mutation CreateReview($input: CreateReviewInput!, $condition: ModelReviewConditionInput) {\n  createReview(input: $input, condition: $condition) {\n    __typename\n    id\n    user\n    recipeID\n    content\n    image\n    recipe {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    createdAt\n    updatedAt\n  }\n}"
+    "mutation CreateReview($input: CreateReviewInput!, $condition: ModelReviewConditionInput) {\n  createReview(input: $input, condition: $condition) {\n    __typename\n    id\n    user\n    recipeID\n    content\n    image\n    recipe {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      reviewNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    createdAt\n    updatedAt\n  }\n}"
 
   public var input: CreateReviewInput
   public var condition: ModelReviewConditionInput?
@@ -5519,6 +5795,7 @@ public final class CreateReviewMutation: GraphQLMutation {
           GraphQLField("contents", type: .object(Content.selections)),
           GraphQLField("reviews", type: .object(Review.selections)),
           GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
           GraphQLField("createdAt", type: .scalar(String.self)),
           GraphQLField("updatedAt", type: .scalar(String.self)),
           GraphQLField("delFlg", type: .nonNull(.scalar(Int.self))),
@@ -5530,8 +5807,8 @@ public final class CreateReviewMutation: GraphQLMutation {
           self.snapshot = snapshot
         }
 
-        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
-          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
+        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
+          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
         }
 
         public var __typename: String {
@@ -5660,6 +5937,15 @@ public final class CreateReviewMutation: GraphQLMutation {
           }
         }
 
+        public var reviewNum: Int {
+          get {
+            return snapshot["reviewNum"]! as! Int
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "reviewNum")
+          }
+        }
+
         public var createdAt: String? {
           get {
             return snapshot["createdAt"] as? String
@@ -5767,7 +6053,7 @@ public final class CreateReviewMutation: GraphQLMutation {
 
 public final class UpdateReviewMutation: GraphQLMutation {
   public static let operationString =
-    "mutation UpdateReview($input: UpdateReviewInput!, $condition: ModelReviewConditionInput) {\n  updateReview(input: $input, condition: $condition) {\n    __typename\n    id\n    user\n    recipeID\n    content\n    image\n    recipe {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    createdAt\n    updatedAt\n  }\n}"
+    "mutation UpdateReview($input: UpdateReviewInput!, $condition: ModelReviewConditionInput) {\n  updateReview(input: $input, condition: $condition) {\n    __typename\n    id\n    user\n    recipeID\n    content\n    image\n    recipe {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      reviewNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    createdAt\n    updatedAt\n  }\n}"
 
   public var input: UpdateReviewInput
   public var condition: ModelReviewConditionInput?
@@ -5931,6 +6217,7 @@ public final class UpdateReviewMutation: GraphQLMutation {
           GraphQLField("contents", type: .object(Content.selections)),
           GraphQLField("reviews", type: .object(Review.selections)),
           GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
           GraphQLField("createdAt", type: .scalar(String.self)),
           GraphQLField("updatedAt", type: .scalar(String.self)),
           GraphQLField("delFlg", type: .nonNull(.scalar(Int.self))),
@@ -5942,8 +6229,8 @@ public final class UpdateReviewMutation: GraphQLMutation {
           self.snapshot = snapshot
         }
 
-        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
-          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
+        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
+          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
         }
 
         public var __typename: String {
@@ -6072,6 +6359,15 @@ public final class UpdateReviewMutation: GraphQLMutation {
           }
         }
 
+        public var reviewNum: Int {
+          get {
+            return snapshot["reviewNum"]! as! Int
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "reviewNum")
+          }
+        }
+
         public var createdAt: String? {
           get {
             return snapshot["createdAt"] as? String
@@ -6179,7 +6475,7 @@ public final class UpdateReviewMutation: GraphQLMutation {
 
 public final class DeleteReviewMutation: GraphQLMutation {
   public static let operationString =
-    "mutation DeleteReview($input: DeleteReviewInput!, $condition: ModelReviewConditionInput) {\n  deleteReview(input: $input, condition: $condition) {\n    __typename\n    id\n    user\n    recipeID\n    content\n    image\n    recipe {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    createdAt\n    updatedAt\n  }\n}"
+    "mutation DeleteReview($input: DeleteReviewInput!, $condition: ModelReviewConditionInput) {\n  deleteReview(input: $input, condition: $condition) {\n    __typename\n    id\n    user\n    recipeID\n    content\n    image\n    recipe {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      reviewNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    createdAt\n    updatedAt\n  }\n}"
 
   public var input: DeleteReviewInput
   public var condition: ModelReviewConditionInput?
@@ -6343,6 +6639,7 @@ public final class DeleteReviewMutation: GraphQLMutation {
           GraphQLField("contents", type: .object(Content.selections)),
           GraphQLField("reviews", type: .object(Review.selections)),
           GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
           GraphQLField("createdAt", type: .scalar(String.self)),
           GraphQLField("updatedAt", type: .scalar(String.self)),
           GraphQLField("delFlg", type: .nonNull(.scalar(Int.self))),
@@ -6354,8 +6651,8 @@ public final class DeleteReviewMutation: GraphQLMutation {
           self.snapshot = snapshot
         }
 
-        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
-          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
+        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
+          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
         }
 
         public var __typename: String {
@@ -6484,6 +6781,15 @@ public final class DeleteReviewMutation: GraphQLMutation {
           }
         }
 
+        public var reviewNum: Int {
+          get {
+            return snapshot["reviewNum"]! as! Int
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "reviewNum")
+          }
+        }
+
         public var createdAt: String? {
           get {
             return snapshot["createdAt"] as? String
@@ -6591,7 +6897,7 @@ public final class DeleteReviewMutation: GraphQLMutation {
 
 public final class CreateUserMutation: GraphQLMutation {
   public static let operationString =
-    "mutation CreateUser($input: CreateUserInput!, $condition: ModelUserConditionInput) {\n  createUser(input: $input, condition: $condition) {\n    __typename\n    id\n    name\n    displayName\n    email\n    description\n    createdAt\n    updatedAt\n  }\n}"
+    "mutation CreateUser($input: CreateUserInput!, $condition: ModelUserConditionInput) {\n  createUser(input: $input, condition: $condition) {\n    __typename\n    id\n    type\n    name\n    displayName\n    email\n    description\n    favNum\n    reviewNum\n    createdAt\n    updatedAt\n  }\n}"
 
   public var input: CreateUserInput
   public var condition: ModelUserConditionInput?
@@ -6637,12 +6943,15 @@ public final class CreateUserMutation: GraphQLMutation {
       public static let selections: [GraphQLSelection] = [
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
         GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("type", type: .nonNull(.scalar(String.self))),
         GraphQLField("name", type: .nonNull(.scalar(String.self))),
         GraphQLField("displayName", type: .nonNull(.scalar(String.self))),
         GraphQLField("email", type: .nonNull(.scalar(String.self))),
         GraphQLField("description", type: .scalar(String.self)),
-        GraphQLField("createdAt", type: .nonNull(.scalar(String.self))),
-        GraphQLField("updatedAt", type: .nonNull(.scalar(String.self))),
+        GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("createdAt", type: .scalar(String.self)),
+        GraphQLField("updatedAt", type: .scalar(String.self)),
       ]
 
       public var snapshot: Snapshot
@@ -6651,8 +6960,8 @@ public final class CreateUserMutation: GraphQLMutation {
         self.snapshot = snapshot
       }
 
-      public init(id: GraphQLID, name: String, displayName: String, email: String, description: String? = nil, createdAt: String, updatedAt: String) {
-        self.init(snapshot: ["__typename": "User", "id": id, "name": name, "displayName": displayName, "email": email, "description": description, "createdAt": createdAt, "updatedAt": updatedAt])
+      public init(id: GraphQLID, type: String, name: String, displayName: String, email: String, description: String? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil) {
+        self.init(snapshot: ["__typename": "User", "id": id, "type": type, "name": name, "displayName": displayName, "email": email, "description": description, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt])
       }
 
       public var __typename: String {
@@ -6670,6 +6979,15 @@ public final class CreateUserMutation: GraphQLMutation {
         }
         set {
           snapshot.updateValue(newValue, forKey: "id")
+        }
+      }
+
+      public var type: String {
+        get {
+          return snapshot["type"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "type")
         }
       }
 
@@ -6709,18 +7027,36 @@ public final class CreateUserMutation: GraphQLMutation {
         }
       }
 
-      public var createdAt: String {
+      public var favNum: Int {
         get {
-          return snapshot["createdAt"]! as! String
+          return snapshot["favNum"]! as! Int
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "favNum")
+        }
+      }
+
+      public var reviewNum: Int {
+        get {
+          return snapshot["reviewNum"]! as! Int
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "reviewNum")
+        }
+      }
+
+      public var createdAt: String? {
+        get {
+          return snapshot["createdAt"] as? String
         }
         set {
           snapshot.updateValue(newValue, forKey: "createdAt")
         }
       }
 
-      public var updatedAt: String {
+      public var updatedAt: String? {
         get {
-          return snapshot["updatedAt"]! as! String
+          return snapshot["updatedAt"] as? String
         }
         set {
           snapshot.updateValue(newValue, forKey: "updatedAt")
@@ -6732,7 +7068,7 @@ public final class CreateUserMutation: GraphQLMutation {
 
 public final class UpdateUserMutation: GraphQLMutation {
   public static let operationString =
-    "mutation UpdateUser($input: UpdateUserInput!, $condition: ModelUserConditionInput) {\n  updateUser(input: $input, condition: $condition) {\n    __typename\n    id\n    name\n    displayName\n    email\n    description\n    createdAt\n    updatedAt\n  }\n}"
+    "mutation UpdateUser($input: UpdateUserInput!, $condition: ModelUserConditionInput) {\n  updateUser(input: $input, condition: $condition) {\n    __typename\n    id\n    type\n    name\n    displayName\n    email\n    description\n    favNum\n    reviewNum\n    createdAt\n    updatedAt\n  }\n}"
 
   public var input: UpdateUserInput
   public var condition: ModelUserConditionInput?
@@ -6778,12 +7114,15 @@ public final class UpdateUserMutation: GraphQLMutation {
       public static let selections: [GraphQLSelection] = [
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
         GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("type", type: .nonNull(.scalar(String.self))),
         GraphQLField("name", type: .nonNull(.scalar(String.self))),
         GraphQLField("displayName", type: .nonNull(.scalar(String.self))),
         GraphQLField("email", type: .nonNull(.scalar(String.self))),
         GraphQLField("description", type: .scalar(String.self)),
-        GraphQLField("createdAt", type: .nonNull(.scalar(String.self))),
-        GraphQLField("updatedAt", type: .nonNull(.scalar(String.self))),
+        GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("createdAt", type: .scalar(String.self)),
+        GraphQLField("updatedAt", type: .scalar(String.self)),
       ]
 
       public var snapshot: Snapshot
@@ -6792,8 +7131,8 @@ public final class UpdateUserMutation: GraphQLMutation {
         self.snapshot = snapshot
       }
 
-      public init(id: GraphQLID, name: String, displayName: String, email: String, description: String? = nil, createdAt: String, updatedAt: String) {
-        self.init(snapshot: ["__typename": "User", "id": id, "name": name, "displayName": displayName, "email": email, "description": description, "createdAt": createdAt, "updatedAt": updatedAt])
+      public init(id: GraphQLID, type: String, name: String, displayName: String, email: String, description: String? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil) {
+        self.init(snapshot: ["__typename": "User", "id": id, "type": type, "name": name, "displayName": displayName, "email": email, "description": description, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt])
       }
 
       public var __typename: String {
@@ -6811,6 +7150,15 @@ public final class UpdateUserMutation: GraphQLMutation {
         }
         set {
           snapshot.updateValue(newValue, forKey: "id")
+        }
+      }
+
+      public var type: String {
+        get {
+          return snapshot["type"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "type")
         }
       }
 
@@ -6850,18 +7198,36 @@ public final class UpdateUserMutation: GraphQLMutation {
         }
       }
 
-      public var createdAt: String {
+      public var favNum: Int {
         get {
-          return snapshot["createdAt"]! as! String
+          return snapshot["favNum"]! as! Int
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "favNum")
+        }
+      }
+
+      public var reviewNum: Int {
+        get {
+          return snapshot["reviewNum"]! as! Int
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "reviewNum")
+        }
+      }
+
+      public var createdAt: String? {
+        get {
+          return snapshot["createdAt"] as? String
         }
         set {
           snapshot.updateValue(newValue, forKey: "createdAt")
         }
       }
 
-      public var updatedAt: String {
+      public var updatedAt: String? {
         get {
-          return snapshot["updatedAt"]! as! String
+          return snapshot["updatedAt"] as? String
         }
         set {
           snapshot.updateValue(newValue, forKey: "updatedAt")
@@ -6873,7 +7239,7 @@ public final class UpdateUserMutation: GraphQLMutation {
 
 public final class DeleteUserMutation: GraphQLMutation {
   public static let operationString =
-    "mutation DeleteUser($input: DeleteUserInput!, $condition: ModelUserConditionInput) {\n  deleteUser(input: $input, condition: $condition) {\n    __typename\n    id\n    name\n    displayName\n    email\n    description\n    createdAt\n    updatedAt\n  }\n}"
+    "mutation DeleteUser($input: DeleteUserInput!, $condition: ModelUserConditionInput) {\n  deleteUser(input: $input, condition: $condition) {\n    __typename\n    id\n    type\n    name\n    displayName\n    email\n    description\n    favNum\n    reviewNum\n    createdAt\n    updatedAt\n  }\n}"
 
   public var input: DeleteUserInput
   public var condition: ModelUserConditionInput?
@@ -6919,12 +7285,15 @@ public final class DeleteUserMutation: GraphQLMutation {
       public static let selections: [GraphQLSelection] = [
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
         GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("type", type: .nonNull(.scalar(String.self))),
         GraphQLField("name", type: .nonNull(.scalar(String.self))),
         GraphQLField("displayName", type: .nonNull(.scalar(String.self))),
         GraphQLField("email", type: .nonNull(.scalar(String.self))),
         GraphQLField("description", type: .scalar(String.self)),
-        GraphQLField("createdAt", type: .nonNull(.scalar(String.self))),
-        GraphQLField("updatedAt", type: .nonNull(.scalar(String.self))),
+        GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("createdAt", type: .scalar(String.self)),
+        GraphQLField("updatedAt", type: .scalar(String.self)),
       ]
 
       public var snapshot: Snapshot
@@ -6933,8 +7302,8 @@ public final class DeleteUserMutation: GraphQLMutation {
         self.snapshot = snapshot
       }
 
-      public init(id: GraphQLID, name: String, displayName: String, email: String, description: String? = nil, createdAt: String, updatedAt: String) {
-        self.init(snapshot: ["__typename": "User", "id": id, "name": name, "displayName": displayName, "email": email, "description": description, "createdAt": createdAt, "updatedAt": updatedAt])
+      public init(id: GraphQLID, type: String, name: String, displayName: String, email: String, description: String? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil) {
+        self.init(snapshot: ["__typename": "User", "id": id, "type": type, "name": name, "displayName": displayName, "email": email, "description": description, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt])
       }
 
       public var __typename: String {
@@ -6952,6 +7321,15 @@ public final class DeleteUserMutation: GraphQLMutation {
         }
         set {
           snapshot.updateValue(newValue, forKey: "id")
+        }
+      }
+
+      public var type: String {
+        get {
+          return snapshot["type"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "type")
         }
       }
 
@@ -6991,18 +7369,36 @@ public final class DeleteUserMutation: GraphQLMutation {
         }
       }
 
-      public var createdAt: String {
+      public var favNum: Int {
         get {
-          return snapshot["createdAt"]! as! String
+          return snapshot["favNum"]! as! Int
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "favNum")
+        }
+      }
+
+      public var reviewNum: Int {
+        get {
+          return snapshot["reviewNum"]! as! Int
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "reviewNum")
+        }
+      }
+
+      public var createdAt: String? {
+        get {
+          return snapshot["createdAt"] as? String
         }
         set {
           snapshot.updateValue(newValue, forKey: "createdAt")
         }
       }
 
-      public var updatedAt: String {
+      public var updatedAt: String? {
         get {
-          return snapshot["updatedAt"]! as! String
+          return snapshot["updatedAt"] as? String
         }
         set {
           snapshot.updateValue(newValue, forKey: "updatedAt")
@@ -7407,7 +7803,7 @@ public final class DeleteFavMutation: GraphQLMutation {
 
 public final class GetRecipeQuery: GraphQLQuery {
   public static let operationString =
-    "query GetRecipe($id: ID!) {\n  getRecipe(id: $id) {\n    __typename\n    id\n    user\n    type\n    title\n    calorie\n    protein\n    fat\n    carbo\n    state\n    materials\n    contents {\n      __typename\n      items {\n        __typename\n        id\n        recipeID\n        order\n        content\n        image\n        createdAt\n        updatedAt\n      }\n      nextToken\n    }\n    reviews {\n      __typename\n      items {\n        __typename\n        id\n        user\n        recipeID\n        content\n        image\n        createdAt\n        updatedAt\n      }\n      nextToken\n    }\n    favNum\n    createdAt\n    updatedAt\n    delFlg\n  }\n}"
+    "query GetRecipe($id: ID!) {\n  getRecipe(id: $id) {\n    __typename\n    id\n    user\n    type\n    title\n    calorie\n    protein\n    fat\n    carbo\n    state\n    materials\n    contents {\n      __typename\n      items {\n        __typename\n        id\n        recipeID\n        order\n        content\n        image\n        createdAt\n        updatedAt\n      }\n      nextToken\n    }\n    reviews {\n      __typename\n      items {\n        __typename\n        id\n        user\n        recipeID\n        content\n        image\n        createdAt\n        updatedAt\n      }\n      nextToken\n    }\n    favNum\n    reviewNum\n    createdAt\n    updatedAt\n    delFlg\n  }\n}"
 
   public var id: GraphQLID
 
@@ -7463,6 +7859,7 @@ public final class GetRecipeQuery: GraphQLQuery {
         GraphQLField("contents", type: .object(Content.selections)),
         GraphQLField("reviews", type: .object(Review.selections)),
         GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
         GraphQLField("createdAt", type: .scalar(String.self)),
         GraphQLField("updatedAt", type: .scalar(String.self)),
         GraphQLField("delFlg", type: .nonNull(.scalar(Int.self))),
@@ -7474,8 +7871,8 @@ public final class GetRecipeQuery: GraphQLQuery {
         self.snapshot = snapshot
       }
 
-      public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
-        self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
+      public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
+        self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
       }
 
       public var __typename: String {
@@ -7601,6 +7998,15 @@ public final class GetRecipeQuery: GraphQLQuery {
         }
         set {
           snapshot.updateValue(newValue, forKey: "favNum")
+        }
+      }
+
+      public var reviewNum: Int {
+        get {
+          return snapshot["reviewNum"]! as! Int
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "reviewNum")
         }
       }
 
@@ -7924,7 +8330,7 @@ public final class GetRecipeQuery: GraphQLQuery {
 
 public final class ListRecipesQuery: GraphQLQuery {
   public static let operationString =
-    "query ListRecipes($filter: ModelRecipeFilterInput, $limit: Int, $nextToken: String) {\n  listRecipes(filter: $filter, limit: $limit, nextToken: $nextToken) {\n    __typename\n    items {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    nextToken\n  }\n}"
+    "query ListRecipes($filter: ModelRecipeFilterInput, $limit: Int, $nextToken: String) {\n  listRecipes(filter: $filter, limit: $limit, nextToken: $nextToken) {\n    __typename\n    items {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      reviewNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    nextToken\n  }\n}"
 
   public var filter: ModelRecipeFilterInput?
   public var limit: Int?
@@ -8030,6 +8436,7 @@ public final class ListRecipesQuery: GraphQLQuery {
           GraphQLField("contents", type: .object(Content.selections)),
           GraphQLField("reviews", type: .object(Review.selections)),
           GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
           GraphQLField("createdAt", type: .scalar(String.self)),
           GraphQLField("updatedAt", type: .scalar(String.self)),
           GraphQLField("delFlg", type: .nonNull(.scalar(Int.self))),
@@ -8041,8 +8448,8 @@ public final class ListRecipesQuery: GraphQLQuery {
           self.snapshot = snapshot
         }
 
-        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
-          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
+        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
+          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
         }
 
         public var __typename: String {
@@ -8171,6 +8578,15 @@ public final class ListRecipesQuery: GraphQLQuery {
           }
         }
 
+        public var reviewNum: Int {
+          get {
+            return snapshot["reviewNum"]! as! Int
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "reviewNum")
+          }
+        }
+
         public var createdAt: String? {
           get {
             return snapshot["createdAt"] as? String
@@ -8278,7 +8694,7 @@ public final class ListRecipesQuery: GraphQLQuery {
 
 public final class GetProcedureQuery: GraphQLQuery {
   public static let operationString =
-    "query GetProcedure($id: ID!) {\n  getProcedure(id: $id) {\n    __typename\n    id\n    recipeID\n    order\n    content\n    image\n    recipe {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    createdAt\n    updatedAt\n  }\n}"
+    "query GetProcedure($id: ID!) {\n  getProcedure(id: $id) {\n    __typename\n    id\n    recipeID\n    order\n    content\n    image\n    recipe {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      reviewNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    createdAt\n    updatedAt\n  }\n}"
 
   public var id: GraphQLID
 
@@ -8440,6 +8856,7 @@ public final class GetProcedureQuery: GraphQLQuery {
           GraphQLField("contents", type: .object(Content.selections)),
           GraphQLField("reviews", type: .object(Review.selections)),
           GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
           GraphQLField("createdAt", type: .scalar(String.self)),
           GraphQLField("updatedAt", type: .scalar(String.self)),
           GraphQLField("delFlg", type: .nonNull(.scalar(Int.self))),
@@ -8451,8 +8868,8 @@ public final class GetProcedureQuery: GraphQLQuery {
           self.snapshot = snapshot
         }
 
-        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
-          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
+        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
+          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
         }
 
         public var __typename: String {
@@ -8581,6 +8998,15 @@ public final class GetProcedureQuery: GraphQLQuery {
           }
         }
 
+        public var reviewNum: Int {
+          get {
+            return snapshot["reviewNum"]! as! Int
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "reviewNum")
+          }
+        }
+
         public var createdAt: String? {
           get {
             return snapshot["createdAt"] as? String
@@ -8688,7 +9114,7 @@ public final class GetProcedureQuery: GraphQLQuery {
 
 public final class ListProceduresQuery: GraphQLQuery {
   public static let operationString =
-    "query ListProcedures($filter: ModelProcedureFilterInput, $limit: Int, $nextToken: String) {\n  listProcedures(filter: $filter, limit: $limit, nextToken: $nextToken) {\n    __typename\n    items {\n      __typename\n      id\n      recipeID\n      order\n      content\n      image\n      recipe {\n        __typename\n        id\n        user\n        type\n        title\n        calorie\n        protein\n        fat\n        carbo\n        state\n        materials\n        favNum\n        createdAt\n        updatedAt\n        delFlg\n      }\n      createdAt\n      updatedAt\n    }\n    nextToken\n  }\n}"
+    "query ListProcedures($filter: ModelProcedureFilterInput, $limit: Int, $nextToken: String) {\n  listProcedures(filter: $filter, limit: $limit, nextToken: $nextToken) {\n    __typename\n    items {\n      __typename\n      id\n      recipeID\n      order\n      content\n      image\n      recipe {\n        __typename\n        id\n        user\n        type\n        title\n        calorie\n        protein\n        fat\n        carbo\n        state\n        materials\n        favNum\n        reviewNum\n        createdAt\n        updatedAt\n        delFlg\n      }\n      createdAt\n      updatedAt\n    }\n    nextToken\n  }\n}"
 
   public var filter: ModelProcedureFilterInput?
   public var limit: Int?
@@ -8898,6 +9324,7 @@ public final class ListProceduresQuery: GraphQLQuery {
             GraphQLField("state", type: .nonNull(.scalar(Int.self))),
             GraphQLField("materials", type: .nonNull(.scalar(String.self))),
             GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
             GraphQLField("createdAt", type: .scalar(String.self)),
             GraphQLField("updatedAt", type: .scalar(String.self)),
             GraphQLField("delFlg", type: .nonNull(.scalar(Int.self))),
@@ -8909,8 +9336,8 @@ public final class ListProceduresQuery: GraphQLQuery {
             self.snapshot = snapshot
           }
 
-          public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, favNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
-            self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
+          public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
+            self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
           }
 
           public var __typename: String {
@@ -9021,6 +9448,15 @@ public final class ListProceduresQuery: GraphQLQuery {
             }
           }
 
+          public var reviewNum: Int {
+            get {
+              return snapshot["reviewNum"]! as! Int
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "reviewNum")
+            }
+          }
+
           public var createdAt: String? {
             get {
               return snapshot["createdAt"] as? String
@@ -9055,7 +9491,7 @@ public final class ListProceduresQuery: GraphQLQuery {
 
 public final class GetReviewQuery: GraphQLQuery {
   public static let operationString =
-    "query GetReview($id: ID!) {\n  getReview(id: $id) {\n    __typename\n    id\n    user\n    recipeID\n    content\n    image\n    recipe {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    createdAt\n    updatedAt\n  }\n}"
+    "query GetReview($id: ID!) {\n  getReview(id: $id) {\n    __typename\n    id\n    user\n    recipeID\n    content\n    image\n    recipe {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      reviewNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    createdAt\n    updatedAt\n  }\n}"
 
   public var id: GraphQLID
 
@@ -9217,6 +9653,7 @@ public final class GetReviewQuery: GraphQLQuery {
           GraphQLField("contents", type: .object(Content.selections)),
           GraphQLField("reviews", type: .object(Review.selections)),
           GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
           GraphQLField("createdAt", type: .scalar(String.self)),
           GraphQLField("updatedAt", type: .scalar(String.self)),
           GraphQLField("delFlg", type: .nonNull(.scalar(Int.self))),
@@ -9228,8 +9665,8 @@ public final class GetReviewQuery: GraphQLQuery {
           self.snapshot = snapshot
         }
 
-        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
-          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
+        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
+          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
         }
 
         public var __typename: String {
@@ -9358,6 +9795,15 @@ public final class GetReviewQuery: GraphQLQuery {
           }
         }
 
+        public var reviewNum: Int {
+          get {
+            return snapshot["reviewNum"]! as! Int
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "reviewNum")
+          }
+        }
+
         public var createdAt: String? {
           get {
             return snapshot["createdAt"] as? String
@@ -9465,7 +9911,7 @@ public final class GetReviewQuery: GraphQLQuery {
 
 public final class ListReviewsQuery: GraphQLQuery {
   public static let operationString =
-    "query ListReviews($filter: ModelReviewFilterInput, $limit: Int, $nextToken: String) {\n  listReviews(filter: $filter, limit: $limit, nextToken: $nextToken) {\n    __typename\n    items {\n      __typename\n      id\n      user\n      recipeID\n      content\n      image\n      recipe {\n        __typename\n        id\n        user\n        type\n        title\n        calorie\n        protein\n        fat\n        carbo\n        state\n        materials\n        favNum\n        createdAt\n        updatedAt\n        delFlg\n      }\n      createdAt\n      updatedAt\n    }\n    nextToken\n  }\n}"
+    "query ListReviews($filter: ModelReviewFilterInput, $limit: Int, $nextToken: String) {\n  listReviews(filter: $filter, limit: $limit, nextToken: $nextToken) {\n    __typename\n    items {\n      __typename\n      id\n      user\n      recipeID\n      content\n      image\n      recipe {\n        __typename\n        id\n        user\n        type\n        title\n        calorie\n        protein\n        fat\n        carbo\n        state\n        materials\n        favNum\n        reviewNum\n        createdAt\n        updatedAt\n        delFlg\n      }\n      createdAt\n      updatedAt\n    }\n    nextToken\n  }\n}"
 
   public var filter: ModelReviewFilterInput?
   public var limit: Int?
@@ -9675,6 +10121,7 @@ public final class ListReviewsQuery: GraphQLQuery {
             GraphQLField("state", type: .nonNull(.scalar(Int.self))),
             GraphQLField("materials", type: .nonNull(.scalar(String.self))),
             GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
             GraphQLField("createdAt", type: .scalar(String.self)),
             GraphQLField("updatedAt", type: .scalar(String.self)),
             GraphQLField("delFlg", type: .nonNull(.scalar(Int.self))),
@@ -9686,8 +10133,8 @@ public final class ListReviewsQuery: GraphQLQuery {
             self.snapshot = snapshot
           }
 
-          public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, favNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
-            self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
+          public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
+            self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
           }
 
           public var __typename: String {
@@ -9798,6 +10245,15 @@ public final class ListReviewsQuery: GraphQLQuery {
             }
           }
 
+          public var reviewNum: Int {
+            get {
+              return snapshot["reviewNum"]! as! Int
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "reviewNum")
+            }
+          }
+
           public var createdAt: String? {
             get {
               return snapshot["createdAt"] as? String
@@ -9832,7 +10288,7 @@ public final class ListReviewsQuery: GraphQLQuery {
 
 public final class GetUserQuery: GraphQLQuery {
   public static let operationString =
-    "query GetUser($id: ID!) {\n  getUser(id: $id) {\n    __typename\n    id\n    name\n    displayName\n    email\n    description\n    createdAt\n    updatedAt\n  }\n}"
+    "query GetUser($id: ID!) {\n  getUser(id: $id) {\n    __typename\n    id\n    type\n    name\n    displayName\n    email\n    description\n    favNum\n    reviewNum\n    createdAt\n    updatedAt\n  }\n}"
 
   public var id: GraphQLID
 
@@ -9876,12 +10332,15 @@ public final class GetUserQuery: GraphQLQuery {
       public static let selections: [GraphQLSelection] = [
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
         GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("type", type: .nonNull(.scalar(String.self))),
         GraphQLField("name", type: .nonNull(.scalar(String.self))),
         GraphQLField("displayName", type: .nonNull(.scalar(String.self))),
         GraphQLField("email", type: .nonNull(.scalar(String.self))),
         GraphQLField("description", type: .scalar(String.self)),
-        GraphQLField("createdAt", type: .nonNull(.scalar(String.self))),
-        GraphQLField("updatedAt", type: .nonNull(.scalar(String.self))),
+        GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("createdAt", type: .scalar(String.self)),
+        GraphQLField("updatedAt", type: .scalar(String.self)),
       ]
 
       public var snapshot: Snapshot
@@ -9890,8 +10349,8 @@ public final class GetUserQuery: GraphQLQuery {
         self.snapshot = snapshot
       }
 
-      public init(id: GraphQLID, name: String, displayName: String, email: String, description: String? = nil, createdAt: String, updatedAt: String) {
-        self.init(snapshot: ["__typename": "User", "id": id, "name": name, "displayName": displayName, "email": email, "description": description, "createdAt": createdAt, "updatedAt": updatedAt])
+      public init(id: GraphQLID, type: String, name: String, displayName: String, email: String, description: String? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil) {
+        self.init(snapshot: ["__typename": "User", "id": id, "type": type, "name": name, "displayName": displayName, "email": email, "description": description, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt])
       }
 
       public var __typename: String {
@@ -9909,6 +10368,15 @@ public final class GetUserQuery: GraphQLQuery {
         }
         set {
           snapshot.updateValue(newValue, forKey: "id")
+        }
+      }
+
+      public var type: String {
+        get {
+          return snapshot["type"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "type")
         }
       }
 
@@ -9948,18 +10416,36 @@ public final class GetUserQuery: GraphQLQuery {
         }
       }
 
-      public var createdAt: String {
+      public var favNum: Int {
         get {
-          return snapshot["createdAt"]! as! String
+          return snapshot["favNum"]! as! Int
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "favNum")
+        }
+      }
+
+      public var reviewNum: Int {
+        get {
+          return snapshot["reviewNum"]! as! Int
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "reviewNum")
+        }
+      }
+
+      public var createdAt: String? {
+        get {
+          return snapshot["createdAt"] as? String
         }
         set {
           snapshot.updateValue(newValue, forKey: "createdAt")
         }
       }
 
-      public var updatedAt: String {
+      public var updatedAt: String? {
         get {
-          return snapshot["updatedAt"]! as! String
+          return snapshot["updatedAt"] as? String
         }
         set {
           snapshot.updateValue(newValue, forKey: "updatedAt")
@@ -9971,7 +10457,7 @@ public final class GetUserQuery: GraphQLQuery {
 
 public final class ListUsersQuery: GraphQLQuery {
   public static let operationString =
-    "query ListUsers($filter: ModelUserFilterInput, $limit: Int, $nextToken: String) {\n  listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {\n    __typename\n    items {\n      __typename\n      id\n      name\n      displayName\n      email\n      description\n      createdAt\n      updatedAt\n    }\n    nextToken\n  }\n}"
+    "query ListUsers($filter: ModelUserFilterInput, $limit: Int, $nextToken: String) {\n  listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {\n    __typename\n    items {\n      __typename\n      id\n      type\n      name\n      displayName\n      email\n      description\n      favNum\n      reviewNum\n      createdAt\n      updatedAt\n    }\n    nextToken\n  }\n}"
 
   public var filter: ModelUserFilterInput?
   public var limit: Int?
@@ -10065,12 +10551,15 @@ public final class ListUsersQuery: GraphQLQuery {
         public static let selections: [GraphQLSelection] = [
           GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
           GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
+          GraphQLField("type", type: .nonNull(.scalar(String.self))),
           GraphQLField("name", type: .nonNull(.scalar(String.self))),
           GraphQLField("displayName", type: .nonNull(.scalar(String.self))),
           GraphQLField("email", type: .nonNull(.scalar(String.self))),
           GraphQLField("description", type: .scalar(String.self)),
-          GraphQLField("createdAt", type: .nonNull(.scalar(String.self))),
-          GraphQLField("updatedAt", type: .nonNull(.scalar(String.self))),
+          GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("createdAt", type: .scalar(String.self)),
+          GraphQLField("updatedAt", type: .scalar(String.self)),
         ]
 
         public var snapshot: Snapshot
@@ -10079,8 +10568,8 @@ public final class ListUsersQuery: GraphQLQuery {
           self.snapshot = snapshot
         }
 
-        public init(id: GraphQLID, name: String, displayName: String, email: String, description: String? = nil, createdAt: String, updatedAt: String) {
-          self.init(snapshot: ["__typename": "User", "id": id, "name": name, "displayName": displayName, "email": email, "description": description, "createdAt": createdAt, "updatedAt": updatedAt])
+        public init(id: GraphQLID, type: String, name: String, displayName: String, email: String, description: String? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil) {
+          self.init(snapshot: ["__typename": "User", "id": id, "type": type, "name": name, "displayName": displayName, "email": email, "description": description, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt])
         }
 
         public var __typename: String {
@@ -10098,6 +10587,15 @@ public final class ListUsersQuery: GraphQLQuery {
           }
           set {
             snapshot.updateValue(newValue, forKey: "id")
+          }
+        }
+
+        public var type: String {
+          get {
+            return snapshot["type"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "type")
           }
         }
 
@@ -10137,18 +10635,36 @@ public final class ListUsersQuery: GraphQLQuery {
           }
         }
 
-        public var createdAt: String {
+        public var favNum: Int {
           get {
-            return snapshot["createdAt"]! as! String
+            return snapshot["favNum"]! as! Int
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "favNum")
+          }
+        }
+
+        public var reviewNum: Int {
+          get {
+            return snapshot["reviewNum"]! as! Int
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "reviewNum")
+          }
+        }
+
+        public var createdAt: String? {
+          get {
+            return snapshot["createdAt"] as? String
           }
           set {
             snapshot.updateValue(newValue, forKey: "createdAt")
           }
         }
 
-        public var updatedAt: String {
+        public var updatedAt: String? {
           get {
-            return snapshot["updatedAt"]! as! String
+            return snapshot["updatedAt"] as? String
           }
           set {
             snapshot.updateValue(newValue, forKey: "updatedAt")
@@ -10470,7 +10986,7 @@ public final class ListFavsQuery: GraphQLQuery {
 
 public final class RecipesByProteinQuery: GraphQLQuery {
   public static let operationString =
-    "query RecipesByProtein($type: String, $protein: ModelFloatKeyConditionInput, $sortDirection: ModelSortDirection, $filter: ModelRecipeFilterInput, $limit: Int, $nextToken: String) {\n  recipesByProtein(type: $type, protein: $protein, sortDirection: $sortDirection, filter: $filter, limit: $limit, nextToken: $nextToken) {\n    __typename\n    items {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    nextToken\n  }\n}"
+    "query RecipesByProtein($type: String, $protein: ModelFloatKeyConditionInput, $sortDirection: ModelSortDirection, $filter: ModelRecipeFilterInput, $limit: Int, $nextToken: String) {\n  recipesByProtein(type: $type, protein: $protein, sortDirection: $sortDirection, filter: $filter, limit: $limit, nextToken: $nextToken) {\n    __typename\n    items {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      reviewNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    nextToken\n  }\n}"
 
   public var type: String?
   public var protein: ModelFloatKeyConditionInput?
@@ -10582,6 +11098,7 @@ public final class RecipesByProteinQuery: GraphQLQuery {
           GraphQLField("contents", type: .object(Content.selections)),
           GraphQLField("reviews", type: .object(Review.selections)),
           GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
           GraphQLField("createdAt", type: .scalar(String.self)),
           GraphQLField("updatedAt", type: .scalar(String.self)),
           GraphQLField("delFlg", type: .nonNull(.scalar(Int.self))),
@@ -10593,8 +11110,8 @@ public final class RecipesByProteinQuery: GraphQLQuery {
           self.snapshot = snapshot
         }
 
-        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
-          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
+        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
+          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
         }
 
         public var __typename: String {
@@ -10723,6 +11240,15 @@ public final class RecipesByProteinQuery: GraphQLQuery {
           }
         }
 
+        public var reviewNum: Int {
+          get {
+            return snapshot["reviewNum"]! as! Int
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "reviewNum")
+          }
+        }
+
         public var createdAt: String? {
           get {
             return snapshot["createdAt"] as? String
@@ -10830,7 +11356,7 @@ public final class RecipesByProteinQuery: GraphQLQuery {
 
 public final class RecipesByFatQuery: GraphQLQuery {
   public static let operationString =
-    "query RecipesByFat($type: String, $fat: ModelFloatKeyConditionInput, $sortDirection: ModelSortDirection, $filter: ModelRecipeFilterInput, $limit: Int, $nextToken: String) {\n  recipesByFat(type: $type, fat: $fat, sortDirection: $sortDirection, filter: $filter, limit: $limit, nextToken: $nextToken) {\n    __typename\n    items {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    nextToken\n  }\n}"
+    "query RecipesByFat($type: String, $fat: ModelFloatKeyConditionInput, $sortDirection: ModelSortDirection, $filter: ModelRecipeFilterInput, $limit: Int, $nextToken: String) {\n  recipesByFat(type: $type, fat: $fat, sortDirection: $sortDirection, filter: $filter, limit: $limit, nextToken: $nextToken) {\n    __typename\n    items {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      reviewNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    nextToken\n  }\n}"
 
   public var type: String?
   public var fat: ModelFloatKeyConditionInput?
@@ -10942,6 +11468,7 @@ public final class RecipesByFatQuery: GraphQLQuery {
           GraphQLField("contents", type: .object(Content.selections)),
           GraphQLField("reviews", type: .object(Review.selections)),
           GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
           GraphQLField("createdAt", type: .scalar(String.self)),
           GraphQLField("updatedAt", type: .scalar(String.self)),
           GraphQLField("delFlg", type: .nonNull(.scalar(Int.self))),
@@ -10953,8 +11480,8 @@ public final class RecipesByFatQuery: GraphQLQuery {
           self.snapshot = snapshot
         }
 
-        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
-          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
+        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
+          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
         }
 
         public var __typename: String {
@@ -11083,6 +11610,15 @@ public final class RecipesByFatQuery: GraphQLQuery {
           }
         }
 
+        public var reviewNum: Int {
+          get {
+            return snapshot["reviewNum"]! as! Int
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "reviewNum")
+          }
+        }
+
         public var createdAt: String? {
           get {
             return snapshot["createdAt"] as? String
@@ -11190,7 +11726,7 @@ public final class RecipesByFatQuery: GraphQLQuery {
 
 public final class RecipesByCarboQuery: GraphQLQuery {
   public static let operationString =
-    "query RecipesByCarbo($type: String, $carbo: ModelFloatKeyConditionInput, $sortDirection: ModelSortDirection, $filter: ModelRecipeFilterInput, $limit: Int, $nextToken: String) {\n  recipesByCarbo(type: $type, carbo: $carbo, sortDirection: $sortDirection, filter: $filter, limit: $limit, nextToken: $nextToken) {\n    __typename\n    items {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    nextToken\n  }\n}"
+    "query RecipesByCarbo($type: String, $carbo: ModelFloatKeyConditionInput, $sortDirection: ModelSortDirection, $filter: ModelRecipeFilterInput, $limit: Int, $nextToken: String) {\n  recipesByCarbo(type: $type, carbo: $carbo, sortDirection: $sortDirection, filter: $filter, limit: $limit, nextToken: $nextToken) {\n    __typename\n    items {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      reviewNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    nextToken\n  }\n}"
 
   public var type: String?
   public var carbo: ModelFloatKeyConditionInput?
@@ -11302,6 +11838,7 @@ public final class RecipesByCarboQuery: GraphQLQuery {
           GraphQLField("contents", type: .object(Content.selections)),
           GraphQLField("reviews", type: .object(Review.selections)),
           GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
           GraphQLField("createdAt", type: .scalar(String.self)),
           GraphQLField("updatedAt", type: .scalar(String.self)),
           GraphQLField("delFlg", type: .nonNull(.scalar(Int.self))),
@@ -11313,8 +11850,8 @@ public final class RecipesByCarboQuery: GraphQLQuery {
           self.snapshot = snapshot
         }
 
-        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
-          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
+        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
+          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
         }
 
         public var __typename: String {
@@ -11443,6 +11980,15 @@ public final class RecipesByCarboQuery: GraphQLQuery {
           }
         }
 
+        public var reviewNum: Int {
+          get {
+            return snapshot["reviewNum"]! as! Int
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "reviewNum")
+          }
+        }
+
         public var createdAt: String? {
           get {
             return snapshot["createdAt"] as? String
@@ -11550,7 +12096,7 @@ public final class RecipesByCarboQuery: GraphQLQuery {
 
 public final class RecipesByFavQuery: GraphQLQuery {
   public static let operationString =
-    "query RecipesByFav($type: String, $favNum: ModelIntKeyConditionInput, $sortDirection: ModelSortDirection, $filter: ModelRecipeFilterInput, $limit: Int, $nextToken: String) {\n  recipesByFav(type: $type, favNum: $favNum, sortDirection: $sortDirection, filter: $filter, limit: $limit, nextToken: $nextToken) {\n    __typename\n    items {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    nextToken\n  }\n}"
+    "query RecipesByFav($type: String, $favNum: ModelIntKeyConditionInput, $sortDirection: ModelSortDirection, $filter: ModelRecipeFilterInput, $limit: Int, $nextToken: String) {\n  recipesByFav(type: $type, favNum: $favNum, sortDirection: $sortDirection, filter: $filter, limit: $limit, nextToken: $nextToken) {\n    __typename\n    items {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      reviewNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    nextToken\n  }\n}"
 
   public var type: String?
   public var favNum: ModelIntKeyConditionInput?
@@ -11662,6 +12208,7 @@ public final class RecipesByFavQuery: GraphQLQuery {
           GraphQLField("contents", type: .object(Content.selections)),
           GraphQLField("reviews", type: .object(Review.selections)),
           GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
           GraphQLField("createdAt", type: .scalar(String.self)),
           GraphQLField("updatedAt", type: .scalar(String.self)),
           GraphQLField("delFlg", type: .nonNull(.scalar(Int.self))),
@@ -11673,8 +12220,8 @@ public final class RecipesByFavQuery: GraphQLQuery {
           self.snapshot = snapshot
         }
 
-        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
-          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
+        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
+          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
         }
 
         public var __typename: String {
@@ -11803,6 +12350,15 @@ public final class RecipesByFavQuery: GraphQLQuery {
           }
         }
 
+        public var reviewNum: Int {
+          get {
+            return snapshot["reviewNum"]! as! Int
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "reviewNum")
+          }
+        }
+
         public var createdAt: String? {
           get {
             return snapshot["createdAt"] as? String
@@ -11910,7 +12466,7 @@ public final class RecipesByFavQuery: GraphQLQuery {
 
 public final class RecipesByDateQuery: GraphQLQuery {
   public static let operationString =
-    "query RecipesByDate($type: String, $createdAt: ModelStringKeyConditionInput, $sortDirection: ModelSortDirection, $filter: ModelRecipeFilterInput, $limit: Int, $nextToken: String) {\n  recipesByDate(type: $type, createdAt: $createdAt, sortDirection: $sortDirection, filter: $filter, limit: $limit, nextToken: $nextToken) {\n    __typename\n    items {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    nextToken\n  }\n}"
+    "query RecipesByDate($type: String, $createdAt: ModelStringKeyConditionInput, $sortDirection: ModelSortDirection, $filter: ModelRecipeFilterInput, $limit: Int, $nextToken: String) {\n  recipesByDate(type: $type, createdAt: $createdAt, sortDirection: $sortDirection, filter: $filter, limit: $limit, nextToken: $nextToken) {\n    __typename\n    items {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      reviewNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    nextToken\n  }\n}"
 
   public var type: String?
   public var createdAt: ModelStringKeyConditionInput?
@@ -12022,6 +12578,7 @@ public final class RecipesByDateQuery: GraphQLQuery {
           GraphQLField("contents", type: .object(Content.selections)),
           GraphQLField("reviews", type: .object(Review.selections)),
           GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
           GraphQLField("createdAt", type: .scalar(String.self)),
           GraphQLField("updatedAt", type: .scalar(String.self)),
           GraphQLField("delFlg", type: .nonNull(.scalar(Int.self))),
@@ -12033,8 +12590,8 @@ public final class RecipesByDateQuery: GraphQLQuery {
           self.snapshot = snapshot
         }
 
-        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
-          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
+        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
+          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
         }
 
         public var __typename: String {
@@ -12163,6 +12720,15 @@ public final class RecipesByDateQuery: GraphQLQuery {
           }
         }
 
+        public var reviewNum: Int {
+          get {
+            return snapshot["reviewNum"]! as! Int
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "reviewNum")
+          }
+        }
+
         public var createdAt: String? {
           get {
             return snapshot["createdAt"] as? String
@@ -12270,7 +12836,7 @@ public final class RecipesByDateQuery: GraphQLQuery {
 
 public final class ByProcedureQuery: GraphQLQuery {
   public static let operationString =
-    "query ByProcedure($recipeID: ID, $order: ModelIntKeyConditionInput, $sortDirection: ModelSortDirection, $filter: ModelProcedureFilterInput, $limit: Int, $nextToken: String) {\n  byProcedure(recipeID: $recipeID, order: $order, sortDirection: $sortDirection, filter: $filter, limit: $limit, nextToken: $nextToken) {\n    __typename\n    items {\n      __typename\n      id\n      recipeID\n      order\n      content\n      image\n      recipe {\n        __typename\n        id\n        user\n        type\n        title\n        calorie\n        protein\n        fat\n        carbo\n        state\n        materials\n        favNum\n        createdAt\n        updatedAt\n        delFlg\n      }\n      createdAt\n      updatedAt\n    }\n    nextToken\n  }\n}"
+    "query ByProcedure($recipeID: ID, $order: ModelIntKeyConditionInput, $sortDirection: ModelSortDirection, $filter: ModelProcedureFilterInput, $limit: Int, $nextToken: String) {\n  byProcedure(recipeID: $recipeID, order: $order, sortDirection: $sortDirection, filter: $filter, limit: $limit, nextToken: $nextToken) {\n    __typename\n    items {\n      __typename\n      id\n      recipeID\n      order\n      content\n      image\n      recipe {\n        __typename\n        id\n        user\n        type\n        title\n        calorie\n        protein\n        fat\n        carbo\n        state\n        materials\n        favNum\n        reviewNum\n        createdAt\n        updatedAt\n        delFlg\n      }\n      createdAt\n      updatedAt\n    }\n    nextToken\n  }\n}"
 
   public var recipeID: GraphQLID?
   public var order: ModelIntKeyConditionInput?
@@ -12486,6 +13052,7 @@ public final class ByProcedureQuery: GraphQLQuery {
             GraphQLField("state", type: .nonNull(.scalar(Int.self))),
             GraphQLField("materials", type: .nonNull(.scalar(String.self))),
             GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
             GraphQLField("createdAt", type: .scalar(String.self)),
             GraphQLField("updatedAt", type: .scalar(String.self)),
             GraphQLField("delFlg", type: .nonNull(.scalar(Int.self))),
@@ -12497,8 +13064,8 @@ public final class ByProcedureQuery: GraphQLQuery {
             self.snapshot = snapshot
           }
 
-          public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, favNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
-            self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
+          public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
+            self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
           }
 
           public var __typename: String {
@@ -12609,6 +13176,15 @@ public final class ByProcedureQuery: GraphQLQuery {
             }
           }
 
+          public var reviewNum: Int {
+            get {
+              return snapshot["reviewNum"]! as! Int
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "reviewNum")
+            }
+          }
+
           public var createdAt: String? {
             get {
               return snapshot["createdAt"] as? String
@@ -12643,7 +13219,7 @@ public final class ByProcedureQuery: GraphQLQuery {
 
 public final class ByReviewQuery: GraphQLQuery {
   public static let operationString =
-    "query ByReview($recipeID: ID, $createdAt: ModelStringKeyConditionInput, $sortDirection: ModelSortDirection, $filter: ModelReviewFilterInput, $limit: Int, $nextToken: String) {\n  byReview(recipeID: $recipeID, createdAt: $createdAt, sortDirection: $sortDirection, filter: $filter, limit: $limit, nextToken: $nextToken) {\n    __typename\n    items {\n      __typename\n      id\n      user\n      recipeID\n      content\n      image\n      recipe {\n        __typename\n        id\n        user\n        type\n        title\n        calorie\n        protein\n        fat\n        carbo\n        state\n        materials\n        favNum\n        createdAt\n        updatedAt\n        delFlg\n      }\n      createdAt\n      updatedAt\n    }\n    nextToken\n  }\n}"
+    "query ByReview($recipeID: ID, $createdAt: ModelStringKeyConditionInput, $sortDirection: ModelSortDirection, $filter: ModelReviewFilterInput, $limit: Int, $nextToken: String) {\n  byReview(recipeID: $recipeID, createdAt: $createdAt, sortDirection: $sortDirection, filter: $filter, limit: $limit, nextToken: $nextToken) {\n    __typename\n    items {\n      __typename\n      id\n      user\n      recipeID\n      content\n      image\n      recipe {\n        __typename\n        id\n        user\n        type\n        title\n        calorie\n        protein\n        fat\n        carbo\n        state\n        materials\n        favNum\n        reviewNum\n        createdAt\n        updatedAt\n        delFlg\n      }\n      createdAt\n      updatedAt\n    }\n    nextToken\n  }\n}"
 
   public var recipeID: GraphQLID?
   public var createdAt: ModelStringKeyConditionInput?
@@ -12859,6 +13435,7 @@ public final class ByReviewQuery: GraphQLQuery {
             GraphQLField("state", type: .nonNull(.scalar(Int.self))),
             GraphQLField("materials", type: .nonNull(.scalar(String.self))),
             GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+            GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
             GraphQLField("createdAt", type: .scalar(String.self)),
             GraphQLField("updatedAt", type: .scalar(String.self)),
             GraphQLField("delFlg", type: .nonNull(.scalar(Int.self))),
@@ -12870,8 +13447,8 @@ public final class ByReviewQuery: GraphQLQuery {
             self.snapshot = snapshot
           }
 
-          public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, favNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
-            self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
+          public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
+            self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
           }
 
           public var __typename: String {
@@ -12982,6 +13559,15 @@ public final class ByReviewQuery: GraphQLQuery {
             }
           }
 
+          public var reviewNum: Int {
+            get {
+              return snapshot["reviewNum"]! as! Int
+            }
+            set {
+              snapshot.updateValue(newValue, forKey: "reviewNum")
+            }
+          }
+
           public var createdAt: String? {
             get {
               return snapshot["createdAt"] as? String
@@ -13007,6 +13593,458 @@ public final class ByReviewQuery: GraphQLQuery {
             set {
               snapshot.updateValue(newValue, forKey: "delFlg")
             }
+          }
+        }
+      }
+    }
+  }
+}
+
+public final class UsersByFavQuery: GraphQLQuery {
+  public static let operationString =
+    "query UsersByFav($type: String, $favNum: ModelIntKeyConditionInput, $sortDirection: ModelSortDirection, $filter: ModelUserFilterInput, $limit: Int, $nextToken: String) {\n  usersByFav(type: $type, favNum: $favNum, sortDirection: $sortDirection, filter: $filter, limit: $limit, nextToken: $nextToken) {\n    __typename\n    items {\n      __typename\n      id\n      type\n      name\n      displayName\n      email\n      description\n      favNum\n      reviewNum\n      createdAt\n      updatedAt\n    }\n    nextToken\n  }\n}"
+
+  public var type: String?
+  public var favNum: ModelIntKeyConditionInput?
+  public var sortDirection: ModelSortDirection?
+  public var filter: ModelUserFilterInput?
+  public var limit: Int?
+  public var nextToken: String?
+
+  public init(type: String? = nil, favNum: ModelIntKeyConditionInput? = nil, sortDirection: ModelSortDirection? = nil, filter: ModelUserFilterInput? = nil, limit: Int? = nil, nextToken: String? = nil) {
+    self.type = type
+    self.favNum = favNum
+    self.sortDirection = sortDirection
+    self.filter = filter
+    self.limit = limit
+    self.nextToken = nextToken
+  }
+
+  public var variables: GraphQLMap? {
+    return ["type": type, "favNum": favNum, "sortDirection": sortDirection, "filter": filter, "limit": limit, "nextToken": nextToken]
+  }
+
+  public struct Data: GraphQLSelectionSet {
+    public static let possibleTypes = ["Query"]
+
+    public static let selections: [GraphQLSelection] = [
+      GraphQLField("usersByFav", arguments: ["type": GraphQLVariable("type"), "favNum": GraphQLVariable("favNum"), "sortDirection": GraphQLVariable("sortDirection"), "filter": GraphQLVariable("filter"), "limit": GraphQLVariable("limit"), "nextToken": GraphQLVariable("nextToken")], type: .object(UsersByFav.selections)),
+    ]
+
+    public var snapshot: Snapshot
+
+    public init(snapshot: Snapshot) {
+      self.snapshot = snapshot
+    }
+
+    public init(usersByFav: UsersByFav? = nil) {
+      self.init(snapshot: ["__typename": "Query", "usersByFav": usersByFav.flatMap { $0.snapshot }])
+    }
+
+    public var usersByFav: UsersByFav? {
+      get {
+        return (snapshot["usersByFav"] as? Snapshot).flatMap { UsersByFav(snapshot: $0) }
+      }
+      set {
+        snapshot.updateValue(newValue?.snapshot, forKey: "usersByFav")
+      }
+    }
+
+    public struct UsersByFav: GraphQLSelectionSet {
+      public static let possibleTypes = ["ModelUserConnection"]
+
+      public static let selections: [GraphQLSelection] = [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("items", type: .nonNull(.list(.nonNull(.object(Item.selections))))),
+        GraphQLField("nextToken", type: .scalar(String.self)),
+      ]
+
+      public var snapshot: Snapshot
+
+      public init(snapshot: Snapshot) {
+        self.snapshot = snapshot
+      }
+
+      public init(items: [Item], nextToken: String? = nil) {
+        self.init(snapshot: ["__typename": "ModelUserConnection", "items": items.map { $0.snapshot }, "nextToken": nextToken])
+      }
+
+      public var __typename: String {
+        get {
+          return snapshot["__typename"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      public var items: [Item] {
+        get {
+          return (snapshot["items"] as! [Snapshot]).map { Item(snapshot: $0) }
+        }
+        set {
+          snapshot.updateValue(newValue.map { $0.snapshot }, forKey: "items")
+        }
+      }
+
+      public var nextToken: String? {
+        get {
+          return snapshot["nextToken"] as? String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "nextToken")
+        }
+      }
+
+      public struct Item: GraphQLSelectionSet {
+        public static let possibleTypes = ["User"]
+
+        public static let selections: [GraphQLSelection] = [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
+          GraphQLField("type", type: .nonNull(.scalar(String.self))),
+          GraphQLField("name", type: .nonNull(.scalar(String.self))),
+          GraphQLField("displayName", type: .nonNull(.scalar(String.self))),
+          GraphQLField("email", type: .nonNull(.scalar(String.self))),
+          GraphQLField("description", type: .scalar(String.self)),
+          GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("createdAt", type: .scalar(String.self)),
+          GraphQLField("updatedAt", type: .scalar(String.self)),
+        ]
+
+        public var snapshot: Snapshot
+
+        public init(snapshot: Snapshot) {
+          self.snapshot = snapshot
+        }
+
+        public init(id: GraphQLID, type: String, name: String, displayName: String, email: String, description: String? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil) {
+          self.init(snapshot: ["__typename": "User", "id": id, "type": type, "name": name, "displayName": displayName, "email": email, "description": description, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt])
+        }
+
+        public var __typename: String {
+          get {
+            return snapshot["__typename"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        public var id: GraphQLID {
+          get {
+            return snapshot["id"]! as! GraphQLID
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "id")
+          }
+        }
+
+        public var type: String {
+          get {
+            return snapshot["type"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "type")
+          }
+        }
+
+        public var name: String {
+          get {
+            return snapshot["name"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "name")
+          }
+        }
+
+        public var displayName: String {
+          get {
+            return snapshot["displayName"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "displayName")
+          }
+        }
+
+        public var email: String {
+          get {
+            return snapshot["email"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "email")
+          }
+        }
+
+        public var description: String? {
+          get {
+            return snapshot["description"] as? String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "description")
+          }
+        }
+
+        public var favNum: Int {
+          get {
+            return snapshot["favNum"]! as! Int
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "favNum")
+          }
+        }
+
+        public var reviewNum: Int {
+          get {
+            return snapshot["reviewNum"]! as! Int
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "reviewNum")
+          }
+        }
+
+        public var createdAt: String? {
+          get {
+            return snapshot["createdAt"] as? String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "createdAt")
+          }
+        }
+
+        public var updatedAt: String? {
+          get {
+            return snapshot["updatedAt"] as? String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "updatedAt")
+          }
+        }
+      }
+    }
+  }
+}
+
+public final class UsersByReviewQuery: GraphQLQuery {
+  public static let operationString =
+    "query UsersByReview($type: String, $reviewNum: ModelIntKeyConditionInput, $sortDirection: ModelSortDirection, $filter: ModelUserFilterInput, $limit: Int, $nextToken: String) {\n  usersByReview(type: $type, reviewNum: $reviewNum, sortDirection: $sortDirection, filter: $filter, limit: $limit, nextToken: $nextToken) {\n    __typename\n    items {\n      __typename\n      id\n      type\n      name\n      displayName\n      email\n      description\n      favNum\n      reviewNum\n      createdAt\n      updatedAt\n    }\n    nextToken\n  }\n}"
+
+  public var type: String?
+  public var reviewNum: ModelIntKeyConditionInput?
+  public var sortDirection: ModelSortDirection?
+  public var filter: ModelUserFilterInput?
+  public var limit: Int?
+  public var nextToken: String?
+
+  public init(type: String? = nil, reviewNum: ModelIntKeyConditionInput? = nil, sortDirection: ModelSortDirection? = nil, filter: ModelUserFilterInput? = nil, limit: Int? = nil, nextToken: String? = nil) {
+    self.type = type
+    self.reviewNum = reviewNum
+    self.sortDirection = sortDirection
+    self.filter = filter
+    self.limit = limit
+    self.nextToken = nextToken
+  }
+
+  public var variables: GraphQLMap? {
+    return ["type": type, "reviewNum": reviewNum, "sortDirection": sortDirection, "filter": filter, "limit": limit, "nextToken": nextToken]
+  }
+
+  public struct Data: GraphQLSelectionSet {
+    public static let possibleTypes = ["Query"]
+
+    public static let selections: [GraphQLSelection] = [
+      GraphQLField("usersByReview", arguments: ["type": GraphQLVariable("type"), "reviewNum": GraphQLVariable("reviewNum"), "sortDirection": GraphQLVariable("sortDirection"), "filter": GraphQLVariable("filter"), "limit": GraphQLVariable("limit"), "nextToken": GraphQLVariable("nextToken")], type: .object(UsersByReview.selections)),
+    ]
+
+    public var snapshot: Snapshot
+
+    public init(snapshot: Snapshot) {
+      self.snapshot = snapshot
+    }
+
+    public init(usersByReview: UsersByReview? = nil) {
+      self.init(snapshot: ["__typename": "Query", "usersByReview": usersByReview.flatMap { $0.snapshot }])
+    }
+
+    public var usersByReview: UsersByReview? {
+      get {
+        return (snapshot["usersByReview"] as? Snapshot).flatMap { UsersByReview(snapshot: $0) }
+      }
+      set {
+        snapshot.updateValue(newValue?.snapshot, forKey: "usersByReview")
+      }
+    }
+
+    public struct UsersByReview: GraphQLSelectionSet {
+      public static let possibleTypes = ["ModelUserConnection"]
+
+      public static let selections: [GraphQLSelection] = [
+        GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+        GraphQLField("items", type: .nonNull(.list(.nonNull(.object(Item.selections))))),
+        GraphQLField("nextToken", type: .scalar(String.self)),
+      ]
+
+      public var snapshot: Snapshot
+
+      public init(snapshot: Snapshot) {
+        self.snapshot = snapshot
+      }
+
+      public init(items: [Item], nextToken: String? = nil) {
+        self.init(snapshot: ["__typename": "ModelUserConnection", "items": items.map { $0.snapshot }, "nextToken": nextToken])
+      }
+
+      public var __typename: String {
+        get {
+          return snapshot["__typename"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "__typename")
+        }
+      }
+
+      public var items: [Item] {
+        get {
+          return (snapshot["items"] as! [Snapshot]).map { Item(snapshot: $0) }
+        }
+        set {
+          snapshot.updateValue(newValue.map { $0.snapshot }, forKey: "items")
+        }
+      }
+
+      public var nextToken: String? {
+        get {
+          return snapshot["nextToken"] as? String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "nextToken")
+        }
+      }
+
+      public struct Item: GraphQLSelectionSet {
+        public static let possibleTypes = ["User"]
+
+        public static let selections: [GraphQLSelection] = [
+          GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
+          GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
+          GraphQLField("type", type: .nonNull(.scalar(String.self))),
+          GraphQLField("name", type: .nonNull(.scalar(String.self))),
+          GraphQLField("displayName", type: .nonNull(.scalar(String.self))),
+          GraphQLField("email", type: .nonNull(.scalar(String.self))),
+          GraphQLField("description", type: .scalar(String.self)),
+          GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("createdAt", type: .scalar(String.self)),
+          GraphQLField("updatedAt", type: .scalar(String.self)),
+        ]
+
+        public var snapshot: Snapshot
+
+        public init(snapshot: Snapshot) {
+          self.snapshot = snapshot
+        }
+
+        public init(id: GraphQLID, type: String, name: String, displayName: String, email: String, description: String? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil) {
+          self.init(snapshot: ["__typename": "User", "id": id, "type": type, "name": name, "displayName": displayName, "email": email, "description": description, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt])
+        }
+
+        public var __typename: String {
+          get {
+            return snapshot["__typename"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "__typename")
+          }
+        }
+
+        public var id: GraphQLID {
+          get {
+            return snapshot["id"]! as! GraphQLID
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "id")
+          }
+        }
+
+        public var type: String {
+          get {
+            return snapshot["type"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "type")
+          }
+        }
+
+        public var name: String {
+          get {
+            return snapshot["name"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "name")
+          }
+        }
+
+        public var displayName: String {
+          get {
+            return snapshot["displayName"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "displayName")
+          }
+        }
+
+        public var email: String {
+          get {
+            return snapshot["email"]! as! String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "email")
+          }
+        }
+
+        public var description: String? {
+          get {
+            return snapshot["description"] as? String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "description")
+          }
+        }
+
+        public var favNum: Int {
+          get {
+            return snapshot["favNum"]! as! Int
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "favNum")
+          }
+        }
+
+        public var reviewNum: Int {
+          get {
+            return snapshot["reviewNum"]! as! Int
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "reviewNum")
+          }
+        }
+
+        public var createdAt: String? {
+          get {
+            return snapshot["createdAt"] as? String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "createdAt")
+          }
+        }
+
+        public var updatedAt: String? {
+          get {
+            return snapshot["updatedAt"] as? String
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "updatedAt")
           }
         }
       }
@@ -13202,7 +14240,7 @@ public final class FavsByDateQuery: GraphQLQuery {
 
 public final class OnCreateRecipeSubscription: GraphQLSubscription {
   public static let operationString =
-    "subscription OnCreateRecipe {\n  onCreateRecipe {\n    __typename\n    id\n    user\n    type\n    title\n    calorie\n    protein\n    fat\n    carbo\n    state\n    materials\n    contents {\n      __typename\n      items {\n        __typename\n        id\n        recipeID\n        order\n        content\n        image\n        createdAt\n        updatedAt\n      }\n      nextToken\n    }\n    reviews {\n      __typename\n      items {\n        __typename\n        id\n        user\n        recipeID\n        content\n        image\n        createdAt\n        updatedAt\n      }\n      nextToken\n    }\n    favNum\n    createdAt\n    updatedAt\n    delFlg\n  }\n}"
+    "subscription OnCreateRecipe {\n  onCreateRecipe {\n    __typename\n    id\n    user\n    type\n    title\n    calorie\n    protein\n    fat\n    carbo\n    state\n    materials\n    contents {\n      __typename\n      items {\n        __typename\n        id\n        recipeID\n        order\n        content\n        image\n        createdAt\n        updatedAt\n      }\n      nextToken\n    }\n    reviews {\n      __typename\n      items {\n        __typename\n        id\n        user\n        recipeID\n        content\n        image\n        createdAt\n        updatedAt\n      }\n      nextToken\n    }\n    favNum\n    reviewNum\n    createdAt\n    updatedAt\n    delFlg\n  }\n}"
 
   public init() {
   }
@@ -13251,6 +14289,7 @@ public final class OnCreateRecipeSubscription: GraphQLSubscription {
         GraphQLField("contents", type: .object(Content.selections)),
         GraphQLField("reviews", type: .object(Review.selections)),
         GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
         GraphQLField("createdAt", type: .scalar(String.self)),
         GraphQLField("updatedAt", type: .scalar(String.self)),
         GraphQLField("delFlg", type: .nonNull(.scalar(Int.self))),
@@ -13262,8 +14301,8 @@ public final class OnCreateRecipeSubscription: GraphQLSubscription {
         self.snapshot = snapshot
       }
 
-      public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
-        self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
+      public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
+        self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
       }
 
       public var __typename: String {
@@ -13389,6 +14428,15 @@ public final class OnCreateRecipeSubscription: GraphQLSubscription {
         }
         set {
           snapshot.updateValue(newValue, forKey: "favNum")
+        }
+      }
+
+      public var reviewNum: Int {
+        get {
+          return snapshot["reviewNum"]! as! Int
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "reviewNum")
         }
       }
 
@@ -13712,7 +14760,7 @@ public final class OnCreateRecipeSubscription: GraphQLSubscription {
 
 public final class OnUpdateRecipeSubscription: GraphQLSubscription {
   public static let operationString =
-    "subscription OnUpdateRecipe {\n  onUpdateRecipe {\n    __typename\n    id\n    user\n    type\n    title\n    calorie\n    protein\n    fat\n    carbo\n    state\n    materials\n    contents {\n      __typename\n      items {\n        __typename\n        id\n        recipeID\n        order\n        content\n        image\n        createdAt\n        updatedAt\n      }\n      nextToken\n    }\n    reviews {\n      __typename\n      items {\n        __typename\n        id\n        user\n        recipeID\n        content\n        image\n        createdAt\n        updatedAt\n      }\n      nextToken\n    }\n    favNum\n    createdAt\n    updatedAt\n    delFlg\n  }\n}"
+    "subscription OnUpdateRecipe {\n  onUpdateRecipe {\n    __typename\n    id\n    user\n    type\n    title\n    calorie\n    protein\n    fat\n    carbo\n    state\n    materials\n    contents {\n      __typename\n      items {\n        __typename\n        id\n        recipeID\n        order\n        content\n        image\n        createdAt\n        updatedAt\n      }\n      nextToken\n    }\n    reviews {\n      __typename\n      items {\n        __typename\n        id\n        user\n        recipeID\n        content\n        image\n        createdAt\n        updatedAt\n      }\n      nextToken\n    }\n    favNum\n    reviewNum\n    createdAt\n    updatedAt\n    delFlg\n  }\n}"
 
   public init() {
   }
@@ -13761,6 +14809,7 @@ public final class OnUpdateRecipeSubscription: GraphQLSubscription {
         GraphQLField("contents", type: .object(Content.selections)),
         GraphQLField("reviews", type: .object(Review.selections)),
         GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
         GraphQLField("createdAt", type: .scalar(String.self)),
         GraphQLField("updatedAt", type: .scalar(String.self)),
         GraphQLField("delFlg", type: .nonNull(.scalar(Int.self))),
@@ -13772,8 +14821,8 @@ public final class OnUpdateRecipeSubscription: GraphQLSubscription {
         self.snapshot = snapshot
       }
 
-      public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
-        self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
+      public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
+        self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
       }
 
       public var __typename: String {
@@ -13899,6 +14948,15 @@ public final class OnUpdateRecipeSubscription: GraphQLSubscription {
         }
         set {
           snapshot.updateValue(newValue, forKey: "favNum")
+        }
+      }
+
+      public var reviewNum: Int {
+        get {
+          return snapshot["reviewNum"]! as! Int
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "reviewNum")
         }
       }
 
@@ -14222,7 +15280,7 @@ public final class OnUpdateRecipeSubscription: GraphQLSubscription {
 
 public final class OnDeleteRecipeSubscription: GraphQLSubscription {
   public static let operationString =
-    "subscription OnDeleteRecipe {\n  onDeleteRecipe {\n    __typename\n    id\n    user\n    type\n    title\n    calorie\n    protein\n    fat\n    carbo\n    state\n    materials\n    contents {\n      __typename\n      items {\n        __typename\n        id\n        recipeID\n        order\n        content\n        image\n        createdAt\n        updatedAt\n      }\n      nextToken\n    }\n    reviews {\n      __typename\n      items {\n        __typename\n        id\n        user\n        recipeID\n        content\n        image\n        createdAt\n        updatedAt\n      }\n      nextToken\n    }\n    favNum\n    createdAt\n    updatedAt\n    delFlg\n  }\n}"
+    "subscription OnDeleteRecipe {\n  onDeleteRecipe {\n    __typename\n    id\n    user\n    type\n    title\n    calorie\n    protein\n    fat\n    carbo\n    state\n    materials\n    contents {\n      __typename\n      items {\n        __typename\n        id\n        recipeID\n        order\n        content\n        image\n        createdAt\n        updatedAt\n      }\n      nextToken\n    }\n    reviews {\n      __typename\n      items {\n        __typename\n        id\n        user\n        recipeID\n        content\n        image\n        createdAt\n        updatedAt\n      }\n      nextToken\n    }\n    favNum\n    reviewNum\n    createdAt\n    updatedAt\n    delFlg\n  }\n}"
 
   public init() {
   }
@@ -14271,6 +15329,7 @@ public final class OnDeleteRecipeSubscription: GraphQLSubscription {
         GraphQLField("contents", type: .object(Content.selections)),
         GraphQLField("reviews", type: .object(Review.selections)),
         GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
         GraphQLField("createdAt", type: .scalar(String.self)),
         GraphQLField("updatedAt", type: .scalar(String.self)),
         GraphQLField("delFlg", type: .nonNull(.scalar(Int.self))),
@@ -14282,8 +15341,8 @@ public final class OnDeleteRecipeSubscription: GraphQLSubscription {
         self.snapshot = snapshot
       }
 
-      public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
-        self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
+      public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
+        self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
       }
 
       public var __typename: String {
@@ -14409,6 +15468,15 @@ public final class OnDeleteRecipeSubscription: GraphQLSubscription {
         }
         set {
           snapshot.updateValue(newValue, forKey: "favNum")
+        }
+      }
+
+      public var reviewNum: Int {
+        get {
+          return snapshot["reviewNum"]! as! Int
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "reviewNum")
         }
       }
 
@@ -14732,7 +15800,7 @@ public final class OnDeleteRecipeSubscription: GraphQLSubscription {
 
 public final class OnCreateProcedureSubscription: GraphQLSubscription {
   public static let operationString =
-    "subscription OnCreateProcedure {\n  onCreateProcedure {\n    __typename\n    id\n    recipeID\n    order\n    content\n    image\n    recipe {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    createdAt\n    updatedAt\n  }\n}"
+    "subscription OnCreateProcedure {\n  onCreateProcedure {\n    __typename\n    id\n    recipeID\n    order\n    content\n    image\n    recipe {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      reviewNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    createdAt\n    updatedAt\n  }\n}"
 
   public init() {
   }
@@ -14887,6 +15955,7 @@ public final class OnCreateProcedureSubscription: GraphQLSubscription {
           GraphQLField("contents", type: .object(Content.selections)),
           GraphQLField("reviews", type: .object(Review.selections)),
           GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
           GraphQLField("createdAt", type: .scalar(String.self)),
           GraphQLField("updatedAt", type: .scalar(String.self)),
           GraphQLField("delFlg", type: .nonNull(.scalar(Int.self))),
@@ -14898,8 +15967,8 @@ public final class OnCreateProcedureSubscription: GraphQLSubscription {
           self.snapshot = snapshot
         }
 
-        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
-          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
+        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
+          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
         }
 
         public var __typename: String {
@@ -15028,6 +16097,15 @@ public final class OnCreateProcedureSubscription: GraphQLSubscription {
           }
         }
 
+        public var reviewNum: Int {
+          get {
+            return snapshot["reviewNum"]! as! Int
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "reviewNum")
+          }
+        }
+
         public var createdAt: String? {
           get {
             return snapshot["createdAt"] as? String
@@ -15135,7 +16213,7 @@ public final class OnCreateProcedureSubscription: GraphQLSubscription {
 
 public final class OnUpdateProcedureSubscription: GraphQLSubscription {
   public static let operationString =
-    "subscription OnUpdateProcedure {\n  onUpdateProcedure {\n    __typename\n    id\n    recipeID\n    order\n    content\n    image\n    recipe {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    createdAt\n    updatedAt\n  }\n}"
+    "subscription OnUpdateProcedure {\n  onUpdateProcedure {\n    __typename\n    id\n    recipeID\n    order\n    content\n    image\n    recipe {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      reviewNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    createdAt\n    updatedAt\n  }\n}"
 
   public init() {
   }
@@ -15290,6 +16368,7 @@ public final class OnUpdateProcedureSubscription: GraphQLSubscription {
           GraphQLField("contents", type: .object(Content.selections)),
           GraphQLField("reviews", type: .object(Review.selections)),
           GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
           GraphQLField("createdAt", type: .scalar(String.self)),
           GraphQLField("updatedAt", type: .scalar(String.self)),
           GraphQLField("delFlg", type: .nonNull(.scalar(Int.self))),
@@ -15301,8 +16380,8 @@ public final class OnUpdateProcedureSubscription: GraphQLSubscription {
           self.snapshot = snapshot
         }
 
-        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
-          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
+        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
+          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
         }
 
         public var __typename: String {
@@ -15431,6 +16510,15 @@ public final class OnUpdateProcedureSubscription: GraphQLSubscription {
           }
         }
 
+        public var reviewNum: Int {
+          get {
+            return snapshot["reviewNum"]! as! Int
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "reviewNum")
+          }
+        }
+
         public var createdAt: String? {
           get {
             return snapshot["createdAt"] as? String
@@ -15538,7 +16626,7 @@ public final class OnUpdateProcedureSubscription: GraphQLSubscription {
 
 public final class OnDeleteProcedureSubscription: GraphQLSubscription {
   public static let operationString =
-    "subscription OnDeleteProcedure {\n  onDeleteProcedure {\n    __typename\n    id\n    recipeID\n    order\n    content\n    image\n    recipe {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    createdAt\n    updatedAt\n  }\n}"
+    "subscription OnDeleteProcedure {\n  onDeleteProcedure {\n    __typename\n    id\n    recipeID\n    order\n    content\n    image\n    recipe {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      reviewNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    createdAt\n    updatedAt\n  }\n}"
 
   public init() {
   }
@@ -15693,6 +16781,7 @@ public final class OnDeleteProcedureSubscription: GraphQLSubscription {
           GraphQLField("contents", type: .object(Content.selections)),
           GraphQLField("reviews", type: .object(Review.selections)),
           GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
           GraphQLField("createdAt", type: .scalar(String.self)),
           GraphQLField("updatedAt", type: .scalar(String.self)),
           GraphQLField("delFlg", type: .nonNull(.scalar(Int.self))),
@@ -15704,8 +16793,8 @@ public final class OnDeleteProcedureSubscription: GraphQLSubscription {
           self.snapshot = snapshot
         }
 
-        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
-          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
+        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
+          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
         }
 
         public var __typename: String {
@@ -15834,6 +16923,15 @@ public final class OnDeleteProcedureSubscription: GraphQLSubscription {
           }
         }
 
+        public var reviewNum: Int {
+          get {
+            return snapshot["reviewNum"]! as! Int
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "reviewNum")
+          }
+        }
+
         public var createdAt: String? {
           get {
             return snapshot["createdAt"] as? String
@@ -15941,7 +17039,7 @@ public final class OnDeleteProcedureSubscription: GraphQLSubscription {
 
 public final class OnCreateReviewSubscription: GraphQLSubscription {
   public static let operationString =
-    "subscription OnCreateReview {\n  onCreateReview {\n    __typename\n    id\n    user\n    recipeID\n    content\n    image\n    recipe {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    createdAt\n    updatedAt\n  }\n}"
+    "subscription OnCreateReview {\n  onCreateReview {\n    __typename\n    id\n    user\n    recipeID\n    content\n    image\n    recipe {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      reviewNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    createdAt\n    updatedAt\n  }\n}"
 
   public init() {
   }
@@ -16096,6 +17194,7 @@ public final class OnCreateReviewSubscription: GraphQLSubscription {
           GraphQLField("contents", type: .object(Content.selections)),
           GraphQLField("reviews", type: .object(Review.selections)),
           GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
           GraphQLField("createdAt", type: .scalar(String.self)),
           GraphQLField("updatedAt", type: .scalar(String.self)),
           GraphQLField("delFlg", type: .nonNull(.scalar(Int.self))),
@@ -16107,8 +17206,8 @@ public final class OnCreateReviewSubscription: GraphQLSubscription {
           self.snapshot = snapshot
         }
 
-        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
-          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
+        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
+          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
         }
 
         public var __typename: String {
@@ -16237,6 +17336,15 @@ public final class OnCreateReviewSubscription: GraphQLSubscription {
           }
         }
 
+        public var reviewNum: Int {
+          get {
+            return snapshot["reviewNum"]! as! Int
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "reviewNum")
+          }
+        }
+
         public var createdAt: String? {
           get {
             return snapshot["createdAt"] as? String
@@ -16344,7 +17452,7 @@ public final class OnCreateReviewSubscription: GraphQLSubscription {
 
 public final class OnUpdateReviewSubscription: GraphQLSubscription {
   public static let operationString =
-    "subscription OnUpdateReview {\n  onUpdateReview {\n    __typename\n    id\n    user\n    recipeID\n    content\n    image\n    recipe {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    createdAt\n    updatedAt\n  }\n}"
+    "subscription OnUpdateReview {\n  onUpdateReview {\n    __typename\n    id\n    user\n    recipeID\n    content\n    image\n    recipe {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      reviewNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    createdAt\n    updatedAt\n  }\n}"
 
   public init() {
   }
@@ -16499,6 +17607,7 @@ public final class OnUpdateReviewSubscription: GraphQLSubscription {
           GraphQLField("contents", type: .object(Content.selections)),
           GraphQLField("reviews", type: .object(Review.selections)),
           GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
           GraphQLField("createdAt", type: .scalar(String.self)),
           GraphQLField("updatedAt", type: .scalar(String.self)),
           GraphQLField("delFlg", type: .nonNull(.scalar(Int.self))),
@@ -16510,8 +17619,8 @@ public final class OnUpdateReviewSubscription: GraphQLSubscription {
           self.snapshot = snapshot
         }
 
-        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
-          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
+        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
+          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
         }
 
         public var __typename: String {
@@ -16640,6 +17749,15 @@ public final class OnUpdateReviewSubscription: GraphQLSubscription {
           }
         }
 
+        public var reviewNum: Int {
+          get {
+            return snapshot["reviewNum"]! as! Int
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "reviewNum")
+          }
+        }
+
         public var createdAt: String? {
           get {
             return snapshot["createdAt"] as? String
@@ -16747,7 +17865,7 @@ public final class OnUpdateReviewSubscription: GraphQLSubscription {
 
 public final class OnDeleteReviewSubscription: GraphQLSubscription {
   public static let operationString =
-    "subscription OnDeleteReview {\n  onDeleteReview {\n    __typename\n    id\n    user\n    recipeID\n    content\n    image\n    recipe {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    createdAt\n    updatedAt\n  }\n}"
+    "subscription OnDeleteReview {\n  onDeleteReview {\n    __typename\n    id\n    user\n    recipeID\n    content\n    image\n    recipe {\n      __typename\n      id\n      user\n      type\n      title\n      calorie\n      protein\n      fat\n      carbo\n      state\n      materials\n      contents {\n        __typename\n        nextToken\n      }\n      reviews {\n        __typename\n        nextToken\n      }\n      favNum\n      reviewNum\n      createdAt\n      updatedAt\n      delFlg\n    }\n    createdAt\n    updatedAt\n  }\n}"
 
   public init() {
   }
@@ -16902,6 +18020,7 @@ public final class OnDeleteReviewSubscription: GraphQLSubscription {
           GraphQLField("contents", type: .object(Content.selections)),
           GraphQLField("reviews", type: .object(Review.selections)),
           GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+          GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
           GraphQLField("createdAt", type: .scalar(String.self)),
           GraphQLField("updatedAt", type: .scalar(String.self)),
           GraphQLField("delFlg", type: .nonNull(.scalar(Int.self))),
@@ -16913,8 +18032,8 @@ public final class OnDeleteReviewSubscription: GraphQLSubscription {
           self.snapshot = snapshot
         }
 
-        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
-          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
+        public init(id: GraphQLID, user: String, type: String, title: String, calorie: Int, protein: Double, fat: Double, carbo: Double, state: Int, materials: String, contents: Content? = nil, reviews: Review? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil, delFlg: Int) {
+          self.init(snapshot: ["__typename": "Recipe", "id": id, "user": user, "type": type, "title": title, "calorie": calorie, "protein": protein, "fat": fat, "carbo": carbo, "state": state, "materials": materials, "contents": contents.flatMap { $0.snapshot }, "reviews": reviews.flatMap { $0.snapshot }, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt, "delFlg": delFlg])
         }
 
         public var __typename: String {
@@ -17043,6 +18162,15 @@ public final class OnDeleteReviewSubscription: GraphQLSubscription {
           }
         }
 
+        public var reviewNum: Int {
+          get {
+            return snapshot["reviewNum"]! as! Int
+          }
+          set {
+            snapshot.updateValue(newValue, forKey: "reviewNum")
+          }
+        }
+
         public var createdAt: String? {
           get {
             return snapshot["createdAt"] as? String
@@ -17150,7 +18278,7 @@ public final class OnDeleteReviewSubscription: GraphQLSubscription {
 
 public final class OnCreateUserSubscription: GraphQLSubscription {
   public static let operationString =
-    "subscription OnCreateUser {\n  onCreateUser {\n    __typename\n    id\n    name\n    displayName\n    email\n    description\n    createdAt\n    updatedAt\n  }\n}"
+    "subscription OnCreateUser {\n  onCreateUser {\n    __typename\n    id\n    type\n    name\n    displayName\n    email\n    description\n    favNum\n    reviewNum\n    createdAt\n    updatedAt\n  }\n}"
 
   public init() {
   }
@@ -17187,12 +18315,15 @@ public final class OnCreateUserSubscription: GraphQLSubscription {
       public static let selections: [GraphQLSelection] = [
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
         GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("type", type: .nonNull(.scalar(String.self))),
         GraphQLField("name", type: .nonNull(.scalar(String.self))),
         GraphQLField("displayName", type: .nonNull(.scalar(String.self))),
         GraphQLField("email", type: .nonNull(.scalar(String.self))),
         GraphQLField("description", type: .scalar(String.self)),
-        GraphQLField("createdAt", type: .nonNull(.scalar(String.self))),
-        GraphQLField("updatedAt", type: .nonNull(.scalar(String.self))),
+        GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("createdAt", type: .scalar(String.self)),
+        GraphQLField("updatedAt", type: .scalar(String.self)),
       ]
 
       public var snapshot: Snapshot
@@ -17201,8 +18332,8 @@ public final class OnCreateUserSubscription: GraphQLSubscription {
         self.snapshot = snapshot
       }
 
-      public init(id: GraphQLID, name: String, displayName: String, email: String, description: String? = nil, createdAt: String, updatedAt: String) {
-        self.init(snapshot: ["__typename": "User", "id": id, "name": name, "displayName": displayName, "email": email, "description": description, "createdAt": createdAt, "updatedAt": updatedAt])
+      public init(id: GraphQLID, type: String, name: String, displayName: String, email: String, description: String? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil) {
+        self.init(snapshot: ["__typename": "User", "id": id, "type": type, "name": name, "displayName": displayName, "email": email, "description": description, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt])
       }
 
       public var __typename: String {
@@ -17220,6 +18351,15 @@ public final class OnCreateUserSubscription: GraphQLSubscription {
         }
         set {
           snapshot.updateValue(newValue, forKey: "id")
+        }
+      }
+
+      public var type: String {
+        get {
+          return snapshot["type"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "type")
         }
       }
 
@@ -17259,18 +18399,36 @@ public final class OnCreateUserSubscription: GraphQLSubscription {
         }
       }
 
-      public var createdAt: String {
+      public var favNum: Int {
         get {
-          return snapshot["createdAt"]! as! String
+          return snapshot["favNum"]! as! Int
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "favNum")
+        }
+      }
+
+      public var reviewNum: Int {
+        get {
+          return snapshot["reviewNum"]! as! Int
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "reviewNum")
+        }
+      }
+
+      public var createdAt: String? {
+        get {
+          return snapshot["createdAt"] as? String
         }
         set {
           snapshot.updateValue(newValue, forKey: "createdAt")
         }
       }
 
-      public var updatedAt: String {
+      public var updatedAt: String? {
         get {
-          return snapshot["updatedAt"]! as! String
+          return snapshot["updatedAt"] as? String
         }
         set {
           snapshot.updateValue(newValue, forKey: "updatedAt")
@@ -17282,7 +18440,7 @@ public final class OnCreateUserSubscription: GraphQLSubscription {
 
 public final class OnUpdateUserSubscription: GraphQLSubscription {
   public static let operationString =
-    "subscription OnUpdateUser {\n  onUpdateUser {\n    __typename\n    id\n    name\n    displayName\n    email\n    description\n    createdAt\n    updatedAt\n  }\n}"
+    "subscription OnUpdateUser {\n  onUpdateUser {\n    __typename\n    id\n    type\n    name\n    displayName\n    email\n    description\n    favNum\n    reviewNum\n    createdAt\n    updatedAt\n  }\n}"
 
   public init() {
   }
@@ -17319,12 +18477,15 @@ public final class OnUpdateUserSubscription: GraphQLSubscription {
       public static let selections: [GraphQLSelection] = [
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
         GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("type", type: .nonNull(.scalar(String.self))),
         GraphQLField("name", type: .nonNull(.scalar(String.self))),
         GraphQLField("displayName", type: .nonNull(.scalar(String.self))),
         GraphQLField("email", type: .nonNull(.scalar(String.self))),
         GraphQLField("description", type: .scalar(String.self)),
-        GraphQLField("createdAt", type: .nonNull(.scalar(String.self))),
-        GraphQLField("updatedAt", type: .nonNull(.scalar(String.self))),
+        GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("createdAt", type: .scalar(String.self)),
+        GraphQLField("updatedAt", type: .scalar(String.self)),
       ]
 
       public var snapshot: Snapshot
@@ -17333,8 +18494,8 @@ public final class OnUpdateUserSubscription: GraphQLSubscription {
         self.snapshot = snapshot
       }
 
-      public init(id: GraphQLID, name: String, displayName: String, email: String, description: String? = nil, createdAt: String, updatedAt: String) {
-        self.init(snapshot: ["__typename": "User", "id": id, "name": name, "displayName": displayName, "email": email, "description": description, "createdAt": createdAt, "updatedAt": updatedAt])
+      public init(id: GraphQLID, type: String, name: String, displayName: String, email: String, description: String? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil) {
+        self.init(snapshot: ["__typename": "User", "id": id, "type": type, "name": name, "displayName": displayName, "email": email, "description": description, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt])
       }
 
       public var __typename: String {
@@ -17352,6 +18513,15 @@ public final class OnUpdateUserSubscription: GraphQLSubscription {
         }
         set {
           snapshot.updateValue(newValue, forKey: "id")
+        }
+      }
+
+      public var type: String {
+        get {
+          return snapshot["type"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "type")
         }
       }
 
@@ -17391,18 +18561,36 @@ public final class OnUpdateUserSubscription: GraphQLSubscription {
         }
       }
 
-      public var createdAt: String {
+      public var favNum: Int {
         get {
-          return snapshot["createdAt"]! as! String
+          return snapshot["favNum"]! as! Int
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "favNum")
+        }
+      }
+
+      public var reviewNum: Int {
+        get {
+          return snapshot["reviewNum"]! as! Int
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "reviewNum")
+        }
+      }
+
+      public var createdAt: String? {
+        get {
+          return snapshot["createdAt"] as? String
         }
         set {
           snapshot.updateValue(newValue, forKey: "createdAt")
         }
       }
 
-      public var updatedAt: String {
+      public var updatedAt: String? {
         get {
-          return snapshot["updatedAt"]! as! String
+          return snapshot["updatedAt"] as? String
         }
         set {
           snapshot.updateValue(newValue, forKey: "updatedAt")
@@ -17414,7 +18602,7 @@ public final class OnUpdateUserSubscription: GraphQLSubscription {
 
 public final class OnDeleteUserSubscription: GraphQLSubscription {
   public static let operationString =
-    "subscription OnDeleteUser {\n  onDeleteUser {\n    __typename\n    id\n    name\n    displayName\n    email\n    description\n    createdAt\n    updatedAt\n  }\n}"
+    "subscription OnDeleteUser {\n  onDeleteUser {\n    __typename\n    id\n    type\n    name\n    displayName\n    email\n    description\n    favNum\n    reviewNum\n    createdAt\n    updatedAt\n  }\n}"
 
   public init() {
   }
@@ -17451,12 +18639,15 @@ public final class OnDeleteUserSubscription: GraphQLSubscription {
       public static let selections: [GraphQLSelection] = [
         GraphQLField("__typename", type: .nonNull(.scalar(String.self))),
         GraphQLField("id", type: .nonNull(.scalar(GraphQLID.self))),
+        GraphQLField("type", type: .nonNull(.scalar(String.self))),
         GraphQLField("name", type: .nonNull(.scalar(String.self))),
         GraphQLField("displayName", type: .nonNull(.scalar(String.self))),
         GraphQLField("email", type: .nonNull(.scalar(String.self))),
         GraphQLField("description", type: .scalar(String.self)),
-        GraphQLField("createdAt", type: .nonNull(.scalar(String.self))),
-        GraphQLField("updatedAt", type: .nonNull(.scalar(String.self))),
+        GraphQLField("favNum", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("reviewNum", type: .nonNull(.scalar(Int.self))),
+        GraphQLField("createdAt", type: .scalar(String.self)),
+        GraphQLField("updatedAt", type: .scalar(String.self)),
       ]
 
       public var snapshot: Snapshot
@@ -17465,8 +18656,8 @@ public final class OnDeleteUserSubscription: GraphQLSubscription {
         self.snapshot = snapshot
       }
 
-      public init(id: GraphQLID, name: String, displayName: String, email: String, description: String? = nil, createdAt: String, updatedAt: String) {
-        self.init(snapshot: ["__typename": "User", "id": id, "name": name, "displayName": displayName, "email": email, "description": description, "createdAt": createdAt, "updatedAt": updatedAt])
+      public init(id: GraphQLID, type: String, name: String, displayName: String, email: String, description: String? = nil, favNum: Int, reviewNum: Int, createdAt: String? = nil, updatedAt: String? = nil) {
+        self.init(snapshot: ["__typename": "User", "id": id, "type": type, "name": name, "displayName": displayName, "email": email, "description": description, "favNum": favNum, "reviewNum": reviewNum, "createdAt": createdAt, "updatedAt": updatedAt])
       }
 
       public var __typename: String {
@@ -17484,6 +18675,15 @@ public final class OnDeleteUserSubscription: GraphQLSubscription {
         }
         set {
           snapshot.updateValue(newValue, forKey: "id")
+        }
+      }
+
+      public var type: String {
+        get {
+          return snapshot["type"]! as! String
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "type")
         }
       }
 
@@ -17523,18 +18723,36 @@ public final class OnDeleteUserSubscription: GraphQLSubscription {
         }
       }
 
-      public var createdAt: String {
+      public var favNum: Int {
         get {
-          return snapshot["createdAt"]! as! String
+          return snapshot["favNum"]! as! Int
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "favNum")
+        }
+      }
+
+      public var reviewNum: Int {
+        get {
+          return snapshot["reviewNum"]! as! Int
+        }
+        set {
+          snapshot.updateValue(newValue, forKey: "reviewNum")
+        }
+      }
+
+      public var createdAt: String? {
+        get {
+          return snapshot["createdAt"] as? String
         }
         set {
           snapshot.updateValue(newValue, forKey: "createdAt")
         }
       }
 
-      public var updatedAt: String {
+      public var updatedAt: String? {
         get {
-          return snapshot["updatedAt"]! as! String
+          return snapshot["updatedAt"] as? String
         }
         set {
           snapshot.updateValue(newValue, forKey: "updatedAt")

@@ -16,6 +16,7 @@ public struct Recipe: Model {
   public var contents: List<Procedure>?
   public var reviews: List<Review>?
   public var favNum: Int
+  public var reviewNum: Int
   public var createdAt: String?
   public var updatedAt: String?
   public var delFlg: Int
@@ -33,6 +34,7 @@ public struct Recipe: Model {
       contents: List<Procedure> = [],
       reviews: List<Review>? = [],
       favNum: Int,
+      reviewNum: Int,
       createdAt: String? = nil,
       updatedAt: String? = nil,
       delFlg: Int) {
@@ -49,6 +51,7 @@ public struct Recipe: Model {
       self.contents = contents
       self.reviews = reviews
       self.favNum = favNum
+      self.reviewNum = reviewNum
       self.createdAt = createdAt
       self.updatedAt = updatedAt
       self.delFlg = delFlg

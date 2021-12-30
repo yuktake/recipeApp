@@ -242,226 +242,244 @@ struct Detail: View {
     var body: some View {
         //　parallex
         ZStack {
-            ScrollView(showsIndicators: false, content: {
-                GeometryReader { reader in
-                    if let image = UIImage(data:header) {
-                        Image(uiImage: image)
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .offset(y: -reader.frame(in: .global).minY)
-                            .frame(
-                                width: UIScreen.main.bounds.width,
-                                height: reader.frame(in: .global).minY + (UIScreen.main.bounds.height * 0.7)
-                            )
-                    }
-                }
-                .frame(height: screen.height * 0.7)
-                
-                VStack(alignment:.leading ,spacing: 15) {
-                    VStack {
-                        HStack {
-                            Text(selectedItem.title)
-                                .font(.system(size:25,weight: .bold))
+            if self.deleted {
+                Text("This Recipe is Deleted")
+                    .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+                    .overlay(
+                        Button(action: {
+                            withAnimation(.spring()){
+                                show.toggle()
+                            }
+                        }) {
+                            Image(systemName: "chevron.left")
+                                .font(.title)
                                 .foregroundColor(.white)
-                                .lineLimit(nil)
-                                .fixedSize(horizontal: false, vertical: true)
-                            Spacer()
+                                .padding(.leading,25)
+                                .padding(.top,30)
+                        },alignment: .topLeading
+                    )
+            } else {
+                ScrollView(showsIndicators: false, content: {
+                    GeometryReader { reader in
+                        if let image = UIImage(data:header) {
+                            Image(uiImage: image)
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .offset(y: -reader.frame(in: .global).minY)
+                                .frame(
+                                    width: UIScreen.main.bounds.width,
+                                    height: reader.frame(in: .global).minY + (UIScreen.main.bounds.height * 0.7)
+                                )
                         }
-                        .padding(.top)
-                        
-                        HStack {
-                            VStack {
-                                Text(state[tmpRecipe.state] ?? "")
-                                    .font(.system(size:10))
-                                    .padding(.horizontal, 14)
-                                    .background(
-                                        Capsule()
-                                            .fill(Color.white)
-                                    )
-                                    .foregroundColor(.black)
+                    }
+                    .frame(height: screen.height * 0.7)
+                    
+                    VStack(alignment:.leading ,spacing: 15) {
+                        VStack {
+                            HStack {
+                                Text(selectedItem.title)
+                                    .font(.system(size:25,weight: .bold))
+                                    .foregroundColor(.white)
+                                    .lineLimit(nil)
+                                    .fixedSize(horizontal: false, vertical: true)
                                 Spacer()
                             }
-                            Spacer()
-                            if let uiimage = UIImage(data: self.profileImage ?? Data()) {
-                                if toProfile {
-                                    NavigationLink(destination: UserPage(userId: selectedItem.userId)) {
+                            .padding(.top)
+                            
+                            HStack {
+                                VStack {
+                                    Text(state[tmpRecipe.state] ?? "")
+                                        .font(.system(size:10))
+                                        .padding(.horizontal, 14)
+                                        .background(
+                                            Capsule()
+                                                .fill(Color.white)
+                                        )
+                                        .foregroundColor(.black)
+                                    Spacer()
+                                }
+                                Spacer()
+                                if let uiimage = UIImage(data: self.profileImage ?? Data()) {
+                                    if toProfile {
+                                        NavigationLink(destination: UserPage(userId: selectedItem.userId)) {
+                                            Image(uiImage: uiimage)
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fit)
+                                                .frame(width: screen.width * 0.1)
+                                                .clipShape(Circle())
+                                        }
+                                    } else {
                                         Image(uiImage: uiimage)
                                             .resizable()
                                             .aspectRatio(contentMode: .fit)
                                             .frame(width: screen.width * 0.1)
                                             .clipShape(Circle())
                                     }
-                                } else {
-                                    Image(uiImage: uiimage)
-                                        .resizable()
-                                        .aspectRatio(contentMode: .fit)
-                                        .frame(width: screen.width * 0.1)
-                                        .clipShape(Circle())
                                 }
-                            }
-                            VStack {
-                                if user.isLogged {
-                                    Button(
-                                        action:{
-                                            self.changing = true
-                                            if self.user.favRecipes.contains(where: {$0.id == selectedItem.id}) {
-                                                self.deleteFav(recipeId: selectedItem.id)
-                                            } else {
-                                                self.addFav(recipeId: selectedItem.id)
+                                VStack {
+                                    if user.isLogged {
+                                        Button(
+                                            action:{
+                                                self.changing = true
+                                                if self.user.favRecipes.contains(where: {$0.id == selectedItem.id}) {
+                                                    self.deleteFav(recipeId: selectedItem.id)
+                                                } else {
+                                                    self.addFav(recipeId: selectedItem.id)
+                                                }
+                                            }, label: {
+                                                Image(systemName: favorite ? "heart.fill":"heart")
+                                                    .resizable()
+                                                    .frame(width: 16, height: 16)
                                             }
-                                        }, label: {
-                                            Image(systemName: favorite ? "heart.fill":"heart")
-                                                .resizable()
-                                                .frame(width: 16, height: 16)
-                                        }
-                                    )
-                                    .disabled(changing)
-                                }
-                                Text("\(selectedItem.calorie)kcal")
-                                    .font(.caption)
-                                    .foregroundColor(.white)
-                            }
-                        }
-                        
-                        Spacer()
-                        
-                        HStack(spacing: 15) {
-                            VStack {
-                                HStack {
-                                    Text(selectedItem.protein)
-                                        .font(.system(size:20,weight: .bold))
-                                        .foregroundColor(.white)
-                                    Text("g")
+                                        )
+                                        .disabled(changing)
+                                    }
+                                    Text("\(selectedItem.calorie)kcal")
                                         .font(.caption)
                                         .foregroundColor(.white)
-                                        .padding(.top,5)
                                 }
-                                Text("protein")
-                                    .font(.caption)
-                                    .foregroundColor(.white)
-                            }
-                            
-                            Spacer()
-                            VStack {
-                                HStack {
-                                    Text(selectedItem.fat)
-                                        .font(.system(size:20,weight: .bold))
-                                        .foregroundColor(.white)
-                                    Text("g")
-                                        .font(.caption)
-                                        .foregroundColor(.white)
-                                        .padding(.top,5)
-                                }
-                                Text("fat")
-                                    .font(.caption)
-                                    .foregroundColor(.white)
                             }
                             
                             Spacer()
                             
-                            VStack {
-                                HStack {
-                                    Text(selectedItem.carbo)
-                                        .font(.system(size:20,weight: .bold))
-                                        .foregroundColor(.white)
-                                    Text("g")
+                            HStack(spacing: 15) {
+                                VStack {
+                                    HStack {
+                                        Text(selectedItem.protein)
+                                            .font(.system(size:20,weight: .bold))
+                                            .foregroundColor(.white)
+                                        Text("g")
+                                            .font(.caption)
+                                            .foregroundColor(.white)
+                                            .padding(.top,5)
+                                    }
+                                    Text("protein")
                                         .font(.caption)
                                         .foregroundColor(.white)
-                                        .padding(.top,5)
                                 }
-                                Text("carbo")
-                                    .font(.caption)
-                                    .foregroundColor(.white)
+                                
+                                Spacer()
+                                VStack {
+                                    HStack {
+                                        Text(selectedItem.fat)
+                                            .font(.system(size:20,weight: .bold))
+                                            .foregroundColor(.white)
+                                        Text("g")
+                                            .font(.caption)
+                                            .foregroundColor(.white)
+                                            .padding(.top,5)
+                                    }
+                                    Text("fat")
+                                        .font(.caption)
+                                        .foregroundColor(.white)
+                                }
+                                
+                                Spacer()
+                                
+                                VStack {
+                                    HStack {
+                                        Text(selectedItem.carbo)
+                                            .font(.system(size:20,weight: .bold))
+                                            .foregroundColor(.white)
+                                        Text("g")
+                                            .font(.caption)
+                                            .foregroundColor(.white)
+                                            .padding(.top,5)
+                                    }
+                                    Text("carbo")
+                                        .font(.caption)
+                                        .foregroundColor(.white)
+                                }
                             }
                         }
-                    }
-                    
-                    Text("材料")
-                        .font(.system(size:20,weight: .bold))
-                        .foregroundColor(.white)
-                    
-                    HStack {
-                        Spacer()
-                        Text(selectedItem.materials)
+                        
+                        Text("材料")
+                            .font(.system(size:20,weight: .bold))
                             .foregroundColor(.white)
-                            .padding(.top,5)
-                        Spacer()
-                    }
-                    .padding(.bottom)
-                    
-                    Text("つくりかた")
-                        .font(.system(size: 20,weight: .bold))
-                        .foregroundColor(.white)
-                    
-                    Divider()
-                        .padding(.top)
-                        .foregroundColor(.white)
-                    
-                    ForEach(0..<procedures.count, id: \.self) { index in
-                        VStack(alignment: .leading, spacing: 10, content:{
-                            Text("\(index+1)")
-                                .font(.title2)
-                                .fontWeight(.bold)
-                                .frame(width: 24)
-                                .background(
-                                    Color(#colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1))
-                                )
-                                .clipShape(Circle())
-                            Text(procedures[index].content)
-                                .font(.caption)
-                        })
-                        .padding(.horizontal)
+                        
+                        HStack {
+                            Spacer()
+                            Text(selectedItem.materials)
+                                .foregroundColor(.white)
+                                .padding(.top,5)
+                            Spacer()
+                        }
+                        .padding(.bottom)
+                        
+                        Text("つくりかた")
+                            .font(.system(size: 20,weight: .bold))
+                            .foregroundColor(.white)
+                        
                         Divider()
                             .padding(.top)
                             .foregroundColor(.white)
-                    }
-                    
-                    Text("みんなの感想")
-                        .font(.system(size: 20,weight: .bold))
-                        .foregroundColor(.white)
-                        .padding(.leading)
-                    
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 12) {
-                            if user.isLogged {
-                                if reviews.filter{$0.user == user.sub}.count == 0 {
-                                    Button {
-                                        self.showModal.toggle()
-                                    } label: {
-                                        if let imageData = user.image {
-                                            let uiimage = UIImage(data: imageData)
-                                            Image(uiImage: uiimage!)
-                                                .resizable()
-                                                .aspectRatio(contentMode: .fit)
-                                                .frame(width:50, height: 50)
-                                                .clipShape(Circle())
-                                                .overlay(
-                                                    Image(systemName: "plus")
-                                                        .padding(7)
-                                                        .background(.blue, in: Circle())
-                                                        .foregroundColor(.white)
-                                                        .padding(2)
-                                                        .background(.black, in: Circle())
-                                                        .offset(x: 10, y: 10)
-                                                )
-                                                .padding(.trailing, 10)
-                                        } else {
-                                            Image(systemName: "person.fill")
-                                                .resizable()
-                                                .foregroundColor(.white)
-                                                .aspectRatio(contentMode: .fit)
-                                                .frame(width:50, height: 50)
-                                                .clipShape(Circle())
-                                                .overlay(
-                                                    Image(systemName: "plus")
-                                                        .padding(7)
-                                                        .background(.blue, in: Circle())
-                                                        .foregroundColor(.white)
-                                                        .padding(2)
-                                                        .background(.black, in: Circle())
-                                                        .offset(x: 10, y: 10)
-                                                )
-                                                .padding(.trailing, 10)
+                        
+                        ForEach(0..<procedures.count, id: \.self) { index in
+                            VStack(alignment: .leading, spacing: 10, content:{
+                                Text("\(index+1)")
+                                    .font(.title2)
+                                    .fontWeight(.bold)
+                                    .frame(width: 24)
+                                    .background(
+                                        Color(#colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1))
+                                    )
+                                    .clipShape(Circle())
+                                Text(procedures[index].content)
+                                    .font(.caption)
+                            })
+                            .padding(.horizontal)
+                            Divider()
+                                .padding(.top)
+                                .foregroundColor(.white)
+                        }
+                        
+                        Text("みんなの感想")
+                            .font(.system(size: 20,weight: .bold))
+                            .foregroundColor(.white)
+                            .padding(.leading)
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 12) {
+                                if user.isLogged {
+                                    if reviews.filter{$0.user == user.sub}.count == 0 {
+                                        Button {
+                                            self.showModal.toggle()
+                                        } label: {
+                                            if let imageData = user.image {
+                                                let uiimage = UIImage(data: imageData)
+                                                Image(uiImage: uiimage!)
+                                                    .resizable()
+                                                    .aspectRatio(contentMode: .fit)
+                                                    .frame(width:50, height: 50)
+                                                    .clipShape(Circle())
+                                                    .overlay(
+                                                        Image(systemName: "plus")
+                                                            .padding(7)
+                                                            .background(.blue, in: Circle())
+                                                            .foregroundColor(.white)
+                                                            .padding(2)
+                                                            .background(.black, in: Circle())
+                                                            .offset(x: 10, y: 10)
+                                                    )
+                                                    .padding(.trailing, 10)
+                                            } else {
+                                                Image(systemName: "person.fill")
+                                                    .resizable()
+                                                    .foregroundColor(.white)
+                                                    .aspectRatio(contentMode: .fit)
+                                                    .frame(width:50, height: 50)
+                                                    .clipShape(Circle())
+                                                    .overlay(
+                                                        Image(systemName: "plus")
+                                                            .padding(7)
+                                                            .background(.blue, in: Circle())
+                                                            .foregroundColor(.white)
+                                                            .padding(2)
+                                                            .background(.black, in: Circle())
+                                                            .offset(x: 10, y: 10)
+                                                    )
+                                                    .padding(.trailing, 10)
+                                            }
                                         }
                                     }
                                 }
@@ -469,7 +487,7 @@ struct Detail: View {
                                     if let uiimage = UIImage(data: reviewImages[reviews[i].id] ?? Data()) {
                                         Image(uiImage: uiimage)
                                             .resizable()
-                                            .aspectRatio(contentMode: .fill)
+                                            .aspectRatio(contentMode: .fit)
                                             .frame(width: 50, height: 50)
                                             .clipShape(Circle())
                                             .padding(2)
@@ -481,7 +499,7 @@ struct Detail: View {
                                             }
                                     }
                                 }
-                                if self.reviews.count >= 1 {
+                                if self.reviews.count >= 3 {
                                     Image(systemName: "ellipsis")
                                         .frame(width: 50, height: 50)
                                         .onTapGesture {
@@ -491,72 +509,71 @@ struct Detail: View {
                             }
                         }
                     }
+                    .padding(.vertical,25)
+                    .padding(.horizontal)
+                    .background(.black)
+                    .cornerRadius(20)
+                    .offset(y: -35)
+                })
+                .navigationBarHidden(true)
+                .edgesIgnoringSafeArea(.all)
+                .background(Color.black.edgesIgnoringSafeArea(.all))
+                .onAppear{
+                    if user.isLogged {
+                        self.getFav(recipeId: selectedItem.id)
+                    }
+                    
+                    if (self.procedures.count == 0) {
+                        load(updated: false)
+                    }
                 }
-                .padding(.vertical,25)
-                .padding(.horizontal)
-                .background(.black)
-                .cornerRadius(20)
-                .offset(y: -35)
-            })
-            .navigationBarHidden(true)
-            .edgesIgnoringSafeArea(.all)
-            .background(Color.black.edgesIgnoringSafeArea(.all))
-            .onAppear{
-                if user.isLogged {
-                    self.getFav(recipeId: selectedItem.id)
+                .opacity(showReview ? 0 : 1)
+                .fullScreenCover(isPresented: $showModal.onChange(sheetChange)){
+                    ReviewView(
+                        recipeID:selectedItem.id,
+                        showSheet: $showModal
+                    )
+                }
+                .fullScreenCover(isPresented: $showList){
+                    ReviewList(
+                        showList: $showList,
+                        recipeId: tmpRecipe.id
+                    )
+                }
+                .if(overlay) {
+                    $0.overlay(
+                        Button(action: {
+                            withAnimation(.spring()){
+                                show = false
+                            }
+                        }) {
+                            Image(systemName: "chevron.left")
+                                .font(.title)
+                                .foregroundColor(.white)
+                                .padding(.leading,25)
+                                .padding(.top,25)
+                        }
+                        ,alignment: .topLeading
+                    )
+                }
+                .if(!overlay) {
+                    $0.overlay(
+                        Button("戻る") {
+                            self.presentationMode.wrappedValue.dismiss()
+                        }
+                        .padding(.leading)
+                        .padding(.top,8)
+                        ,alignment: .topLeading
+                    )
                 }
                 
-                if (self.procedures.count == 0) {
-                    load(updated: false)
-                }
-            }
-            .opacity(showReview ? 0 : 1)
-            .fullScreenCover(isPresented: $showModal.onChange(sheetChange)){
-                ReviewView(
-                    recipeID:selectedItem.id,
-                    showSheet: $showModal
-                )
-            }
-            .if(overlay) {
-                $0.overlay(
-                    Button(action: {
-                        withAnimation(.spring()){
-                            show = false
-                        }
-                    }) {
-                        Image(systemName: "chevron.left")
-                            .font(.title)
-                            .foregroundColor(.white)
-                            .padding(.leading,25)
-                            .padding(.top,25)
+                if (showReview) {
+                    if let review = selectedReview {
+                        StoryView(showReview: $showReview, reviewImage: self.reviewImages[review.id] ?? Data(), reviewData: review)
+                            .ignoresSafeArea(.all)
+                            .transition(.move(edge:.bottom))
                     }
-                    ,alignment: .topLeading
-                )
-            }
-            .if(!overlay) {
-                $0.overlay(
-                    Button("戻る") {
-                        self.presentationMode.wrappedValue.dismiss()
-                    }
-                    .padding(.leading)
-                    .padding(.top,8)
-                    ,alignment: .topLeading
-                )
-            }
-            
-            if (showReview) {
-                if let review = selectedReview {
-                    StoryView(showReview: $showReview, reviewImage: self.reviewImages[review.id] ?? Data(), reviewData: review)
-                        .ignoresSafeArea(.all)
-                        .transition(.move(edge:.bottom))
                 }
-            }
-            
-            if (showList) {
-                ReviewList(
-                    showList: $showList,
-                    recipeId: selectedItem.id
-                )
             }
         }
         .navigationBarHidden(true)

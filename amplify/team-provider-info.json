@@ -18,11 +18,15 @@
       "function": {
         "swiftuitest5b036111": {
           "deploymentBucketName": "amplify-swiftuitest-dev-102838-deployment",
-          "s3Key": "amplify-builds/swiftuitest5b036111-463239644e786f395757-build.zip"
+          "s3Key": "amplify-builds/swiftuitest5b036111-34546f4836494f6a3836-build.zip"
         },
         "swiftuitest8fbc6ba5": {
           "deploymentBucketName": "amplify-swiftuitest-dev-102838-deployment",
-          "s3Key": "amplify-builds/swiftuitest8fbc6ba5-4b397063667276426a73-build.zip"
+          "s3Key": "amplify-builds/swiftuitest8fbc6ba5-63353338677151594e48-build.zip"
+        },
+        "calculateUserFavNum": {
+          "deploymentBucketName": "amplify-swiftuitest-dev-102838-deployment",
+          "s3Key": "amplify-builds/calculateUserFavNum-5a6937316c536d626242-build.zip"
         }
       }
     }

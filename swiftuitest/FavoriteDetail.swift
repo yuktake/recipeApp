@@ -133,11 +133,12 @@ struct FavoriteDetail: View {
                                 print("Successfully delete fav: \(fav)")
                                 self.changing = false
                                 self.favorite = false
-                                if let firstIndex = self.user.favRecipes.firstIndex(where: {$0.id == selectedId}) {
-                                    self.user.favRecipes.remove(at: firstIndex)
+                                DispatchQueue.main.async {
+                                    if let firstIndex = self.user.favRecipes.firstIndex(where: {$0.id == selectedId}) {
+                                        self.user.favRecipes.remove(at: firstIndex)
+                                    }
+                                    self.user.favImageDatum.removeValue(forKey: selectedId)
                                 }
-                                self.user.favImageDatum.removeValue(forKey: selectedId)
-//                                UserDefaults.standard.set(self.user.favImageDatum, forKey: "favImageDatum")
                             case .failure(let error):
                                 print("Got failed result with \(error.errorDescription)")
                             }
@@ -157,16 +158,15 @@ struct FavoriteDetail: View {
     
     func load(updated: Bool){
         // get recipe
-//        self.procedures = []
         Amplify.API.query(request: .getRecipeForDetail(id: selectedId)) { event in
             switch event {
             case .success(let result):
                 switch result {
                 case .success(let recipe):
                     print("Successfully retrieved recipe: \(recipe)")
-                    // TODO del_flgチェック
                     if (recipe.delFlg == 1) {
                         self.deleted = true
+                        self.deleteFav(recipeId: recipe.id)
                         return
                     }
                     if (updated) {
@@ -220,18 +220,35 @@ struct FavoriteDetail: View {
     }
     
     var body: some View {
-        // 拡大遷移
-        // 親ViewのZStackの上に表示
-        if let image = UIImage(data:header) {
-            Image(uiImage: image)
-                .resizable()
-                .aspectRatio(contentMode: .fill)
-                .padding()
-        }
+        if self.deleted {
+            Color.black
+            Text("This Recipe is Deleted")
+                .frame(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+                .overlay(
+                    Button(action: {
+                        withAnimation(.spring()){
+                            show.toggle()
+                        }
+                    }) {
+                        Image(systemName: "chevron.left")
+                            .font(.title)
+                            .foregroundColor(.white)
+                            .padding(.leading,25)
+                            .padding(.top,30)
+                    },alignment: .topLeading
+                )
+        } else {
+            // 拡大遷移
+            // 親ViewのZStackの上に表示
+            if let image = UIImage(data:header) {
+                Image(uiImage: image)
+                    .resizable()
+                    .aspectRatio(contentMode: .fill)
+                    .padding()
+            }
 
-        Color.black
-            .opacity(0.5)
-        
+            Color.black.opacity(0.5)
+            
             OffsetableScrollView { point in
                 verticalOffset = point.y
             } content: {
@@ -411,8 +428,7 @@ struct FavoriteDetail: View {
                     load(updated: true)
                 }
             }
-//        }
-        
+        }
     }
 }
 

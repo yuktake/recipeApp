@@ -46,6 +46,7 @@ class CreateRecipeViewModel: ObservableObject {
             state: recipe.state,
             materials: recipe.materials,
             favNum: 0,
+            reviewNum: 0,
             delFlg: 0
         )
         

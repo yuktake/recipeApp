@@ -52,6 +52,7 @@ struct MakeRecipeView: View {
     
     init() {
         UITableView.appearance().showsVerticalScrollIndicator = false
+        UITextView.appearance().backgroundColor = .clear
     }
     
     func asyncProcess(completion: @escaping () -> Void) {
@@ -115,8 +116,8 @@ struct MakeRecipeView: View {
     
     var body: some View {
         ZStack {
-            Color.black.edgesIgnoringSafeArea(.all)
-            ZStack(alignment: .top) {
+            Color("FormBackground").edgesIgnoringSafeArea(.all)
+            VStack {
                 ScrollView(showsIndicators: false) {
                     HStack {
                         Button(action:{
@@ -132,8 +133,8 @@ struct MakeRecipeView: View {
                                 Image(systemName: "camera")
                                     .font(.largeTitle)
                                     .padding()
-                                    .background(Color.purple)
-                                    .foregroundColor(.white)
+                                    .background(Color.yellow)
+                                    .foregroundColor(.black)
                                     .clipShape(Circle())
                                     .frame (width: screen.width ,height: screen.height * 0.3)
                                     .background(Color.gray)
@@ -200,6 +201,10 @@ struct MakeRecipeView: View {
                         }
                         .pickerStyle(SegmentedPickerStyle())
                         .padding()
+                        .background(BlurView(style: .systemMaterial))
+                        .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+                        .shadow(color: .black.opacity(0.15), radius: 20, x:0, y:20)
+                        .padding(.horizontal)
                         
                         HStack {
                             Text("材料一覧")
@@ -228,7 +233,7 @@ struct MakeRecipeView: View {
                                         TextAreaView(
                                             contents: $viewModel.recipe.contents[index].content
                                         )
-                                        .frame(width:screen.width*0.8)
+                                        .padding(.horizontal)
                                     }
                                     .frame(height:screen.height*0.2)
                                 }
@@ -264,13 +269,11 @@ struct MakeRecipeView: View {
                             HStack(spacing: 10) {
                                 Image(systemName: "xmark")
                                     .renderingMode(.template)
-                                Text("Close")
-                                    .fontWeight(.semibold)
                             }
-                            .foregroundColor(.yellow)
+                            .foregroundColor(.red)
                             .padding(.vertical, 10)
                             .padding(.horizontal, 15)
-                            .background(.yellow.opacity(0.15))
+                            .background(.red.opacity(0.15))
                             .clipShape(Capsule())
                         }
                         Spacer()
@@ -333,6 +336,7 @@ struct MakeRecipeView: View {
                     ,alignment: .bottom
                 )
             }
+            .background(.black)
             .actionSheet(isPresented: $showModal, content: {
                 ActionSheet(title: Text("Select Photo"),message: Text("Choose"),buttons: [
                     .default(Text("Photo Library")) {
@@ -408,8 +412,8 @@ struct TitleView: View {
                     contents.remove(at: index)
                 }, label: {
                     Image(systemName: "xmark.circle")
-                        .background(Color.purple)
-                        .foregroundColor(.white)
+                        .background(Color.yellow)
+                        .foregroundColor(.black)
                         .clipShape(Circle())
                         .frame(width:16)
                         .padding(.leading)
@@ -429,21 +433,20 @@ struct TextAreaView: View {
     @Binding var contents:String
     
     var body: some View {
-        VStack {
-            HStack {
-                TextEditor(text: $contents)
-                    .keyboardType(.default)
-                    .font(.subheadline)
-                    .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-            }
-            .frame(height:110)
-            .frame(maxWidth: .infinity)
-            .background(
-                BlurView(style: .systemMaterial)
-            )
-            .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-            .shadow(color: .black.opacity(0.15), radius: 20, x:0, y:20)
+        HStack {
+            TextEditor(text: $contents)
+                .keyboardType(.default)
+                .font(.subheadline)
+                .background(Color("FormBackground"))
+                .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
         }
+        .frame(height:110)
+        .frame(maxWidth: .infinity)
+        .background(Color("FormBackground"))
+//        .background(.yellow)
+        .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+        .shadow(color: .black.opacity(0.15), radius: 20, x:0, y:20)
+        .padding(8)
     }
 }
 

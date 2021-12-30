@@ -21,9 +21,48 @@ struct Home: View {
     @EnvironmentObject var user:UserStore
     @State var poplularRecipes: [RecipeData] = []
     @State var imageDatum = [String:Data]()
+    @State var users:[User] = []
+    @State var userImages:[String:Data?] = [:]
+    
+    func getPopularUsers() {
+        print("getPopularUsers")
+        Amplify.API.query(request: .getPopularUsers()) { event in
+            switch event {
+            case .success(let result):
+                switch result {
+                case .success(let query):
+                    print("Successfully retrieved popular users:")
+                    let users = query.getItems()
+                    users.forEach { user in
+                        Amplify.Storage.downloadData(key: "users/\(user.id).jpg") { result in
+                            switch result {
+                            case .success(let imageData):
+                                DispatchQueue.main.async{
+                                    self.users.append(user)
+                                    self.userImages[user.id] = imageData
+                                }
+                            case .failure(let error):
+                                print("Failed to download image data - \(error)")
+                                DispatchQueue.main.async{
+                                    self.users.append(user)
+                                    self.userImages[user.id] = Data()
+                                }
+                            }
+                        }
+                    }
+                case .failure(let error):
+                    print("Got failed popular result with \(error.errorDescription)")
+                    print(error.recoverySuggestion)
+                    print(error.debugDescription)
+                }
+            case .failure(let error):
+                print("Got failed popular event with error \(error)")
+            }
+        }
+    }
     
     func getRecipes() {
-        Amplify.API.query(request: .getRecipesByFav()) { event in
+        Amplify.API.query(request: .getPopularRecipes()) { event in
             switch event {
             case .success(let result):
                 switch result {
@@ -75,7 +114,7 @@ struct Home: View {
         ZStack {
             Color("background")
             if imageDatum.count >= 3 {
-                ScrollView(showsIndicators: false) {
+                ScrollView(.vertical, showsIndicators: false) {
                     LazyVStack {
                         HStack {
                             Text("Today's Receipt")
@@ -86,6 +125,47 @@ struct Home: View {
                         }
                         .padding(.horizontal)
                         .padding(.top, 30)
+                        
+                        HStack {
+                            Text("人気のユーザ")
+                                .font(.system(size: 20,weight: .bold))
+                                .foregroundColor(.black)
+                                .padding(.leading)
+                            Spacer()
+                            
+                        }
+                        
+                        ScrollView(.horizontal, showsIndicators: false) {
+                            HStack(spacing: 12) {
+//                                ScrollView(.horizontal, showsIndicators: false) {
+                                ForEach(0..<self.users.count,id: \.self) { i in
+                                    if let user = users[i] {
+                                        if let uiimage = UIImage(data: (userImages[user.id] ?? nil) ?? Data() ) {
+                                            NavigationLink(destination: UserPage(userId: user.id)) {
+                                                Image(uiImage: uiimage)
+                                                    .resizable()
+                                                    .aspectRatio(contentMode: .fit)
+                                                    .frame(width: 50, height: 50)
+                                                    .clipShape(Circle())
+                                                    .padding(2)
+                                            }
+                                        } else {
+                                            NavigationLink(destination: UserPage(userId: user.id)) {
+                                                Image(systemName: "person.fill")
+                                                    .resizable()
+                                                    .aspectRatio(contentMode: .fit)
+                                                    .frame(width: 50, height: 50)
+                                                    .clipShape(Circle())
+                                                    .padding(2)
+                                            }
+                                        }
+                                    }
+                                }
+//                                }
+//                                .frame(width: UIScreen.main.bounds.width)
+                            }
+                        }
+                        .padding(.leading)
                         
                         if (self.poplularRecipes.count >= 1) {
                             ForEach(0...self.poplularRecipes.count-1,id: \.self) { i in
@@ -122,11 +202,11 @@ struct Home: View {
                         
                         Spacer()
                     }
-                    .frame(
-                        maxWidth: .infinity,
-                        maxHeight: .infinity,
-                        alignment: .top
-                    )
+//                    .frame(
+//                        maxWidth: .infinity,
+//                        maxHeight: .infinity,
+//                        alignment: .top
+//                    )
                 }
                 .navigationBarTitle("")
                 .navigationBarHidden(true)
@@ -135,21 +215,6 @@ struct Home: View {
                 if user.showLogin {
                     ZStack {
                         LoginView()
-                        VStack{
-                            HStack{
-                                Spacer()
-                                Image(systemName: "xmark")
-                                    .frame(width: 36, height: 36)
-                                    .foregroundColor(.white)
-                                    .background(Color.black)
-                                    .clipShape(Circle())
-                            }
-                            Spacer()
-                        }
-                        .padding()
-                        .onTapGesture {
-                            self.user.showLogin = false
-                        }
                     }
                 }
                 
@@ -164,6 +229,7 @@ struct Home: View {
                     )
                     .ignoresSafeArea(.all)
                 }
+                
             } else {
                 VStack {
                     ProgressView()
@@ -176,17 +242,11 @@ struct Home: View {
             if (first) {
                 first = false
                 self.getRecipes()
+                self.getPopularUsers()
             }
         }
     }
 }
-
-//struct Home_Previews: PreviewProvider {
-//    static var previews: some View {
-//        Home()
-//            .environmentObject(UserStore())
-//    }
-//}
 
 struct Card: View {
     var i: Int
@@ -236,7 +296,6 @@ struct SectionView: View {
                 .foregroundColor(.black)
             HStack {
                 Text("\(recipe.calorie)kcal")
-//                    .font(.subheadline)
                     .font(.custom("851MkPOP",size: 15))
                     .foregroundColor(Color(#colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)))
                 Spacer()
@@ -251,7 +310,6 @@ struct SectionView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 16, style:.continuous))
                         .shadow(color:Color.black.opacity(0.15),radius: 5, x:0, y:5)
                     Text("\(recipe.protein)")
-//                        .font(.subheadline)
                         .font(.custom("851MkPOP",size: 15))
                         .foregroundColor(Color(#colorLiteral(red: 0.501960814, green: 0.501960814, blue: 0.501960814, alpha: 1)))
                 }
@@ -286,7 +344,6 @@ struct SectionView: View {
         .background(
             Image("paper")
         )
-//        .clipShape(RounddRectangle(cornerRadius: 16, style: .continuous))
         .clipShape(Rectangle())
         .shadow(
             color: Color(#colorLiteral(red: 0.760805108, green: 0.8164883852, blue: 0.9259157777, alpha: 1)), radius: 20, x: i%2==0 ?20:-20, y: 20

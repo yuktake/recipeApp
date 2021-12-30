@@ -95,10 +95,13 @@ struct SettingsView: View {
                     // update
                     let amplifyUser = User(
                         id: userData.id,
+                        type: "User",
                         name: userData.name,
                         displayName: name,
                         email: userData.email,
-                        description: description
+                        description: description,
+                        favNum: userData.favNum,
+                        reviewNum: userData.reviewNum
                     )
                     Amplify.API.mutate(request: .update(amplifyUser)) { event in
                         switch event {
@@ -141,146 +144,148 @@ struct SettingsView: View {
     }
     
     var body: some View {
-        VStack {
+        ZStack {
+            Color("FormBackground").edgesIgnoringSafeArea(.all)
             VStack {
-                ZStack {
-                    if let imageData = profile {
-                        Image(uiImage: imageData)
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .frame(width: screen.width / 3)
-                            .clipShape(Circle())
-                    } else if let image = user.image {
-                        if let uiimage = UIImage(data: image) {
-                            Image(uiImage: uiimage)
+                VStack {
+                    ZStack {
+                        if let imageData = profile {
+                            Image(uiImage: imageData)
                                 .resizable()
                                 .aspectRatio(contentMode: .fill)
                                 .frame(width: screen.width / 3)
                                 .clipShape(Circle())
+                        } else if let image = user.image {
+                            if let uiimage = UIImage(data: image) {
+                                Image(uiImage: uiimage)
+                                    .resizable()
+                                    .aspectRatio(contentMode: .fill)
+                                    .frame(width: screen.width / 3)
+                                    .clipShape(Circle())
+                            }
+                        } else {
+                            Image(systemName: "person.fill")
+                                .resizable()
+                                .aspectRatio(contentMode: .fill)
+                                .foregroundColor(.white)
+                                .frame(width: screen.width / 3)
+                                .font(.system(size: 24, weight: .medium, design: .rounded))
+                                .background(.yellow)
+                                .clipShape(Circle())
                         }
-                    } else {
-                        Image(systemName: "person.fill")
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                            .foregroundColor(.white)
-                            .frame(width: screen.width / 3)
-                            .font(.system(size: 24, weight: .medium, design: .rounded))
-                            .background(.yellow)
-                            .clipShape(Circle())
                     }
+                    .padding(.top)
+                    .onTapGesture {
+                        showSheet.toggle()
+                    }
+                    
+                    HStack {
+                        TextField("Username", text: $name.onChange(nameChange))
+                            .keyboardType(.default)
+                            .font(.subheadline)
+                            .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+                    }
+                    .frame(height:40)
+                    .frame(maxWidth: .infinity)
+                    .background(BlurView(style: .systemMaterial))
+                    .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+                    .shadow(color: .black.opacity(0.15), radius: 20, x:0, y:20)
+                    .padding(8)
+                    
+                    Spacer()
                 }
-                .padding(.top)
+                .frame(width: screen.width / 3, height: screen.height / 3)
                 .onTapGesture {
-                    showSheet.toggle()
+                    self.hideKeyboard()
                 }
                 
                 HStack {
-                    TextField("Username", text: $name.onChange(nameChange))
+                    if self.nameError {
+                        Text("制限文字数を15文字までです。")
+                            .foregroundColor(.red)
+                            .padding(.top,8)
+                    }
+                }
+                
+                Rectangle()
+                    .frame(height:1)
+                    .foregroundColor(.white.opacity(0.1))
+
+                HStack {
+                    Text("自己紹介")
+                        .font(.system(size: 20,weight: .bold))
+                        .foregroundColor(.white)
+                        .padding(.leading)
+                    Spacer()
+                }
+                
+                HStack {
+                    if self.descriptionError {
+                        Text("制限文字数を100文字までです。")
+                            .foregroundColor(.red)
+                            .padding(.top, 8)
+                            .padding(.leading)
+                        Spacer()
+                    }
+                }
+                
+                HStack {
+                    TextEditor(text: $description.onChange(descriptionChange))
                         .keyboardType(.default)
                         .font(.subheadline)
-                        .padding(.leading,4)
-                        .frame(height:44)
+                        .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
                 }
-                .frame(height:40)
-                .background(BlurView(style: .systemMaterial))
+                .frame(height:110)
+                .frame(maxWidth: .infinity)
                 .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
                 .shadow(color: .black.opacity(0.15), radius: 20, x:0, y:20)
                 .padding(8)
                 
                 Spacer()
             }
-            .frame(width: screen.width / 3, height: screen.height / 3)
+            .actionSheet(isPresented: $showSheet, content: {
+                ActionSheet(title: Text("Select Photo"),message: Text("Choose"),buttons: [
+                    .default(Text("Photo Library")) {
+                        showSheet.toggle()
+                        showPicker.toggle()
+                    },
+                    .destructive(Text("Delete Photo")) {
+                        showSheet.toggle()
+                        profile = nil
+                    },
+                    .cancel() {
+                        showSheet.toggle()
+                    }
+                ])
+            })
+            .sheet(isPresented: $showPicker, content: {
+                ImagePicker(sourceType: .photoLibrary, selectedImage: $profile,showModal: $showSheet, cropperShown: $cropperShown)
+            })
+            .sheet(isPresented: $cropperShown){
+                ImageCroppingView(shown: $cropperShown, image: profile!, croppedImage: $profile)
+            }
+            .overlay(
+                HStack {
+                    Button (action: {
+                        dismiss()
+                    }, label: {
+                        Text("Cancel")
+                    })
+                    Spacer()
+                    Button (action: {
+                        save()
+                    }, label: {
+                        Text("Save")
+                    })
+                    .disabled(disableForm)
+                }
+                .padding()
+                ,alignment: .top
+            )
+            .background(.black)
             .onTapGesture {
                 self.hideKeyboard()
             }
-            
-            HStack {
-                if self.nameError {
-                    Text("制限文字数を15文字までです。")
-                        .foregroundColor(.red)
-                        .padding(.top,8)
-                }
-            }
-            
-            Rectangle()
-                .frame(height:1)
-                .foregroundColor(.white.opacity(0.1))
-
-            HStack {
-                Text("自己紹介")
-                    .font(.system(size: 20,weight: .bold))
-                    .foregroundColor(.white)
-                    .padding(.leading)
-                Spacer()
-            }
-            
-            HStack {
-                if self.descriptionError {
-                    Text("制限文字数を100文字までです。")
-                        .foregroundColor(.red)
-                        .padding(.top, 8)
-                        .padding(.leading)
-                    Spacer()
-                }
-            }
-            
-            HStack {
-                TextEditor(text: $description.onChange(descriptionChange))
-                    .keyboardType(.default)
-                    .font(.subheadline)
-                    .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-            }
-            .frame(height:110)
-            .frame(maxWidth: .infinity)
-            .background(BlurView(style: .systemMaterial))
-            .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-            .shadow(color: .black.opacity(0.15), radius: 20, x:0, y:20)
-            .padding(8)
-            
-            Spacer()
-        }
-        .actionSheet(isPresented: $showSheet, content: {
-            ActionSheet(title: Text("Select Photo"),message: Text("Choose"),buttons: [
-                .default(Text("Photo Library")) {
-                    showSheet.toggle()
-                    showPicker.toggle()
-                },
-                .destructive(Text("Delete Photo")) {
-                    showSheet.toggle()
-                    profile = nil
-                },
-                .cancel() {
-                    showSheet.toggle()
-                }
-            ])
-        })
-        .sheet(isPresented: $showPicker, content: {
-            ImagePicker(sourceType: .photoLibrary, selectedImage: $profile,showModal: $showSheet, cropperShown: $cropperShown)
-        })
-        .sheet(isPresented: $cropperShown){
-            ImageCroppingView(shown: $cropperShown, image: profile!, croppedImage: $profile)
-        }
-        .overlay(
-            HStack {
-                Button (action: {
-                    dismiss()
-                }, label: {
-                    Text("Cancel")
-                })
-                Spacer()
-                Button (action: {
-                    save()
-                }, label: {
-                    Text("Save")
-                })
-                .disabled(disableForm)
-            }
-            .padding()
-            ,alignment: .top
-        )
-        .background(.black)
-        .onTapGesture {
-            self.hideKeyboard()
         }
     }
 }

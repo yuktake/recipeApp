@@ -18,13 +18,15 @@ type Recipe @model
   contents: [Procedure!]! @connection(name: "RecipeProcedures",keyName: "byProcedure", fields: ["id"])
   reviews: [Review] @connection(name: "RecipeReviews", keyName: "byReview", fields: ["id"])
   favNum: Int!
+  reviewNum: Int!
   createdAt: String
   updatedAt: String
   delFlg: Int!
 }
 
 type Procedure @model
-  @key(name: "byProcedure", fields: ["recipeID", "order"], queryField: "byProcedure") {
+  @key(name: "byProcedure", fields: ["recipeID", "order"], queryField: "byProcedure") 
+{
   id: ID!
   recipeID: ID!
   order: Int!
@@ -46,16 +48,24 @@ type Review @model
   updatedAt: String
 }
 
-type User @model{
+type User @model
+  @key(name: "usersByFav",fields: ["type", "favNum"], queryField: "usersByFav")
+  @key(name: "usersByReview",fields: ["type", "reviewNum"], queryField: "usersByReview")
+{
   id: ID!
+  type: String!
   name: String!
   displayName: String!
   email: String!
   description: String
+  favNum: Int!
+  reviewNum: Int!
+  createdAt: String
+  updatedAt: String
 }
 
 type Fav @model
-@key(name: "favsByDate",fields: ["type", "createdAt"], queryField: "favsByDate")
+  @key(name: "favsByDate",fields: ["type", "createdAt"], queryField: "favsByDate")
 {
   id: ID!
   userID: String!

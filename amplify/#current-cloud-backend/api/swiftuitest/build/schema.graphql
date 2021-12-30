@@ -12,6 +12,7 @@ type Recipe {
   contents(order: ModelIntKeyConditionInput, filter: ModelProcedureFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelProcedureConnection
   reviews(createdAt: ModelStringKeyConditionInput, filter: ModelReviewFilterInput, sortDirection: ModelSortDirection, limit: Int, nextToken: String): ModelReviewConnection
   favNum: Int!
+  reviewNum: Int!
   createdAt: String
   updatedAt: String
   delFlg: Int!
@@ -41,12 +42,15 @@ type Review {
 
 type User {
   id: ID!
+  type: String!
   name: String!
   displayName: String!
   email: String!
   description: String
-  createdAt: AWSDateTime!
-  updatedAt: AWSDateTime!
+  favNum: Int!
+  reviewNum: Int!
+  createdAt: String
+  updatedAt: String
 }
 
 type Fav {
@@ -153,6 +157,7 @@ input ModelRecipeFilterInput {
   state: ModelIntInput
   materials: ModelStringInput
   favNum: ModelIntInput
+  reviewNum: ModelIntInput
   createdAt: ModelStringInput
   updatedAt: ModelStringInput
   delFlg: ModelIntInput
@@ -192,6 +197,8 @@ type Query {
   recipesByDate(type: String, createdAt: ModelStringKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelRecipeFilterInput, limit: Int, nextToken: String): ModelRecipeConnection
   byProcedure(recipeID: ID, order: ModelIntKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelProcedureFilterInput, limit: Int, nextToken: String): ModelProcedureConnection
   byReview(recipeID: ID, createdAt: ModelStringKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelReviewFilterInput, limit: Int, nextToken: String): ModelReviewConnection
+  usersByFav(type: String, favNum: ModelIntKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelUserFilterInput, limit: Int, nextToken: String): ModelUserConnection
+  usersByReview(type: String, reviewNum: ModelIntKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelUserFilterInput, limit: Int, nextToken: String): ModelUserConnection
   favsByDate(type: String, createdAt: ModelStringKeyConditionInput, sortDirection: ModelSortDirection, filter: ModelFavFilterInput, limit: Int, nextToken: String): ModelFavConnection
 }
 
@@ -207,6 +214,7 @@ input CreateRecipeInput {
   state: Int!
   materials: String!
   favNum: Int!
+  reviewNum: Int!
   createdAt: String
   updatedAt: String
   delFlg: Int!
@@ -224,6 +232,7 @@ input UpdateRecipeInput {
   state: Int
   materials: String
   favNum: Int
+  reviewNum: Int
   createdAt: String
   updatedAt: String
   delFlg: Int
@@ -262,6 +271,7 @@ input ModelRecipeConditionInput {
   state: ModelIntInput
   materials: ModelStringInput
   favNum: ModelIntInput
+  reviewNum: ModelIntInput
   createdAt: ModelStringInput
   updatedAt: ModelStringInput
   delFlg: ModelIntInput
@@ -395,10 +405,15 @@ type ModelUserConnection {
 
 input ModelUserFilterInput {
   id: ModelIDInput
+  type: ModelStringInput
   name: ModelStringInput
   displayName: ModelStringInput
   email: ModelStringInput
   description: ModelStringInput
+  favNum: ModelIntInput
+  reviewNum: ModelIntInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
   and: [ModelUserFilterInput]
   or: [ModelUserFilterInput]
   not: ModelUserFilterInput
@@ -406,18 +421,28 @@ input ModelUserFilterInput {
 
 input CreateUserInput {
   id: ID
+  type: String!
   name: String!
   displayName: String!
   email: String!
   description: String
+  favNum: Int!
+  reviewNum: Int!
+  createdAt: String
+  updatedAt: String
 }
 
 input UpdateUserInput {
   id: ID!
+  type: String
   name: String
   displayName: String
   email: String
   description: String
+  favNum: Int
+  reviewNum: Int
+  createdAt: String
+  updatedAt: String
 }
 
 input DeleteUserInput {
@@ -425,10 +450,15 @@ input DeleteUserInput {
 }
 
 input ModelUserConditionInput {
+  type: ModelStringInput
   name: ModelStringInput
   displayName: ModelStringInput
   email: ModelStringInput
   description: ModelStringInput
+  favNum: ModelIntInput
+  reviewNum: ModelIntInput
+  createdAt: ModelStringInput
+  updatedAt: ModelStringInput
   and: [ModelUserConditionInput]
   or: [ModelUserConditionInput]
   not: ModelUserConditionInput

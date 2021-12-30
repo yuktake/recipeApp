@@ -48,22 +48,6 @@ struct Search: View {
                 ScrollView(.vertical, showsIndicators: false, content: {
                         VStack {
                             HStack {
-                                if (isFocused) {
-                                    Button(action: {
-                                        self.hideKeyboard()
-                                        self.isFocused = false
-                                    }){
-                                        Text("Cancel")
-                                            .foregroundColor(.white)
-                                    }
-                                } else {
-                                    Image(systemName: "magnifyingglass")
-                                        .foregroundColor(Color(#colorLiteral(red: 0.6549019608, green: 0.7137254902, blue: 0.862745098, alpha: 1)))
-                                        .frame(width:30, height: 30)
-                                        .background(Color.white)
-                                        .clipShape(RoundedRectangle(cornerRadius: 8, style:.continuous))
-                                        .shadow(color:Color.black.opacity(0.15),radius: 5, x:0, y:5)
-                                }
                                 TextField("Keyword".uppercased(), text: $keyword)
                                     .keyboardType(.default)
                                     .font(.subheadline)
@@ -71,6 +55,8 @@ struct Search: View {
                                     .frame(height:44)
                                     .background(Color.white)
                                     .foregroundColor(.black)
+                                    .clipShape(RoundedRectangle(cornerRadius: 16, style:.continuous))
+                                    .shadow(color:Color.black.opacity(0.15),radius: 5, x:0, y:5)
                                     .onTapGesture {
                                         self.isFocused = true
                                     }
@@ -86,9 +72,9 @@ struct Search: View {
                                             .font(.subheadline)
                                             .background(Color.white)
                                             .foregroundColor(.black)
+                                            .cornerRadius(/*@START_MENU_TOKEN@*/3.0/*@END_MENU_TOKEN@*/)
                                             .padding(.bottom, 8)
                                             .padding(.leading, 8)
-                                            .cornerRadius(/*@START_MENU_TOKEN@*/3.0/*@END_MENU_TOKEN@*/)
                                             .onTapGesture {
                                                 self.isFocused = true
                                             }
@@ -114,9 +100,9 @@ struct Search: View {
                                             .font(.subheadline)
                                             .background(Color.white)
                                             .foregroundColor(.black)
+                                            .cornerRadius(/*@START_MENU_TOKEN@*/3.0/*@END_MENU_TOKEN@*/)
                                             .padding(.bottom, 8)
                                             .padding(.leading, 8)
-                                            .cornerRadius(/*@START_MENU_TOKEN@*/3.0/*@END_MENU_TOKEN@*/)
                                             .onTapGesture {
                                                 self.isFocused = true
                                             }
@@ -141,9 +127,9 @@ struct Search: View {
                                             .font(.subheadline)
                                             .background(Color.white)
                                             .foregroundColor(.black)
+                                            .cornerRadius(/*@START_MENU_TOKEN@*/3.0/*@END_MENU_TOKEN@*/)
                                             .padding(.bottom, 8)
                                             .padding(.leading, 8)
-                                            .cornerRadius(/*@START_MENU_TOKEN@*/3.0/*@END_MENU_TOKEN@*/)
                                             .onTapGesture {
                                                 self.isFocused = true
                                             }
@@ -165,22 +151,22 @@ struct Search: View {
                             }
                             .pickerStyle(SegmentedPickerStyle())
                             
-                            LazyVStack {
-                                if (viewModel.recipes.count != 0) {
-                                    HStack {
-                                        Spacer()
-                                        Picker(
-                                            selection: $sort_state.onChange(sortChange),
-                                            label: Text("ソート順")
-                                        ) {
-                                            Text("新着順").tag(0)
-                                            Text("タンパク質の多い順").tag(1)
-                                            Text("脂肪の少ない順").tag(2)
-                                            Text("炭水化物の少ない順").tag(3)
-                                        }
-                                        .pickerStyle(MenuPickerStyle())
-                                    }
+                            HStack {
+                                Spacer()
+                                Picker(
+                                    selection: $sort_state,
+                                    label: Text("ソート順")
+                                ) {
+                                    Text("新着順").tag(0)
+                                    Text("タンパク質の多い順").tag(1)
+                                    Text("脂肪の少ない順").tag(2)
+                                    Text("炭水化物の少ない順").tag(3)
+                                    Text("人気順").tag(4)
                                 }
+                                .pickerStyle(MenuPickerStyle())
+                            }
+                            
+                            LazyVStack {
                                 
                                 if (viewModel.searched && viewModel.recipes.count == 0) {
                                     Image(systemName:"xmark")
@@ -210,9 +196,11 @@ struct Search: View {
                                                 }
                                             }
                                         }
+                                        if i >= 10 && i % 10 == 0 {
+                                            BannerAd(unitID: "ca-app-pub-5558779899182260/4197512760")
+                                        }
                                     }
                                 }
-                                BannerAd(unitID: "ca-app-pub-5558779899182260/4197512760")
                             }
                         }
                         .padding()

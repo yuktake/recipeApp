@@ -35,8 +35,8 @@
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-swiftuitest-dev-102838-deployment/amplify-cfn-templates/api/cloudformation-template.json",
         "logicalId": "apiswiftuitest"
       },
-      "lastPushTimeStamp": "2021-12-17T05:49:33.504Z",
-      "lastPushDirHash": "RUt900M37A8ivH1Wagra+FhDQrQ="
+      "lastPushTimeStamp": "2021-12-29T12:16:39.322Z",
+      "lastPushDirHash": "/71eJ2TVPeEcKgU9UQgIFrDps0I="
     }
   },
   "auth": {
@@ -67,10 +67,10 @@
         ]
       },
       "providerMetadata": {
-        "s3TemplateURL": "https://s3.amazonaws.com/amplify-swiftuitest-dev-102838-deployment/amplify-cfn-templates/auth/swiftuitestef80af86-cloudformation-template.yml",
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-swiftuitest-dev-102838-deployment/amplify-cfn-templates/auth/swiftuitestef80af86-cloudformation-template.json",
         "logicalId": "authswiftuitestef80af86"
       },
-      "lastPushTimeStamp": "2021-12-17T05:49:31.062Z",
+      "lastPushTimeStamp": "2021-12-29T12:16:39.325Z",
       "output": {
         "UserPoolId": "ap-northeast-1_snZZ5ZfZ1",
         "AppClientIDWeb": "6f419udce0ge72fjakbn0piovf",
@@ -81,7 +81,7 @@
         "UserPoolName": "swiftuitestef80af86_userpool_ef80af86",
         "CreatedSNSRole": "arn:aws:iam::159192932442:role/snsef80af86102838-dev"
       },
-      "lastPushDirHash": "E9N4SJoqHWpJW0eOxw4A0+YuUsw="
+      "lastPushDirHash": "3QBMsjXyXd2XrUu16F8+EPc8po0="
     }
   },
   "storage": {
@@ -92,7 +92,7 @@
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-swiftuitest-dev-102838-deployment/amplify-cfn-templates/storage/s3-cloudformation-template.json",
         "logicalId": "storages3af17192e"
       },
-      "lastPushTimeStamp": "2021-12-17T05:49:31.065Z",
+      "lastPushTimeStamp": "2021-12-29T12:16:39.327Z",
       "output": {
         "BucketName": "swiftuitestba08fb19acc64e4ca91fb089a97a7d8d102838-dev",
         "Region": "ap-northeast-1"
@@ -114,26 +114,26 @@
           ]
         }
       ],
-      "lastBuildTimeStamp": "2021-12-12T23:04:42.000Z",
+      "lastBuildTimeStamp": "2021-12-29T07:57:02.221Z",
       "lastBuildType": "PROD",
-      "lastPackageTimeStamp": "2021-12-12T23:04:42.049Z",
-      "distZipFilename": "swiftuitest5b036111-463239644e786f395757-build.zip",
+      "lastPackageTimeStamp": "2021-12-29T07:57:02.258Z",
+      "distZipFilename": "swiftuitest5b036111-34546f4836494f6a3836-build.zip",
       "s3Bucket": {
         "deploymentBucketName": "amplify-swiftuitest-dev-102838-deployment",
-        "s3Key": "amplify-builds/swiftuitest5b036111-463239644e786f395757-build.zip"
+        "s3Key": "amplify-builds/swiftuitest5b036111-34546f4836494f6a3836-build.zip"
       },
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-swiftuitest-dev-102838-deployment/amplify-cfn-templates/function/swiftuitest5b036111-cloudformation-template.json",
         "logicalId": "functionswiftuitest5b036111"
       },
-      "lastPushTimeStamp": "2021-12-17T05:49:31.067Z",
+      "lastPushTimeStamp": "2021-12-29T12:16:39.329Z",
       "output": {
         "Region": "ap-northeast-1",
         "Arn": "arn:aws:lambda:ap-northeast-1:159192932442:function:swiftuitest5b036111-dev",
         "Name": "swiftuitest5b036111-dev",
         "LambdaExecutionRole": "swiftuitestLambdaRole236179aa-dev"
       },
-      "lastPushDirHash": "BGM8w27HdW1zUcLBGkHCKQslYfE="
+      "lastPushDirHash": "scrnIw8vOoIa485Gef935FtxPMY="
     },
     "swiftuitest8fbc6ba5": {
       "build": true,
@@ -150,19 +150,19 @@
           ]
         }
       ],
-      "lastBuildTimeStamp": "2021-12-13T12:27:29.094Z",
+      "lastBuildTimeStamp": "2021-12-29T12:15:03.963Z",
       "lastBuildType": "PROD",
-      "lastPackageTimeStamp": "2021-12-13T12:27:29.136Z",
-      "distZipFilename": "swiftuitest8fbc6ba5-4b397063667276426a73-build.zip",
+      "lastPackageTimeStamp": "2021-12-29T12:15:04.010Z",
+      "distZipFilename": "swiftuitest8fbc6ba5-63353338677151594e48-build.zip",
       "s3Bucket": {
         "deploymentBucketName": "amplify-swiftuitest-dev-102838-deployment",
-        "s3Key": "amplify-builds/swiftuitest8fbc6ba5-4b397063667276426a73-build.zip"
+        "s3Key": "amplify-builds/swiftuitest8fbc6ba5-63353338677151594e48-build.zip"
       },
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-swiftuitest-dev-102838-deployment/amplify-cfn-templates/function/swiftuitest8fbc6ba5-cloudformation-template.json",
         "logicalId": "functionswiftuitest8fbc6ba5"
       },
-      "lastPushTimeStamp": "2021-12-17T05:49:31.069Z",
+      "lastPushTimeStamp": "2021-12-29T12:16:39.350Z",
       "output": {
         "Region": "ap-northeast-1",
         "CloudWatchEventRule": "amplify-swiftuitest-dev-102838-fun-CloudWatchEvent-17XFSHI9ZYO8H",
@@ -170,7 +170,51 @@
         "Name": "swiftuitest8fbc6ba5-dev",
         "LambdaExecutionRole": "swiftuitestLambdaRolef60c269b-dev"
       },
-      "lastPushDirHash": "aqrQizfwy5C9qNnmelQFVnPA1Qw="
+      "lastPushDirHash": "/mJBqA63zozpupV6YJQbOmTDZOI="
+    },
+    "calculateUserFavNum": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "api",
+          "resourceName": "swiftuitest",
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ]
+        },
+        {
+          "category": "auth",
+          "resourceName": "swiftuitestef80af86",
+          "attributes": [
+            "UserPoolId"
+          ]
+        }
+      ],
+      "lastBuildTimeStamp": "2021-12-29T12:15:03.964Z",
+      "lastBuildType": "PROD",
+      "lastPackageTimeStamp": "2021-12-29T12:15:04.019Z",
+      "distZipFilename": "calculateUserFavNum-5a6937316c536d626242-build.zip",
+      "s3Bucket": {
+        "deploymentBucketName": "amplify-swiftuitest-dev-102838-deployment",
+        "s3Key": "amplify-builds/calculateUserFavNum-5a6937316c536d626242-build.zip"
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-swiftuitest-dev-102838-deployment/amplify-cfn-templates/function/calculateUserFavNum-cloudformation-template.json",
+        "logicalId": "functioncalculateUserFavNum"
+      },
+      "lastPushTimeStamp": "2021-12-29T12:16:39.350Z",
+      "output": {
+        "Region": "ap-northeast-1",
+        "CloudWatchEventRule": "amplify-swiftuitest-dev-102838-fun-CloudWatchEvent-1TK6PNLXOZIM9",
+        "Arn": "arn:aws:lambda:ap-northeast-1:159192932442:function:calculateUserFavNum-dev",
+        "Name": "calculateUserFavNum-dev",
+        "LambdaExecutionRole": "swiftuitestLambdaRolee921e989-dev"
+      },
+      "lastPushDirHash": "r9QWYIrnF5V08Udof4Y/XqmuIDk="
     }
   }
 }
