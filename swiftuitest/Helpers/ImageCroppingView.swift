@@ -21,6 +21,7 @@ struct ImageCroppingView: View {
     
     var image:UIImage
     @Binding var croppedImage:UIImage?
+    @Binding var change:Bool
     
     var body: some View {
         ZStack{
@@ -33,7 +34,8 @@ struct ImageCroppingView: View {
                     Button(
                         action: {
                             shown = false
-                            croppedImage = nil
+//                            croppedImage = nil
+                            change = false
                         }){
                         Text("Cancel")
                             .foregroundColor(.red)
@@ -60,6 +62,7 @@ struct ImageCroppingView: View {
                         if let cImage = cgImage.cropping(to: CGRect(x: xOffset, y: yOffset, width: scaledDim, height: scaledDim)){
                             croppedImage = UIImage(cgImage: cImage)
                             shown = false
+                            change = true
                         }
                         
                         

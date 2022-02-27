@@ -12,15 +12,25 @@ import UniformTypeIdentifiers
 struct RecipeEdit: View {
     
     var detail_recipe: RecipeData
-    @Binding var detail_image: Data
+    var procedureImagesData: [String:Data]
+    
+    @Binding var detail_header: Data
     @Binding var showSheet: Bool
     
     @State var shouldShowHeaderImagePicker: Bool = false
     @State var shouldShowHeaderCropper:Bool = false
+    @State var headerImageChanged: Bool = false
+    @State var shouldShowProcedureImagePicker: [Bool] = []
+    @State var shouldShowProcedureImageCropper:[Bool] = []
+    @State var procedureImageChanged: [Bool] = []
+    
     @State var header: UIImage?
-    @State var headerImage: Data = Data()
+//    @State var headerImage: Data = Data()
+    
     @State var procedures:[Procedure] = []
-    @State var oldProcereIds:[String] = []
+    @State var procedureImages: [UIImage?] = []
+    @State var oldProcedureIds:[String] = []
+    @State var deleteProcedures:[Procedure] = []
 
     @State var screen: CGSize! = UIScreen.main.bounds.size
     @State var showModal = false
@@ -30,7 +40,8 @@ struct RecipeEdit: View {
     @State var isLoading = false
     
     @State var draggedItem: String?
-    @State var procedureTmp: [String] = ["1"]
+//    @State var procedureTmp: [String] = ["1"]
+    @State var procedureTmp: [String] = []
     
     @State var showingAlert:Bool = false
     @State var alertText:String = ""
@@ -93,6 +104,14 @@ struct RecipeEdit: View {
         }
         self.recipe = detail_recipe
         self.title = detail_recipe.title
+        
+//        print(procedureImagesData)
+        
+        shouldShowProcedureImagePicker = [Bool](repeating: false, count: self.procedureImagesData.count)
+        shouldShowProcedureImageCropper = [Bool](repeating: false, count: self.procedureImagesData.count)
+//        print(shouldShowProcedureImagePicker)
+//        print(shouldShowProcedureImageCropper)
+        
         Amplify.API.query(request: .getRecipeForDetail(id: recipe.id)) { event in
             switch event {
             case .success(let result):
@@ -110,8 +129,15 @@ struct RecipeEdit: View {
                     recipe.contents?.forEach{ procedure in
                         DispatchQueue.main.async {
                             self.recipe.contents.append(procedure)
-                            self.oldProcereIds.append(procedure.id)
+                            self.oldProcedureIds.append(procedure.id)
+                            self.procedureImageChanged.append(false)
                             procedureTmp.append(UUID().uuidString)
+                            print("contentttttt")
+                            if let uiimage = UIImage(data:procedureImagesData[procedure.id]!) {
+                                self.procedureImages.append(uiimage)
+                            } else {
+                                self.procedureImages.append(nil)
+                            }
                         }
                     }
                 case .failure(let error):
@@ -140,11 +166,13 @@ struct RecipeEdit: View {
         let group = DispatchGroup()
         
         group.enter()
+        let subgroup = DispatchGroup()
+        subgroup.enter()
         asyncProcess { () -> Void in
             self.upload(
                 image: header,
                 recipeId: recipe.id,
-                group: group
+                group: subgroup
             )
             print("# End header")
         }
@@ -161,7 +189,7 @@ struct RecipeEdit: View {
             state: self.recipe.state,
             materials: self.recipe.materials,
             favNum: self.recipe.favNum,
-            reviewNum: 0,
+            reviewNum: self.recipe.reviews.count,
             createdAt: recipe.create_at,
             updatedAt: recipe.update_at,
             delFlg: 0
@@ -175,7 +203,7 @@ struct RecipeEdit: View {
                     id: content.id,
                     order: order,
                     content: content.content,
-                    image: "",
+                    image: content.image!,
                     recipe: amplifyRecipe
                 )
             )
@@ -196,15 +224,25 @@ struct RecipeEdit: View {
                             self.user.myRecipes[firstIndex].title = recipe.title
                         }
                     }
-                    self.procedures.forEach{ p in
-                        group.enter()
+                    self.deleteProcedures.forEach { procedure in
+                        subgroup.enter()
                         asyncProcess { () -> Void in
-                            if self.oldProcereIds.contains(where: {$0 == p.id}) {
-                                self.updateProcedure(procedure: p, group: group)
+                            self.deleteProcedure(procedure: procedure, group: subgroup)
+                        }
+                    }
+                    self.procedures.forEach{ p in
+                        subgroup.enter()
+                        asyncProcess { () -> Void in
+                            if self.oldProcedureIds.contains(where: {$0 == p.id}) {
+                                self.updateProcedure(procedure: p, procedureImage: procedureImages[p.order-1], group: subgroup)
                             } else {
-                                self.createProcedure(procedure: p, group: group)
+                                self.createProcedure(procedure: p, procedureImage: procedureImages[p.order-1], group: subgroup)
                             }
                         }
+                    }
+                    subgroup.notify(queue: .main) {
+                        print("subgroup end")
+                        group.leave()
                     }
                 case .failure(let error):
                     print("Got failed update result with \(error.errorDescription)")
@@ -217,7 +255,7 @@ struct RecipeEdit: View {
         }
         
         group.notify(queue: .main) {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                 self.isLoading = false
                 self.showSheet.toggle()
                 print("All Process Done!")
@@ -231,6 +269,7 @@ struct RecipeEdit: View {
         group:DispatchGroup
     ) {
         if header == nil {
+            print("no upload")
             group.leave()
             return
         }
@@ -249,7 +288,6 @@ struct RecipeEdit: View {
                 switch result {
                 case .success(let k):
                     print("upload image success")
-                    
                     DispatchQueue.main.async {
                         self.user.imageDatum[recipeId] = imageData
                         group.leave()
@@ -262,16 +300,30 @@ struct RecipeEdit: View {
         }
     }
     
-    func createProcedure(procedure: Procedure, group: DispatchGroup) {
+    func createProcedure(procedure: Procedure, procedureImage:UIImage?, group: DispatchGroup) {
         Amplify.API.mutate(request: .create(procedure)) { event in
             switch event {
             case .success(let result):
                 switch result {
                 case .success(let procedure):
                     print("Successfully created procedure: \(procedure)")
-                    group.leave()
+                    if let procedureImage = procedureImage {
+                        if !self.procedureImageChanged[procedure.order-1] {
+                            print("same picture")
+                            group.leave()
+                            return
+                        }
+                        guard let imageData = procedureImage.jpegData(compressionQuality: 0.5) else {
+                            group.leave()
+                            return
+                        }
+                        self.procedureImageUpload(key: "procedures/"+procedure.id+".jpg", imageData: imageData, group:group)
+                    } else {
+                        group.leave()
+                    }
                 case .failure(let error):
                     print("Got failed result with \(error.errorDescription)")
+                    group.leave()
                 }
             case .failure(let error):
                 print("Got failed event with error \(error)")
@@ -280,19 +332,96 @@ struct RecipeEdit: View {
         }
     }
     
-    func updateProcedure(procedure: Procedure, group: DispatchGroup) {
+    func updateProcedure(procedure: Procedure, procedureImage:UIImage?, group: DispatchGroup) {
         Amplify.API.mutate(request: .update(procedure)) { event in
             switch event {
             case .success(let result):
                 switch result {
                 case .success(let procedure):
                     print("Successfully updated procedure: \(procedure)")
-                    group.leave()
+                    if let procedureImage = procedureImage {
+                        if !self.procedureImageChanged[procedure.order-1] {
+                            print("same picture")
+                            group.leave()
+                            return
+                        }
+                        guard let imageData = procedureImage.jpegData(compressionQuality: 0.5) else {
+                            group.leave()
+                            return
+                        }
+                        self.procedureImageUpload(key: "procedures/"+procedure.id+".jpg", imageData: imageData, group:group)
+                    } else {
+                        // 詳細画面では画像が存在
+                        if procedureImagesData[procedure.id] != Data() {
+                            self.procedureImageDelete(key: "procedures/"+procedure.id+".jpg", group: group)
+                        } else {
+                            print("already nil")
+                        }
+                        group.leave()
+                    }
                 case .failure(let error):
                     print("Got update failed result with \(error.errorDescription)")
+                    group.leave()
                 }
             case .failure(let error):
                 print("Got update failed event with error \(error)")
+                group.leave()
+            }
+        }
+    }
+    
+    func deleteProcedure(procedure: Procedure, group: DispatchGroup) {
+        if (procedure.image == "") {
+            group.leave()
+            return;
+        }
+        Amplify.Storage.remove(key: procedure.image!) { event in
+            switch event {
+            case let .success(data):
+                print("Completed: Deleted \(data)")
+                Amplify.API.mutate(request: .delete(procedure)) { event in
+                    switch event {
+                    case .success(let result):
+                        switch result {
+                        case .success(let procedure):
+                            print("Successfully deleted procedure: \(procedure)")
+                            group.leave()
+                        case .failure(let error):
+                            print("Got update failed result with \(error.errorDescription)")
+                            group.leave()
+                        }
+                    case .failure(let error):
+                        print("Got update failed event with error \(error)")
+                        group.leave()
+                    }
+                }
+            case let .failure(storageError):
+                print("Failed: \(storageError.errorDescription). \(storageError.recoverySuggestion)")
+                group.leave()
+            }
+        }
+    }
+    
+    func procedureImageUpload(key: String, imageData: Data, group: DispatchGroup) {
+        Amplify.Storage.uploadData(key: key, data: imageData) { result in
+            switch result {
+            case .success:
+                print("upload procedure image success")
+                group.leave()
+            case .failure(let error):
+                print("upload procedure data error \(error)")
+                group.leave()
+            }
+        }
+    }
+    
+    func procedureImageDelete(key: String, group: DispatchGroup) {
+        Amplify.Storage.remove(key: key) { event in
+            switch event {
+            case let .success(data):
+                print("Completed: Deleted \(data)")
+            case let .failure(storageError):
+                print("Failed: \(storageError.errorDescription). \(storageError.recoverySuggestion)")
             }
         }
     }
@@ -306,12 +435,14 @@ struct RecipeEdit: View {
                         showModal.toggle()
                         pickerImageIndex = -1
                     }, label: {
+                        // Pickerから選択した画像
                         if let image = header {
                             Image(uiImage: image)
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
                                 .padding(.top)
-                        } else if let image = UIImage(data: detail_image){
+                        // 詳細から受け取った画像
+                        } else if let image = UIImage(data: detail_header){
                             Image(uiImage: image)
                                 .resizable()
                                 .aspectRatio(contentMode: .fit)
@@ -337,7 +468,8 @@ struct RecipeEdit: View {
                         ImageCroppingView(
                             shown: $shouldShowHeaderCropper,
                             image: header!,
-                            croppedImage: $header
+                            croppedImage: $header,
+                            change: $headerImageChanged
                         )
                     }
                     .padding(.top)
@@ -380,8 +512,14 @@ struct RecipeEdit: View {
                     LazyVStack(spacing : 15) {
                         ForEach(0..<recipe.contents.count, id:\.self) { index in
                             VStack {
-                                TitleView(
+                                EditTitleView(
                                     contents: $recipe.contents,
+                                    oldProcedureIds: $oldProcedureIds,
+                                    deleteProcedures: $deleteProcedures,
+                                    shouldShowProcedureImagePicker: $shouldShowProcedureImagePicker,
+                                    shouldShowProcedureImageCropper: $shouldShowProcedureImageCropper,
+                                    procedureImages: $procedureImages,
+                                    procedureTmp: $procedureTmp,
                                     index: index,
                                     height: screen.height
                                 )
@@ -390,8 +528,22 @@ struct RecipeEdit: View {
                                     TextAreaView(
                                         contents: $recipe.contents[index].content
                                     )
-                                    .frame(width:screen.width*0.8)
+                                    .frame(width:screen.width*0.7)
+                                    
+//                                    if (procedureImages[index] != nil) {
+                                        ImageButton(
+                                            showModal: $showModal,
+                                            pickerImageIndex: $pickerImageIndex,
+                                            procedureImage: $procedureImages[index],
+                                            showPicker: $shouldShowProcedureImagePicker[index],
+                                            showCropper: $shouldShowProcedureImageCropper[index],
+                                            change: $procedureImageChanged[index],
+                                            width: screen.width,
+                                            index: index
+                                        )
+//                                    }
                                 }
+                                .padding(.horizontal)
                                 .frame(height:screen.height*0.2)
                             }
                             .onDrag({
@@ -402,13 +554,20 @@ struct RecipeEdit: View {
                                 delegate: MyDropDelegate(
                                     item: index,
                                     items: $procedureTmp,
+                                    images: $procedureImages,
                                     contents: $recipe.contents,
+                                    imageChanges: $procedureImageChanged,
+                                    pickers: $shouldShowProcedureImagePicker,
+                                    croppers: $shouldShowProcedureImageCropper,
                                     draggedItem: $draggedItem
                                 )
                             )
                         }
                     }
-                    BannerAd(unitID: "ca-app-pub-5558779899182260/4197512760")
+                    .padding(.horizontal)
+                    
+                    BannerAd(unitID: Constants.bannerAdId)
+                        .background(.blue)
                 }
                 .padding(.top)
             }
@@ -442,6 +601,10 @@ struct RecipeEdit: View {
                             )
                         )
                         procedureTmp.append(UUID().uuidString)
+                        procedureImageChanged.append(false)
+                        shouldShowProcedureImagePicker.append(false)
+                        shouldShowProcedureImageCropper.append(false)
+                        procedureImages.append(nil)
                         print("add!!!")
                         print(self.recipe.contents.count)
                     }){
@@ -491,6 +654,7 @@ struct RecipeEdit: View {
             .onTapGesture{
                 hideKeyboard()
             }
+            .background(.black)
             
             if (isLoading) {
                 VStack{}
@@ -506,11 +670,23 @@ struct RecipeEdit: View {
             ActionSheet(title: Text("Select Photo"),message: Text("Choose"),buttons: [
                 .default(Text("Photo Library")) {
                     showModal.toggle()
-                    shouldShowHeaderImagePicker.toggle()
+                    if (pickerImageIndex == -1) {
+                        shouldShowHeaderImagePicker.toggle()
+                    } else {
+                        shouldShowProcedureImagePicker[pickerImageIndex].toggle()
+                    }
                 },
                 .destructive(Text("Delete Photo")) {
                     showModal.toggle()
-                    header = nil
+                    if (pickerImageIndex == -1) {
+                        header = nil
+                    } else {
+                        if procedureImages[pickerImageIndex] != nil {
+                            procedureImageChanged[pickerImageIndex] = true
+                        }
+                        procedureImages[pickerImageIndex] = nil
+                        self.recipe.contents[pickerImageIndex].image = ""
+                    }
                 },
                 .cancel() {
                     showModal.toggle()
@@ -518,8 +694,54 @@ struct RecipeEdit: View {
             ])
         })
         .onAppear(){
+//            UITextView.appearance().backgroundColor = .clear
             screen = UIScreen.main.bounds.size
             load()
         }
+//        onDisappear() {
+//            UITextView.appearance().backgroundColor = nil
+//        }
+    }
+}
+
+struct EditTitleView: View {
+    @Binding var contents: [Procedure]
+    @Binding var oldProcedureIds: [String]
+    @Binding var deleteProcedures: [Procedure]
+    @Binding var shouldShowProcedureImagePicker: [Bool]
+    @Binding var shouldShowProcedureImageCropper: [Bool]
+    @Binding var procedureImages: [UIImage?]
+    @Binding var procedureTmp: [String]
+    
+    var index: Int
+    var height: CGFloat
+    
+    var body: some View {
+        HStack {
+            Text("手順\(index+1)")
+                .font(.system(size: 20,weight: .bold))
+                .foregroundColor(.white)
+                .padding(.vertical, 8)
+            if index >= 1 {
+                Button(action: {
+                    if oldProcedureIds.contains(where: {$0 == contents[index].id}) {
+                        deleteProcedures.append(contents[index])
+                    }
+                    contents.remove(at: index)
+                    shouldShowProcedureImagePicker.remove(at: index)
+                    shouldShowProcedureImageCropper.remove(at: index)
+                    procedureImages.remove(at: index)
+                    procedureTmp.remove(at: index)
+                }, label: {
+                    Image(systemName: "xmark.circle")
+                        .background(Color.yellow)
+                        .foregroundColor(.black)
+                        .clipShape(Circle())
+                        .frame(width:16)
+                })
+            }
+            Spacer()
+        }
+        .frame(height: height*0.05)
     }
 }

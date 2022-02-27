@@ -34,6 +34,7 @@ struct SettingsView: View {
     @State var showSheet:Bool = false
     @State var showPicker:Bool = false
     @State var cropperShown = false
+    @State var profileImageChanged: Bool = false
     
     @Environment(\.presentationMode) var presentationMode
     @EnvironmentObject var user: UserStore
@@ -128,7 +129,7 @@ struct SettingsView: View {
                 print("Got failed event with error \(error)")
             }
         }
-        
+
         group.notify(queue: .main) {
             print("All Process Done!")
             dismiss()
@@ -184,6 +185,7 @@ struct SettingsView: View {
                             .keyboardType(.default)
                             .font(.subheadline)
                             .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+                            .padding(8)
                     }
                     .frame(height:40)
                     .frame(maxWidth: .infinity)
@@ -233,10 +235,11 @@ struct SettingsView: View {
                     TextEditor(text: $description.onChange(descriptionChange))
                         .keyboardType(.default)
                         .font(.subheadline)
-                        .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+                        .padding(8)
                 }
                 .frame(height:110)
                 .frame(maxWidth: .infinity)
+                .background(BlurView(style: .systemMaterial))
                 .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
                 .shadow(color: .black.opacity(0.15), radius: 20, x:0, y:20)
                 .padding(8)
@@ -262,7 +265,7 @@ struct SettingsView: View {
                 ImagePicker(sourceType: .photoLibrary, selectedImage: $profile,showModal: $showSheet, cropperShown: $cropperShown)
             })
             .sheet(isPresented: $cropperShown){
-                ImageCroppingView(shown: $cropperShown, image: profile!, croppedImage: $profile)
+                ImageCroppingView(shown: $cropperShown, image: profile!, croppedImage: $profile, change: $profileImageChanged)
             }
             .overlay(
                 HStack {

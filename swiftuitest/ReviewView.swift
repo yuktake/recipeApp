@@ -11,6 +11,8 @@ import Amplify
 struct ReviewView: View {
     @State var shouldShowHeaderImagePicker = false
     @State var shouldShowHeaderCropper = false
+    // 実質使わない
+    @State var headerImageChanged: Bool = false
     @State var showLottie: Bool = false
     @State var header: UIImage?
     @State var screen: CGSize! = UIScreen.main.bounds.size
@@ -192,7 +194,8 @@ struct ReviewView: View {
                     .padding()
                 }
                 Spacer()
-                BannerAd(unitID: "ca-app-pub-5558779899182260/4197512760")
+                BannerAd(unitID: Constants.bannerAdId)
+                    .background(.blue)
             }
             .sheet(isPresented: $shouldShowHeaderImagePicker, content: {
                 ImagePicker(
@@ -206,7 +209,8 @@ struct ReviewView: View {
                 ImageCroppingView(
                     shown: $shouldShowHeaderCropper,
                     image: header!,
-                    croppedImage: $header
+                    croppedImage: $header,
+                    change: $headerImageChanged
                 )
             }
             .actionSheet(isPresented: $showModal, content: {

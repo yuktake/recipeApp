@@ -438,6 +438,48 @@ query RecipesByFav(
     nextToken
   }
 }
+query RecipesByReview(
+  $type: String
+  $reviewNum: ModelIntKeyConditionInput
+  $sortDirection: ModelSortDirection
+  $filter: ModelRecipeFilterInput
+  $limit: Int
+  $nextToken: String
+) {
+  recipesByReview(
+    type: $type
+    reviewNum: $reviewNum
+    sortDirection: $sortDirection
+    filter: $filter
+    limit: $limit
+    nextToken: $nextToken
+  ) {
+    items {
+      id
+      user
+      type
+      title
+      calorie
+      protein
+      fat
+      carbo
+      state
+      materials
+      contents {
+        nextToken
+      }
+      reviews {
+        nextToken
+      }
+      favNum
+      reviewNum
+      createdAt
+      updatedAt
+      delFlg
+    }
+    nextToken
+  }
+}
 query RecipesByDate(
   $type: String
   $createdAt: ModelStringKeyConditionInput

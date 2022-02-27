@@ -30,12 +30,14 @@ class CreateRecipeViewModel: ObservableObject {
     )
     
     func createRecipe(
-        id: String,
-        recipe: RecipeData,
+        header: Data,
+        procedureImages: [UIImage?],
         group: DispatchGroup
     ) {
+        let uuid = UUID().uuidString
+        
         let amplify_recipe = Recipe(
-            id: id,
+            id: uuid,
             user: recipe.userId,
             type: "Recipe",
             title: recipe.title,
@@ -52,21 +54,35 @@ class CreateRecipeViewModel: ObservableObject {
         
         let subgroup = DispatchGroup()
         var procedures: [Procedure] = []
-        recipe.contents.forEach{ content in
-            procedures.append(Procedure(order: content.order,content: content.content, image: content.image!, recipe: amplify_recipe))
+        
+        (0..<recipe.contents.count).forEach { index in
+            if procedureImages[index] != nil {
+                recipe.contents[index].image = "procedures/\(UUID().uuidString).jpg"
+            }
+            procedures.append(
+                Procedure(
+                    order: recipe.contents[index].order,
+                    content: recipe.contents[index].content,
+                    image: recipe.contents[index].image!,
+                    recipe: amplify_recipe
+                )
+            )
         }
         
         print("upload recipe")
         print(recipe)
+        
         Amplify.API.mutate(request: .create(amplify_recipe)) { event in
             switch event {
             case .success(let result):
                 switch result {
                 case .success(let recipe):
                     print("Successfully created recipe: \(recipe)")
+                    subgroup.enter()
+                    self.recipeImageUpload(id: recipe.id, imageData: header, group: subgroup)
                     procedures.forEach{ p in
                         subgroup.enter()
-                        self.createProcedure(procedure: p, group: subgroup)
+                        self.createProcedure(procedure: p, procedureImage: procedureImages[p.order-1], group: subgroup)
                     }
                     subgroup.notify(queue: .main) {
                         print("subgroup end")
@@ -84,20 +100,54 @@ class CreateRecipeViewModel: ObservableObject {
         
     }
     
-    func createProcedure(procedure: Procedure, group: DispatchGroup) {
+    func createProcedure(procedure: Procedure, procedureImage:UIImage?, group: DispatchGroup) {
         Amplify.API.mutate(request: .create(procedure)) { event in
             switch event {
             case .success(let result):
                 switch result {
                 case .success(let procedure):
                     print("Successfully created procedure: \(procedure)")
-                    group.leave()
+                    if let procedureImage = procedureImage {
+                        guard let imageData = procedureImage.jpegData(compressionQuality: 0.5) else {
+                            return
+                        }
+                        self.procedureImageUpload(key: procedure.image!, imageData: imageData, group:group)
+                    } else {
+                        group.leave()
+                    }
                 case .failure(let error):
                     print("Got failed result with \(error.errorDescription)")
                     group.leave()
                 }
             case .failure(let error):
                 print("Got failed event with error \(error)")
+                group.leave()
+            }
+        }
+    }
+    
+    func recipeImageUpload(id: String, imageData: Data, group: DispatchGroup) {
+        let key = "recipes/\(id).jpg"
+        Amplify.Storage.uploadData(key: key, data: imageData) { result in
+            switch result {
+            case .success:
+                print("upload image success")
+                group.leave()
+            case .failure(let error):
+                print("upload data error \(error)")
+                group.leave()
+            }
+        }
+    }
+    
+    func procedureImageUpload(key: String, imageData: Data, group: DispatchGroup) {
+        Amplify.Storage.uploadData(key: key, data: imageData) { result in
+            switch result {
+            case .success:
+                print("upload image success")
+                group.leave()
+            case .failure(let error):
+                print("upload data error \(error)")
                 group.leave()
             }
         }

@@ -162,6 +162,7 @@ struct Search: View {
                                     Text("脂肪の少ない順").tag(2)
                                     Text("炭水化物の少ない順").tag(3)
                                     Text("人気順").tag(4)
+                                    Text("レビューの多い順").tag(5)
                                 }
                                 .pickerStyle(MenuPickerStyle())
                             }
@@ -197,7 +198,8 @@ struct Search: View {
                                             }
                                         }
                                         if i >= 10 && i % 10 == 0 {
-                                            BannerAd(unitID: "ca-app-pub-5558779899182260/4197512760")
+                                            BannerAd(unitID: Constants.bannerAdId)
+                                                .background(.blue)
                                         }
                                     }
                                 }

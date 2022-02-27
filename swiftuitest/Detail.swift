@@ -29,6 +29,7 @@ struct Detail: View {
     
     @State var profileImage: Data?
     @State var procedures:[Procedure] = []
+    @State var procedureImages = [String:Data]()
     @State var reviews:[Review] = []
     @State var reviewImages:[String:Data] = [:]
     @State var showReview: Bool = false
@@ -57,6 +58,8 @@ struct Detail: View {
     )
     @State var changing = true
     @State var showModal = false
+    @State var showEdit = false
+    @State var showAlert = false
     
     func sheetChange(_ tag: Bool){
         print("sheet change")
@@ -206,9 +209,27 @@ struct Detail: View {
                     }
                     
                     recipe.contents?.forEach{ procedure in
-                        print("contentttttt")
                         DispatchQueue.main.async {
                             self.procedures.append(procedure)
+                        }
+                        if (procedure.image! != "") {
+                            Amplify.Storage.downloadData(key: procedure.image!) { result in
+                                switch result {
+                                case .success(let imageData):
+                                    DispatchQueue.main.async{
+                                        self.procedureImages[procedure.id] = imageData
+                                    }
+                                case .failure(let error):
+                                    print("Failed to download image data - \(error)")
+                                    DispatchQueue.main.async{
+                                        self.procedureImages[procedure.id] = Data()
+                                    }
+                                }
+                            }
+                        } else {
+                            DispatchQueue.main.async{
+                                self.procedureImages[procedure.id] = Data()
+                            }
                         }
                     }
 
@@ -283,6 +304,34 @@ struct Detail: View {
                                     .lineLimit(nil)
                                     .fixedSize(horizontal: false, vertical: true)
                                 Spacer()
+                                if user.sub == selectedItem.userId {
+                                    Menu {
+                                        Button(
+                                            role: .destructive,
+                                            action: {
+                                                showAlert = true
+                                            }, label: {
+                                                Text("削除")
+                                            }
+                                        )
+                                        .foregroundColor(Color.red)
+                                        
+                                        Button(action: {
+                                            showEdit = true
+                                        }, label: {
+                                            Text("編集")
+                                        })
+                                    } label: {
+                                        Label(
+                                            title: {},
+                                            icon: {
+                                                Image(systemName: "ellipsis")
+                                                    .foregroundColor(.white)
+                                                    .frame(width: 48, height: 48)
+                                            }
+                                        )
+                                    }
+                                }
                             }
                             .padding(.top)
                             
@@ -392,27 +441,32 @@ struct Detail: View {
                                 }
                             }
                         }
+                        .padding(.horizontal)
                         
                         Text("材料")
                             .font(.system(size:20,weight: .bold))
                             .foregroundColor(.white)
+                            .padding(.horizontal)
                         
                         HStack {
-                            Spacer()
                             Text(selectedItem.materials)
+                                .underline()
                                 .foregroundColor(.white)
                                 .padding(.top,5)
                             Spacer()
                         }
                         .padding(.bottom)
+                        .padding(.horizontal)
                         
                         Text("つくりかた")
                             .font(.system(size: 20,weight: .bold))
                             .foregroundColor(.white)
+                            .padding(.horizontal)
                         
                         Divider()
                             .padding(.top)
                             .foregroundColor(.white)
+                            .padding(.horizontal)
                         
                         ForEach(0..<procedures.count, id: \.self) { index in
                             VStack(alignment: .leading, spacing: 10, content:{
@@ -424,8 +478,26 @@ struct Detail: View {
                                         Color(#colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1))
                                     )
                                     .clipShape(Circle())
-                                Text(procedures[index].content)
-                                    .font(.caption)
+                                
+                                HStack(spacing:8) {
+                                    VStack {
+                                        Text(procedures[index].content)
+                                            .font(.caption)
+                                            .padding(8)
+//                                            .frame(width: screen.width * 0.6, alignment: .topLeading)
+                                            .frame(alignment: .topLeading)
+                                            .background(.blue)
+                                    }
+                                    Spacer()
+                                    if let imagedata = procedureImages[procedures[index].id] {
+                                        if let image = UIImage(data:imagedata ?? Data()) {
+                                            Image(uiImage: image)
+                                                .resizable()
+                                                .aspectRatio(contentMode: .fit)
+                                                .frame(width: screen.width*0.2)
+                                        }
+                                    }
+                                }
                             })
                             .padding(.horizontal)
                             Divider()
@@ -508,9 +580,9 @@ struct Detail: View {
                                 }
                             }
                         }
+                        .padding(.horizontal)
                     }
                     .padding(.vertical,25)
-                    .padding(.horizontal)
                     .background(.black)
                     .cornerRadius(20)
                     .offset(y: -35)
@@ -540,6 +612,14 @@ struct Detail: View {
                         recipeId: tmpRecipe.id
                     )
                 }
+                .fullScreenCover(isPresented: $showEdit){
+                    RecipeEdit(
+                        detail_recipe: selectedItem,
+                        procedureImagesData: procedureImages,
+                        detail_header: $header,
+                        showSheet: $showEdit
+                    )
+                }
                 .if(overlay) {
                     $0.overlay(
                         Button(action: {
@@ -564,6 +644,20 @@ struct Detail: View {
                         .padding(.leading)
                         .padding(.top,8)
                         ,alignment: .topLeading
+                    )
+                }
+                .alert(isPresented: $showAlert) {
+                    Alert(
+                        title: Text("Warning"),
+                        message: Text("このレシピを削除しますか？"),
+                        primaryButton: .cancel(Text("キャンセル")),
+                        secondaryButton: .destructive(
+                            Text("削除"),
+                            action: {
+                               print("delete")
+//                                deleteRecipe()
+                            }
+                        )
                     )
                 }
                 

@@ -268,6 +268,57 @@ extension GraphQLRequest
         )
     }
     
+    static func getRecipesByReview(
+        protein: Double,
+        fat: Double,
+        carbo: Double,
+        state: Int,
+        keyword: String = ""
+    ) -> GraphQLRequest<QueryRecipes>
+    {
+        let document = """
+        query RecipesByReview($state:Int,$protein:Float,$fat:Float,$carbo:Float,$keyword:String) {
+            recipesByReview(
+                type: "Recipe",
+                filter: {state: {eq: $state}, protein: {ge: $protein}, fat: {le: $fat}, carbo: {le: $carbo}, materials: {contains: $keyword}, delFlg:{eq: 0}},
+                limit: 20,
+                sortDirection: DESC
+            ) {
+                items {
+                    id
+                    user
+                    type
+                    title
+                    calorie
+                    protein
+                    fat
+                    carbo
+                    state
+                    materials
+                    favNum
+                    reviewNum
+                    createdAt
+                    updatedAt
+                    delFlg
+                }
+                nextToken
+            }
+        }
+        """
+        return GraphQLRequest<QueryRecipes>(
+            document: document,
+            variables: [
+                "state": state,
+                "protein": protein == 0.0 ? -1000.0 : protein,
+                "fat": fat == 0.0 ? 1000.0 : fat,
+                "carbo": carbo == 0.0 ? 1000.0 : carbo,
+                "keyword": keyword
+            ],
+            responseType: QueryRecipes.self,
+            decodePath: "recipesByReview"
+        )
+    }
+    
     static func getRecipesByProteinOrderedNextPage(
         protein: Double,
         fat: Double,
@@ -538,6 +589,60 @@ extension GraphQLRequest
         )
     }
     
+    static func getRecipesByReviewOrderedNextPage(
+        protein: Double,
+        fat: Double,
+        carbo: Double,
+        state: Int,
+        keyword: String = "",
+        nextToken: String = ""
+    ) -> GraphQLRequest<QueryRecipes>
+    {
+        let document = """
+        query RecipesByReview {
+            recipesByReview(
+                type: "Recipe",
+                filter: {state: {eq: $state}, protein: {ge: $protein}, fat: {le: $fat}, carbo: {le: $carbo}, materials: {contains: $keyword}, delFlg:{eq: 0}},
+                limit: 20,
+                sortDirection: DESC
+                nextToken: $nextToken
+            ) {
+                items {
+                    id
+                    user
+                    type
+                    title
+                    calorie
+                    protein
+                    fat
+                    carbo
+                    state
+                    materials
+                    favNum
+                    reviewNum
+                    createdAt
+                    updatedAt
+                    delFlg
+                }
+                nextToken
+            }
+        }
+        """
+        return GraphQLRequest<QueryRecipes>(
+            document: document,
+            variables: [
+                "state": state,
+                "protein": protein == 0.0 ? -1000.0 : protein,
+                "fat": fat == 0.0 ? 1000.0 : fat,
+                "carbo": carbo == 0.0 ? 1000.0 : carbo,
+                "keyword": keyword,
+                "nextToken": nextToken
+            ],
+            responseType: QueryRecipes.self,
+            decodePath: "recipesByReview"
+        )
+    }
+    
     static func getFavsByDate(
         userId: String
     ) -> GraphQLRequest<QueryFavs>
@@ -613,7 +718,7 @@ extension GraphQLRequest
             recipesByDate(
                 type: "Recipe",
                 filter: {user: {eq: $userid}, delFlg: {eq: $flg}},
-                limit: 5,
+                limit: 20,
                 sortDirection: DESC
             ) {
                 items {

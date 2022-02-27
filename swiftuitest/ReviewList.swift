@@ -71,7 +71,8 @@ struct ReviewList: View {
                                     self.viewModel.listNextPage()
                                 }
                             }
-                        BannerAd(unitID: "ca-app-pub-5558779899182260/4197512760")
+                        BannerAd(unitID: Constants.bannerAdId)
+                            .background(.blue)
                     }
                 }
                 .padding(.top, 32)

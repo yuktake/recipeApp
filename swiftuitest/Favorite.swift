@@ -22,7 +22,7 @@ struct Favorite: View {
                 if self.store.isLogged {
                     if (store.favRecipes.count >= 1) {
                         ScrollView(showsIndicators: false) {
-                            LazyVGrid(columns: Array(repeating: GridItem(), count: 3)) { // カラム数の指定
+                            LazyVGrid(columns: Array(repeating: GridItem(spacing:0), count: 3), spacing: 0) { // カラム数の指定
                                 ForEach(0...store.favRecipes.count-1,id: \.self) { i in
                                     ZStack {
                                         if let fav = store.favRecipes[i] {
@@ -109,7 +109,7 @@ struct favCellView: View {
                 .aspectRatio(contentMode: .fit)
 //                .matchedGeometryEffect(id: "fav\(id)", in: animation)
                 .background(Color.black)
-                .cornerRadius(20)
+//                .cornerRadius(20)
         } else {
             LottieView(filename: "search")
                 .frame(width:80, height: 80)

@@ -3,6 +3,7 @@ type Recipe @model
   @key(name: "recipesByFat",fields: ["type", "fat"], queryField: "recipesByFat")
   @key(name: "recipesByCarbo",fields: ["type", "carbo"], queryField: "recipesByCarbo")
   @key(name: "recipesByFav",fields: ["type", "favNum"], queryField: "recipesByFav")
+  @key(name: "recipesByReview",fields: ["type", "reviewNum"], queryField: "recipesByReview")
   @key(name: "recipesByDate",fields: ["type", "createdAt"], queryField: "recipesByDate")
 {
   id: ID!

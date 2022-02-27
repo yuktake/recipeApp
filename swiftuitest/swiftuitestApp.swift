@@ -43,6 +43,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             try Amplify.add(plugin: dataStorePlugin)
             try Amplify.add(plugin: AWSS3StoragePlugin())
             try Amplify.configure()
+            UITextView.appearance().backgroundColor = .clear
             print("Amplify configured with DataStore plugin")
         } catch {
             print("Failed to initialize Amplify with \(error)")

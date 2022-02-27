@@ -181,34 +181,30 @@ struct ProfileView: View {
                     
                     if user.isLogged {
                         if (user.myRecipes.count >= 1) {
-                            ForEach(0...user.myRecipes.count-1,id: \.self) { i in
-                                if let recipe = user.myRecipes[i] {
-                                    UserView(
-                                        profile: user.image ?? Data(),
-                                        username: user.username ?? "",
-                                        recipeId: recipe.id,
-                                        i: i,
-                                        index: $index,
-                                        showModal: $showModal,
-                                        showAlert: $showAlert,
-                                        currentImage: $currentImage
-                                    )
-                                    PostView(
-                                        recipe: recipe,
-                                        header: user.imageDatum[recipe.id] ?? Data()
-                                    )
-                                    .onTapGesture{
-                                        withAnimation(.spring()){
-                                            showDetail = true
-                                            index = i
-                                            currentImage = user.imageDatum[recipe.id] ?? Data()
-                                        }
-                                    }
-                                    .onAppear {
-                                        // 最低３つないといけない
-                                        if i == user.myRecipes.count - 1 {
-                                            if (!user.token.isEmpty) {
-                                                user.listNextPage(nextToken: user.token)
+                            ScrollView(showsIndicators: false) {
+                                LazyVGrid(columns: Array(repeating: GridItem(spacing:0), count: 3), spacing: 0) {
+                                    ForEach(0...user.myRecipes.count-1,id: \.self) { i in
+                                        ZStack {
+                                            if let recipe = user.myRecipes[i] {
+                                                favCellView(
+                                                    id: recipe.id,
+                                                    image: user.imageDatum[recipe.id] ?? Data(),
+                                                    animation: animation
+                                                )
+                                                .onAppear{
+                                                    if i == user.myRecipes.count - 1 {
+                                                        if (!user.token.isEmpty) {
+                                                            user.listNextPage(nextToken: user.token)
+                                                        }
+                                                    }
+                                                }
+                                                .onTapGesture {
+                                                    withAnimation(.spring()){
+                                                        showDetail = true
+                                                        index = i
+                                                        currentImage = user.imageDatum[recipe.id] ?? Data()
+                                                    }
+                                                }
                                             }
                                         }
                                     }
@@ -219,20 +215,6 @@ struct ProfileView: View {
                 }
             }
             .navigationBarHidden(true)
-            .alert(isPresented: $showAlert) {
-                Alert(
-                    title: Text("Warning"),
-                    message: Text("このレシピを削除しますか？"),
-                    primaryButton: .cancel(Text("キャンセル")),
-                    secondaryButton: .destructive(
-                        Text("削除"),
-                        action: {
-                           print("delete")
-                            deleteRecipe()
-                        }
-                    )
-                )
-            }
             
             if showDetail {
                 Detail(
@@ -260,104 +242,7 @@ struct ProfileView_Previews: PreviewProvider {
     }
 }
 
-struct UserView: View {
-    var profile: Data
-    var username: String
-    var recipeId: String
-    var i: Int
-    @Binding var index: Int
-    @Binding var showModal: Bool
-    @Binding var showAlert: Bool
-    @Binding var currentImage: Data
-    
-    @EnvironmentObject var user: UserStore
-    
-    var body: some View {
-        HStack {
-            if let image = UIImage(data: profile) {
-                Image(uiImage: image)
-                    .resizable()
-                    .clipShape(Circle())
-                    .frame(width: 60, height: 60)
-                    .clipped()
-            }
-            VStack(alignment: .leading, spacing: 4) {
-                Text(username).font(.headline)
-            }
-            .padding(.leading, 8)
-            
-            Spacer()
-            
-            Menu {
-                Button(
-                    role: .destructive,
-                    action: {
-                        showAlert = true
-                        currentImage = user.imageDatum[recipeId] ?? Data()
-                        index = i
-                    }, label: {
-                        Text("削除")
-                    }
-                )
-                .foregroundColor(Color.red)
-                Button(action: {
-                    showModal = true
-                    currentImage = user.imageDatum[recipeId] ?? Data()
-                    index = i
-                }, label: {
-                    Text("編集")
-                })
-            } label: {
-                Label(
-                    title: {},
-                    icon: {
-                        Image(systemName: "ellipsis")
-                            .foregroundColor(.white)
-                            .frame(width: 48, height: 48)
-                    }
-                )
-            }
-            .padding(.trailing,24)
-        }
-        .padding(.leading, 16)
-        .padding(.top, 16)
-        .fullScreenCover(isPresented: $showModal){
-            RecipeEdit(
-                detail_recipe: user.myRecipes[index],
-                detail_image: $currentImage,
-                showSheet: $showModal
-            )
-        }
-    }
-}
-
-struct PostView: View {
-    var recipe: RecipeData
-    var header: Data
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            
-            Text(recipe.title)
-                .lineLimit(nil)
-                .padding(.leading, 16)
-                .padding(.trailing, 32)
-            
-            if let image = UIImage(data: header) {
-                Image(uiImage: image)
-                    .resizable()
-                    .aspectRatio(contentMode: .fill)
-            }
-        }
-        .padding(.bottom, -8)
-        Divider()
-            .padding(.top)
-            .foregroundColor(.white)
-    }
-}
-
 extension UserDefaults {
-
     func removeAll() {
         dictionaryRepresentation().forEach{ removeObject(forKey: $0.key) }
     }

@@ -32,7 +32,7 @@ struct UserPage: View {
                 switch result {
                 case .success(let user):
                     guard let user = user else {
-                        print("Could not find todo")
+                        print("Could not find user")
                         return
                     }
                     print("Successfully retrieved User: \(user)")
@@ -174,10 +174,8 @@ struct UserPage: View {
     }
     
     var body: some View {
-        ZStack {
-            ScrollView(showsIndicators: false) {
+        ScrollView(showsIndicators: false) {
                 VStack {
-                    BannerAd(unitID: "ca-app-pub-5558779899182260/4197512760")
                     // profileCard
                     VStack {
                         VStack(alignment: .leading,spacing: 16) {
@@ -231,6 +229,9 @@ struct UserPage: View {
                     .cornerRadius(30)
                     .padding()
                     
+                    BannerAd(unitID: Constants.bannerAdId)
+                        .background(.blue)
+                    
                     VStack {
                         if index != -1 {
                             NavigationLink(
@@ -247,23 +248,28 @@ struct UserPage: View {
                     }.hidden()
                     
                     if (self.imageDatum.count >= 1) {
-                        ForEach(0...self.recipes.count-1,id: \.self) { i in
-                            if let recipe = self.recipes[i] {
-                                PostView(
-                                    recipe: recipe,
-                                    header: imageDatum[recipe.id] ?? Data()
-                                )
-                                .onTapGesture{
-                                    withAnimation(.spring()){
-                                        index = i
-                                        currentImage = imageDatum[recipe.id] ?? Data()
-                                        self.navigationViewIsActive = true
-                                    }
-                                }
-                                .onAppear {
-                                    if i == self.recipes.count - 1 {
-                                        if (!token.isEmpty) {
-                                            self.listNextPage(nextToken: token)
+                        LazyVGrid(columns: Array(repeating: GridItem(spacing:0), count: 3), spacing: 0) {
+                            ForEach(0...self.recipes.count-1,id: \.self) { i in
+                                ZStack {
+                                    if let recipe = self.recipes[i] {
+                                        favCellView(
+                                            id: recipe.id,
+                                            image: self.imageDatum[recipe.id] ?? Data(),
+                                            animation: animation
+                                        )
+                                        .onAppear{
+                                            if i == self.recipes.count - 1 {
+                                                if (!token.isEmpty) {
+                                                    self.listNextPage(nextToken: token)
+                                                }
+                                            }
+                                        }
+                                        .onTapGesture {
+                                            withAnimation(.spring()){
+                                                index = i
+                                                currentImage = imageDatum[recipe.id] ?? Data()
+                                                self.navigationViewIsActive = true
+                                            }
                                         }
                                     }
                                 }
@@ -274,7 +280,9 @@ struct UserPage: View {
                     }
                     Spacer()
                 }
+                .padding(.top,32)
             }
+            .edgesIgnoringSafeArea(.top)
             .onAppear{
                 if (first) {
                     self.getUser()
@@ -282,8 +290,6 @@ struct UserPage: View {
                     self.first = false
                 }
             }
-        }
-        .background(.black)
     }
 }
 

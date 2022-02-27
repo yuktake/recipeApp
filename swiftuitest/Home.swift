@@ -163,6 +163,7 @@ struct Home: View {
                                 }
 //                                }
 //                                .frame(width: UIScreen.main.bounds.width)
+                                
                             }
                         }
                         .padding(.leading)
@@ -194,7 +195,8 @@ struct Home: View {
                                             .clipped()
                                     }
                                     if i % adPlacement == 0 {
-                                        BannerAd(unitID: "ca-app-pub-5558779899182260/4197512760")
+                                        BannerAd(unitID: Constants.bannerAdId)
+                                            .background(.blue)
                                     }
                                 }
                             }

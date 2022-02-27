@@ -37,6 +37,7 @@ extension Recipe {
       .index(fields: ["type", "fat"], name: "recipesByFat"),
       .index(fields: ["type", "carbo"], name: "recipesByCarbo"),
       .index(fields: ["type", "favNum"], name: "recipesByFav"),
+      .index(fields: ["type", "reviewNum"], name: "recipesByReview"),
       .index(fields: ["type", "createdAt"], name: "recipesByDate")
     )
     
