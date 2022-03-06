@@ -244,7 +244,10 @@ struct FavoriteDetail: View {
                 Image(uiImage: image)
                     .resizable()
                     .aspectRatio(contentMode: .fill)
-                    .padding()
+                    .frame(
+                        width: UIScreen.main.bounds.width,
+                        height: UIScreen.main.bounds.height
+                    )
             }
 
             Color.black.opacity(0.5)
@@ -261,7 +264,7 @@ struct FavoriteDetail: View {
                             .fixedSize(horizontal: false, vertical: true)
                         Spacer()
                     }
-                    .padding(.top)
+                    .padding(.top,20)
                     
                     HStack {
                         VStack {
@@ -298,7 +301,8 @@ struct FavoriteDetail: View {
                                         }
                                     }, label: {
                                         Image(systemName: favorite ? "heart.fill":"heart")
-                                            .resizable()
+                                            .renderingMode(.template)
+                                            .foregroundColor(.red)
                                             .frame(width: 16, height: 16)
                                     }
                                 )
@@ -371,9 +375,10 @@ struct FavoriteDetail: View {
                     .padding(.top, 16)
 
                     HStack {
-                        Spacer()
                         Text(tmpRecipe.materials)
+                            .underline()
                             .padding(.top,5)
+                            .foregroundColor(.white)
                         Spacer()
                     }
                     .padding(.bottom)
@@ -390,6 +395,7 @@ struct FavoriteDetail: View {
                             HStack {
                                 Text("\(i+1). \(procedures[i].content)")
                                     .frame(width: screen.width * 0.7, alignment: .topLeading)
+                                    .foregroundColor(.white)
                                 Spacer()
                             }
                             Divider()
@@ -399,7 +405,7 @@ struct FavoriteDetail: View {
                     }
                     .padding(.top)
                 }
-                .padding(.horizontal,32)
+                .padding(.horizontal,8)
                 .padding(.top,36)
             }
             .overlay(
@@ -412,14 +418,15 @@ struct FavoriteDetail: View {
                     Image(systemName: "chevron.left")
                         .font(.title)
                         .foregroundColor(.white)
-                        .padding(.leading,25)
-                        .padding(.top,25)
+                        .padding(.leading)
+                        .padding(.top,32)
                 },alignment: .topLeading
             )
             .frame(
                 width: UIScreen.main.bounds.width,
                 height: UIScreen.main.bounds.height * 0.9
             )
+            .padding(.horizontal,8)
             .onAppear{
                 if user.isLogged {
                     self.getFav(recipeId: selectedId)

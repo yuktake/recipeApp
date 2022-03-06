@@ -111,9 +111,7 @@ struct ProfileView: View {
                                         .foregroundColor(.white)
                                         .font(.title3)
                                         .bold()
-                                        .frame(maxWidth: .infinity)
                                 }
-                                .frame(maxWidth: .infinity)
                                 
                                 Spacer()
                                 

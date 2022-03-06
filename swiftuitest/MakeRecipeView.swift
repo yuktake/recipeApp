@@ -32,6 +32,7 @@ struct MakeRecipeView: View {
     @State var procedureTmp: [String] = ["1"]
     
     @State var error = false
+    @State private var scrollTarget: Int?
     
     @ObservedObject var viewModel = CreateRecipeViewModel()
     @EnvironmentObject var user: UserStore
@@ -116,253 +117,263 @@ struct MakeRecipeView: View {
         ZStack {
             Color("FormBackground").edgesIgnoringSafeArea(.all)
             VStack {
-                ScrollView(showsIndicators: false) {
-                    HStack {
-                        Button(action:{
-                            showModal.toggle()
-                            pickerImageIndex = -1
-                        }, label: {
-                            if let image = header {
-                                Image(uiImage: image)
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fit)
-                                    .padding(.top)
-                            } else {
-                                Image(systemName: "camera")
-                                    .font(.largeTitle)
-                                    .padding()
-                                    .background(Color.yellow)
-                                    .foregroundColor(.black)
-                                    .clipShape(Circle())
-                                    .frame (width: screen.width ,height: screen.height * 0.3)
-                                    .background(Color.gray)
+                ScrollViewReader { proxy in
+                    ScrollView(showsIndicators: false) {
+                        HStack {
+                            Button(action:{
+                                showModal.toggle()
+                                pickerImageIndex = -1
+                            }, label: {
+                                if let image = header {
+                                    Image(uiImage: image)
+                                        .resizable()
+                                        .aspectRatio(contentMode: .fit)
+                                        .padding(.top)
+                                } else {
+                                    Image(systemName: "camera")
+                                        .font(.largeTitle)
+                                        .padding()
+                                        .background(Color.yellow)
+                                        .foregroundColor(.black)
+                                        .clipShape(Circle())
+                                        .frame (width: screen.width ,height: screen.height * 0.3)
+                                        .background(Color.gray)
+                                }
+                            })
+                            .sheet(isPresented: $shouldShowHeaderImagePicker, content: {
+                                ImagePicker(
+                                    sourceType: .photoLibrary,
+                                    selectedImage: $header,
+                                    showModal: $showModal,
+                                    cropperShown: $shouldShowHeaderCropper
+                                )
+                            })
+                            .sheet(isPresented: $shouldShowHeaderCropper){
+                                ImageCroppingView(
+                                    shown: $shouldShowHeaderCropper,
+                                    image: header!,
+                                    croppedImage: $header,
+                                    change: $headerImageChanged
+                                )
                             }
-                        })
-                        .sheet(isPresented: $shouldShowHeaderImagePicker, content: {
-                            ImagePicker(
-                                sourceType: .photoLibrary,
-                                selectedImage: $header,
-                                showModal: $showModal,
-                                cropperShown: $shouldShowHeaderCropper
+                            .padding(.top)
+                        }
+                        
+                        VStack(spacing:16) {
+                            
+                            FormView(
+                                iconImage: "pencil",
+                                placeholder: "TITLE",
+                                numberPad: false,
+                                text: $viewModel.recipe.title.onChange(textChange)
                             )
-                        })
-                        .sheet(isPresented: $shouldShowHeaderCropper){
-                            ImageCroppingView(
-                                shown: $shouldShowHeaderCropper,
-                                image: header!,
-                                croppedImage: $header,
-                                change: $headerImageChanged
+                            if error {
+                                HStack {
+                                    Text("制限文字数を30文字までです。")
+                                        .foregroundColor(.red)
+                                        .padding(.top)
+                                        .padding(.leading)
+                                    Spacer()
+                                }
+                            }
+                            
+                            HStack {
+                                FormView(iconImage: "p.circle.fill", placeholder: "ROTEIN", numberPad: true, text: $viewModel.recipe.protein)
+                                FormView(iconImage: "f.circle.fill", placeholder: "AT", numberPad: true, text: $viewModel.recipe.fat)
+                                FormView(iconImage: "c.circle.fill", placeholder: "ARBO", numberPad: true, text: $viewModel.recipe.carbo)
+                            }
+                            HStack {
+                                FormView(
+                                    iconImage: "plus.circle.fill",
+                                    placeholder: "Calorie",
+                                    numberPad: true,
+                                    text: $viewModel.recipe.calorie
+                                )
+                                    .frame(width: screen.width  * 0.4)
+                                Text("kcal")
+                                    .font(.caption)
+                                    .foregroundColor(.white)
+                                Spacer()
+                            }
+                            Picker(selection: $viewModel.recipe.state, label: Text("状態")) {
+                                Text("減量中").tag(1)
+                                Text("体重維持").tag(2)
+                                Text("増量中").tag(3)
+                            }
+                            .pickerStyle(SegmentedPickerStyle())
+                            .padding()
+                            .background(BlurView(style: .systemMaterial))
+                            .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
+                            .shadow(color: .black.opacity(0.15), radius: 20, x:0, y:20)
+                            .padding(.horizontal)
+                            
+                            HStack {
+                                Text("材料一覧")
+                                    .font(.system(size: 20,weight: .bold))
+                                    .foregroundColor(.white)
+                                    .padding(.leading, 16)
+                                Spacer()
+                            }
+                            
+                            TextAreaView(
+                                contents: $viewModel.recipe.materials
                             )
+                            .frame(height:screen.height*0.2)
+                            .padding(.horizontal)
+                            
+                            LazyVStack(spacing : 15) {
+                                ForEach(0..<viewModel.recipe.contents.count, id:\.self) { index in
+                                    VStack {
+                                        TitleView(
+                                            contents: $viewModel.recipe.contents,
+                                            shouldShowProcedureImagePicker: $shouldShowProcedureImagePicker,
+                                            shouldShowProcedureImageCropper: $shouldShowProcedureImageCropper,
+                                            procedureImages: $procedureImages,
+                                            procedureTmp: $procedureTmp,
+                                            index: index,
+                                            height: screen.height
+                                        )
+                                        .padding(.leading, 16)
+                                        
+                                        HStack {
+                                            TextAreaView(
+                                                contents: $viewModel.recipe.contents[index].content
+                                            )
+                                            ImageButton(
+                                                showModal: $showModal,
+                                                pickerImageIndex: $pickerImageIndex,
+                                                procedureImage: $procedureImages[index],
+                                                showPicker: $shouldShowProcedureImagePicker[index],
+                                                showCropper: $shouldShowProcedureImageCropper[index],
+                                                change: $procedureImageChanged[index],
+                                                width: screen.width,
+                                                index: index
+                                            )
+                                        }
+                                        .frame(height:screen.height*0.2)
+                                    }
+                                    .id(index+1)
+                                    .onChange(of: scrollTarget) { target in
+                                        if let target = target {
+                                            scrollTarget = nil
+                                            withAnimation {
+                                                proxy.scrollTo(target, anchor: .bottom)
+                                            }
+                                        }
+                                    }
+                                    .onDrag({
+                                        self.draggedItem = procedureTmp[index]
+                                        return NSItemProvider(item: nil, typeIdentifier: String(index))
+                                    }).onDrop(
+                                        of: [UTType.text],
+                                        delegate: MyDropDelegate(
+                                            item: index,
+                                            items: $procedureTmp,
+                                            images: $procedureImages,
+                                            contents: $viewModel.recipe.contents,
+                                            imageChanges: $procedureImageChanged,
+                                            pickers: $shouldShowProcedureImagePicker,
+                                            croppers: $shouldShowProcedureImageCropper,
+                                            draggedItem: $draggedItem
+                                        )
+                                    )
+                                }
+                            }
+                            BannerAd(unitID: Constants.bannerAdId)
+                                .background(.blue)
                         }
                         .padding(.top)
                     }
-                    
-                    VStack(spacing:16) {
-                        
-                        FormView(
-                            iconImage: "pencil",
-                            placeholder: "TITLE",
-                            numberPad: false,
-                            text: $viewModel.recipe.title.onChange(textChange)
-                        )
-                        if error {
-                            HStack {
-                                Text("制限文字数を30文字までです。")
-                                    .foregroundColor(.red)
-                                    .padding(.top)
-                                    .padding(.leading)
-                                Spacer()
-                            }
-                        }
-                        
+                    .padding(.bottom)
+                    .onTapGesture {
+                        hideKeyboard()
+                    }
+                    .overlay(
                         HStack {
-                            FormView(iconImage: "p.circle.fill", placeholder: "ROTEIN", numberPad: true, text: $viewModel.recipe.protein)
-                            FormView(iconImage: "f.circle.fill", placeholder: "AT", numberPad: true, text: $viewModel.recipe.fat)
-                            FormView(iconImage: "c.circle.fill", placeholder: "ARBO", numberPad: true, text: $viewModel.recipe.carbo)
-                        }
-                        HStack {
-                            FormView(
-                                iconImage: "plus.circle.fill",
-                                placeholder: "Calorie",
-                                numberPad: true,
-                                text: $viewModel.recipe.calorie
-                            )
-                                .frame(width: screen.width  * 0.4)
-                            Text("kcal")
-                                .font(.caption)
-                                .foregroundColor(.white)
-                            Spacer()
-                        }
-                        Picker(selection: $viewModel.recipe.state, label: Text("状態")) {
-                            Text("減量中").tag(1)
-                            Text("体重維持").tag(2)
-                            Text("増量中").tag(3)
-                        }
-                        .pickerStyle(SegmentedPickerStyle())
-                        .padding()
-                        .background(BlurView(style: .systemMaterial))
-                        .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))
-                        .shadow(color: .black.opacity(0.15), radius: 20, x:0, y:20)
-                        .padding(.horizontal)
-                        
-                        HStack {
-                            Text("材料一覧")
-                                .font(.system(size: 20,weight: .bold))
-                                .foregroundColor(.white)
-                                .padding(.leading, 16)
-                            Spacer()
-                        }
-                        
-                        TextAreaView(
-                            contents: $viewModel.recipe.materials
-                        )
-                        .padding(.horizontal)
-                        
-                        LazyVStack(spacing : 15) {
-                            ForEach(0..<viewModel.recipe.contents.count, id:\.self) { index in
-                                VStack {
-                                    TitleView(
-                                        contents: $viewModel.recipe.contents,
-                                        shouldShowProcedureImagePicker: $shouldShowProcedureImagePicker,
-                                        shouldShowProcedureImageCropper: $shouldShowProcedureImageCropper,
-                                        procedureImages: $procedureImages,
-                                        procedureTmp: $procedureTmp,
-                                        index: index,
-                                        height: screen.height
-                                    )
-                                    .padding(.leading, 16)
-                                    
-                                    HStack {
-                                        TextAreaView(
-                                            contents: $viewModel.recipe.contents[index].content
-                                        )
-//                                        .padding(.horizontal)
-                                        ImageButton(
-                                            showModal: $showModal,
-                                            pickerImageIndex: $pickerImageIndex,
-                                            procedureImage: $procedureImages[index],
-                                            showPicker: $shouldShowProcedureImagePicker[index],
-                                            showCropper: $shouldShowProcedureImageCropper[index],
-                                            change: $procedureImageChanged[index],
-                                            width: screen.width,
-                                            index: index
-                                        )
-                                    }
-                                    .frame(height:screen.height*0.2)
+                            Button(action:{
+                                dismiss()
+                            }){
+                                HStack(spacing: 10) {
+                                    Image(systemName: "xmark")
+                                        .renderingMode(.template)
                                 }
-                                .onDrag({
-                                    self.draggedItem = procedureTmp[index]
-                                    return NSItemProvider(item: nil, typeIdentifier: String(index))
-                                }) .onDrop(
-                                    of: [UTType.text],
-                                    delegate: MyDropDelegate(
-                                        item: index,
-                                        items: $procedureTmp,
-                                        images: $procedureImages,
-                                        contents: $viewModel.recipe.contents,
-                                        imageChanges: $procedureImageChanged,
-                                        pickers: $shouldShowProcedureImagePicker,
-                                        croppers: $shouldShowProcedureImageCropper,
-                                        draggedItem: $draggedItem
+                                .foregroundColor(.red)
+                                .padding(.vertical, 10)
+                                .padding(.horizontal, 15)
+                                .background(.red.opacity(0.15))
+                                .clipShape(Capsule())
+                            }
+                            Spacer()
+                            Button(action:{
+                                if (viewModel.recipe.contents.count >= 5) {
+                                    self.showingAlert = true
+                                    self.alertText = "手順は5つまでです。"
+                                    return
+                                }
+                                viewModel.recipe.contents.append(
+                                    Procedure(
+                                        order:viewModel.recipe.contents.count+1,
+                                        content: "",
+                                        image: ""
                                     )
                                 )
+                                shouldShowProcedureImagePicker.append(false)
+                                shouldShowProcedureImageCropper.append(false)
+                                procedureImageChanged.append(false)
+                                procedureImages.append(nil)
+                                procedureTmp.append(UUID().uuidString)
+                                scrollTarget = viewModel.recipe.contents.count
+                            }){
+                                HStack(spacing: 10) {
+                                    Image(systemName: "plus")
+                                        .renderingMode(.template)
+                                    Text("Add")
+                                        .fontWeight(.semibold)
+                                }
+                                .foregroundColor(.yellow)
+                                .padding(.vertical, 10)
+                                .padding(.horizontal, 15)
+                                .background(.yellow.opacity(0.15))
+                                .clipShape(Capsule())
                             }
+                            .alert(isPresented: $showingAlert) {
+                                Alert(title: Text(alertText))
+                            }
+                            
+                            Spacer(minLength: 0)
+                            
+                            Button(action:{
+                                self.post()
+                            }){
+                                HStack(spacing: 10) {
+                                    Image(systemName: "paperplane.circle")
+                                        .renderingMode(.template)
+                                    Text("Post")
+                                        .fontWeight(.semibold)
+                                }
+                                .foregroundColor(.yellow)
+                                .padding(.vertical, 10)
+                                .padding(.horizontal, 15)
+                                .background(disableForm ? .gray.opacity(0.15) : .yellow.opacity(0.15))
+                                .clipShape(Capsule())
+                            }
+                            .disabled(disableForm)
                         }
-                        BannerAd(unitID: Constants.bannerAdId)
-                            .background(.blue)
-                    }
-                    .padding(.top)
-                    
+                        .padding(.top)
+                        .padding(.horizontal, 22)
+                        .padding(.bottom, UIApplication.shared.windows.first?.safeAreaInsets.bottom == 0 ? 15 : UIApplication.shared.windows.first?.safeAreaInsets.bottom)
+                        .background(Color.white)
+                        .clipShape(CustomCorner(corners: [.topLeft, .topRight], size: 55))
+                        .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: -5)
+                        ,alignment: .bottom
+                    )
                 }
-                .padding(.bottom)
-                .onTapGesture {
-                    hideKeyboard()
-                }
-                .overlay(
-                    HStack {
-                        Button(action:{
-                            dismiss()
-                        }){
-                            HStack(spacing: 10) {
-                                Image(systemName: "xmark")
-                                    .renderingMode(.template)
-                            }
-                            .foregroundColor(.red)
-                            .padding(.vertical, 10)
-                            .padding(.horizontal, 15)
-                            .background(.red.opacity(0.15))
-                            .clipShape(Capsule())
-                        }
-                        Spacer()
-                        Button(action:{
-                            if (viewModel.recipe.contents.count >= 5) {
-                                self.showingAlert = true
-                                self.alertText = "手順は5つまでです。"
-                                return
-                            }
-                            viewModel.recipe.contents.append(
-                                Procedure(
-                                    order:viewModel.recipe.contents.count+1,
-                                    content: "",
-                                    image: ""
-                                )
-                            )
-                            shouldShowProcedureImagePicker.append(false)
-                            shouldShowProcedureImageCropper.append(false)
-                            procedureImageChanged.append(false)
-                            procedureImages.append(nil)
-                            procedureTmp.append(UUID().uuidString)
-                        }){
-                            HStack(spacing: 10) {
-                                Image(systemName: "plus")
-                                    .renderingMode(.template)
-                                Text("Add")
-                                    .fontWeight(.semibold)
-                            }
-                            .foregroundColor(.yellow)
-                            .padding(.vertical, 10)
-                            .padding(.horizontal, 15)
-                            .background(.yellow.opacity(0.15))
-                            .clipShape(Capsule())
-                        }
-                        .alert(isPresented: $showingAlert) {
-                            Alert(title: Text(alertText))
-                        }
-                        
-                        Spacer(minLength: 0)
-                        
-                        Button(action:{
-                            self.post()
-                        }){
-                            HStack(spacing: 10) {
-                                Image(systemName: "paperplane.circle")
-                                    .renderingMode(.template)
-                                Text("Post")
-                                    .fontWeight(.semibold)
-                            }
-                            .foregroundColor(.yellow)
-                            .padding(.vertical, 10)
-                            .padding(.horizontal, 15)
-                            .background(disableForm ? .gray.opacity(0.15) : .yellow.opacity(0.15))
-                            .clipShape(Capsule())
-                        }
-                        .disabled(disableForm)
-                    }
-                    .padding(.top)
-                    .padding(.horizontal, 22)
-                    .padding(.bottom, UIApplication.shared.windows.first?.safeAreaInsets.bottom == 0 ? 15 : UIApplication.shared.windows.first?.safeAreaInsets.bottom)
-                    .background(Color.white)
-                    .clipShape(CustomCorner(corners: [.topLeft, .topRight], size: 55))
-                    .shadow(color: Color.black.opacity(0.05), radius: 5, x: 0, y: -5)
-                    ,alignment: .bottom
-                )
             }
             .background(.black)
             .actionSheet(isPresented: $showModal, content: {
                 ActionSheet(title: Text("Select Photo"),message: Text("Choose"),buttons: [
                     .default(Text("Photo Library")) {
                         showModal.toggle()
-//                        shouldShowHeaderImagePicker.toggle()
                         if (pickerImageIndex == -1) {
                             shouldShowHeaderImagePicker.toggle()
                         } else {
@@ -480,7 +491,7 @@ struct TextAreaView: View {
                 .font(.subheadline)
                 .padding(4)
         }
-        .frame(height:110)
+//        .frame(height:110)
         .frame(maxWidth: .infinity)
         .background(BlurView(style: .systemMaterial))
         .clipShape(RoundedRectangle(cornerRadius: 30, style: .continuous))

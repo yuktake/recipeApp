@@ -63,7 +63,7 @@ struct Detail: View {
     
     func sheetChange(_ tag: Bool){
         print("sheet change")
-        self.load(updated: false)
+//        self.load(updated: false)
     }
     
     func getFav(recipeId: String) {
@@ -298,13 +298,13 @@ struct Detail: View {
                     VStack(alignment:.leading ,spacing: 15) {
                         VStack {
                             HStack {
-                                Text(selectedItem.title)
+                                Text(tmpRecipe.title)
                                     .font(.system(size:25,weight: .bold))
                                     .foregroundColor(.white)
                                     .lineLimit(nil)
                                     .fixedSize(horizontal: false, vertical: true)
                                 Spacer()
-                                if user.sub == selectedItem.userId {
+                                if user.sub == tmpRecipe.userId {
                                     Menu {
                                         Button(
                                             role: .destructive,
@@ -350,7 +350,7 @@ struct Detail: View {
                                 Spacer()
                                 if let uiimage = UIImage(data: self.profileImage ?? Data()) {
                                     if toProfile {
-                                        NavigationLink(destination: UserPage(userId: selectedItem.userId)) {
+                                        NavigationLink(destination: UserPage(userId: tmpRecipe.userId)) {
                                             Image(uiImage: uiimage)
                                                 .resizable()
                                                 .aspectRatio(contentMode: .fit)
@@ -377,13 +377,14 @@ struct Detail: View {
                                                 }
                                             }, label: {
                                                 Image(systemName: favorite ? "heart.fill":"heart")
-                                                    .resizable()
+                                                    .renderingMode(.template)
+                                                    .foregroundColor(.red)
                                                     .frame(width: 16, height: 16)
                                             }
                                         )
                                         .disabled(changing)
                                     }
-                                    Text("\(selectedItem.calorie)kcal")
+                                    Text("\(tmpRecipe.calorie)kcal")
                                         .font(.caption)
                                         .foregroundColor(.white)
                                 }
@@ -394,7 +395,7 @@ struct Detail: View {
                             HStack(spacing: 15) {
                                 VStack {
                                     HStack {
-                                        Text(selectedItem.protein)
+                                        Text(tmpRecipe.protein)
                                             .font(.system(size:20,weight: .bold))
                                             .foregroundColor(.white)
                                         Text("g")
@@ -410,7 +411,7 @@ struct Detail: View {
                                 Spacer()
                                 VStack {
                                     HStack {
-                                        Text(selectedItem.fat)
+                                        Text(tmpRecipe.fat)
                                             .font(.system(size:20,weight: .bold))
                                             .foregroundColor(.white)
                                         Text("g")
@@ -427,7 +428,7 @@ struct Detail: View {
                                 
                                 VStack {
                                     HStack {
-                                        Text(selectedItem.carbo)
+                                        Text(tmpRecipe.carbo)
                                             .font(.system(size:20,weight: .bold))
                                             .foregroundColor(.white)
                                         Text("g")
@@ -449,7 +450,7 @@ struct Detail: View {
                             .padding(.horizontal)
                         
                         HStack {
-                            Text(selectedItem.materials)
+                            Text(tmpRecipe.materials)
                                 .underline()
                                 .foregroundColor(.white)
                                 .padding(.top,5)
@@ -477,6 +478,7 @@ struct Detail: View {
                                     .background(
                                         Color(#colorLiteral(red: 0.9686274529, green: 0.78039217, blue: 0.3450980484, alpha: 1))
                                     )
+                                    .foregroundColor(.white)
                                     .clipShape(Circle())
                                 
                                 HStack(spacing:8) {
@@ -484,9 +486,8 @@ struct Detail: View {
                                         Text(procedures[index].content)
                                             .font(.caption)
                                             .padding(8)
-//                                            .frame(width: screen.width * 0.6, alignment: .topLeading)
                                             .frame(alignment: .topLeading)
-                                            .background(.blue)
+                                            .foregroundColor(.white)
                                     }
                                     Spacer()
                                     if let imagedata = procedureImages[procedures[index].id] {
@@ -596,7 +597,13 @@ struct Detail: View {
                     }
                     
                     if (self.procedures.count == 0) {
-                        load(updated: false)
+                        load(updated: true)
+                    }
+                }
+                .onChange(of: self.edited) { value in
+                    print("change edited")
+                    if value {
+                        self.load(updated: true)
                     }
                 }
                 .opacity(showReview ? 0 : 1)
@@ -614,10 +621,11 @@ struct Detail: View {
                 }
                 .fullScreenCover(isPresented: $showEdit){
                     RecipeEdit(
-                        detail_recipe: selectedItem,
+                        detail_recipe: tmpRecipe,
                         procedureImagesData: procedureImages,
                         detail_header: $header,
-                        showSheet: $showEdit
+                        showSheet: $showEdit,
+                        edited: $edited
                     )
                 }
                 .if(overlay) {
@@ -630,8 +638,11 @@ struct Detail: View {
                             Image(systemName: "chevron.left")
                                 .font(.title)
                                 .foregroundColor(.white)
+                                .padding(8)
+                                .background(BlurView(style: .systemMaterial))
+                                .clipShape(Capsule())
                                 .padding(.leading,25)
-                                .padding(.top,25)
+                                .padding(.top,35)
                         }
                         ,alignment: .topLeading
                     )
